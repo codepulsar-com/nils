@@ -85,4 +85,15 @@ public class NilsFactory {
   public static NilsFactory init(AdapterConfig adapterConfig) {
     return new NilsFactory(NilsConfig.init(adapterConfig));
   }
+
+  // TODO add test
+  /**
+   * Initialize the factory using a {@link NilsConfig}.
+   *
+   * @param config A {@link NilsConfig} object.
+   * @return The create factory.
+   */
+  public static NilsFactory init(NilsConfig config) {
+    return new NilsFactory(config);
+  }
 }

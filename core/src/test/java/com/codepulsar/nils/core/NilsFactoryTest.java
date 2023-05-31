@@ -1,4 +1,4 @@
-package com.codepulsar.nils;
+package com.codepulsar.nils.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -7,8 +7,8 @@ import java.util.Locale;
 
 import org.junit.jupiter.api.Test;
 
-import com.codepulsar.nils.adapter.AdapterConfig;
-import com.codepulsar.nils.testadapter.StaticAdapterConfig;
+import com.codepulsar.nils.core.adapter.AdapterConfig;
+import com.codepulsar.nils.core.testadapter.StaticAdapterConfig;
 
 public class NilsFactoryTest {
   @Test

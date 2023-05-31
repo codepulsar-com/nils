@@ -1,11 +1,11 @@
-package com.codepulsar.nils.examples;
+package com.codepulsar.nils.core.examples;
 
 import java.util.Locale;
 
-import com.codepulsar.nils.NLS;
-import com.codepulsar.nils.NilsConfig;
-import com.codepulsar.nils.NilsFactory;
-import com.codepulsar.nils.adapter.rb.ResourceBundleAdapterConfig;
+import com.codepulsar.nils.core.NLS;
+import com.codepulsar.nils.core.NilsConfig;
+import com.codepulsar.nils.core.NilsFactory;
+import com.codepulsar.nils.core.adapter.rb.ResourceBundleAdapterConfig;
 
 public class SimpleUse {
 

@@ -1,12 +1,12 @@
-package com.codepulsar.nils.adapter;
+package com.codepulsar.nils.core.adapter;
 
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.Optional;
 
-import com.codepulsar.nils.NilsConfig;
-import com.codepulsar.nils.NilsException;
-import com.codepulsar.nils.util.ParameterCheck;
+import com.codepulsar.nils.core.NilsConfig;
+import com.codepulsar.nils.core.NilsException;
+import com.codepulsar.nils.core.util.ParameterCheck;
 /**
  * Base class for <tt>Adapter</tt> implementations, providing functionalities to
  *

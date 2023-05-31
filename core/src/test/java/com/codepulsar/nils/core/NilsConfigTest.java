@@ -1,4 +1,4 @@
-package com.codepulsar.nils;
+package com.codepulsar.nils.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -11,8 +11,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import com.codepulsar.nils.adapter.AdapterConfig;
-import com.codepulsar.nils.testadapter.StaticAdapterConfig;
+import com.codepulsar.nils.core.adapter.AdapterConfig;
+import com.codepulsar.nils.core.testadapter.StaticAdapterConfig;
 
 public class NilsConfigTest {
 

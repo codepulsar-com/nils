@@ -1,4 +1,4 @@
-package com.codepulsar.nils;
+package com.codepulsar.nils.core;
 /** Generic RuntimeException thrown by NILS. */
 public class NilsException extends RuntimeException {
 

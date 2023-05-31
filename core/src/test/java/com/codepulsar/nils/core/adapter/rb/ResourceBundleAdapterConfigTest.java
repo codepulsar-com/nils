@@ -1,4 +1,4 @@
-package com.codepulsar.nils.adapter.rb;
+package com.codepulsar.nils.core.adapter.rb;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

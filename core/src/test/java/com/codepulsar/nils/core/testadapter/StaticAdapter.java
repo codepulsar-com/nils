@@ -1,11 +1,11 @@
-package com.codepulsar.nils.testadapter;
+package com.codepulsar.nils.core.testadapter;
 
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
-import com.codepulsar.nils.NilsConfig;
-import com.codepulsar.nils.adapter.BaseAdapter;
+import com.codepulsar.nils.core.NilsConfig;
+import com.codepulsar.nils.core.adapter.BaseAdapter;
 
 public class StaticAdapter extends BaseAdapter {
 

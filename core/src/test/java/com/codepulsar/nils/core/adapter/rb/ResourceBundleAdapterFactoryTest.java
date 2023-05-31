@@ -1,4 +1,4 @@
-package com.codepulsar.nils.adapter.rb;
+package com.codepulsar.nils.core.adapter.rb;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -7,7 +7,7 @@ import java.util.Locale;
 
 import org.junit.jupiter.api.Test;
 
-import com.codepulsar.nils.NilsConfig;
+import com.codepulsar.nils.core.NilsConfig;
 
 public class ResourceBundleAdapterFactoryTest {
 

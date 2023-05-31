@@ -1,4 +1,4 @@
-package com.codepulsar.nils.adapter.rb;
+package com.codepulsar.nils.core.adapter.rb;
 
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -8,8 +8,8 @@ import java.util.ResourceBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.codepulsar.nils.NilsConfig;
-import com.codepulsar.nils.adapter.BaseAdapter;
+import com.codepulsar.nils.core.NilsConfig;
+import com.codepulsar.nils.core.adapter.BaseAdapter;
 /** A NLS adapter implementation using Java ResourceBundles for the translations. */
 public class ResourceBundleAdapter extends BaseAdapter {
   private static final Logger LOG = LoggerFactory.getLogger(ResourceBundleAdapter.class);

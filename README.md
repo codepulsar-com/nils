@@ -124,7 +124,7 @@ Currently there is only one implementation for this layer: ResourceBundles.
 
 If you need another kind of translation source you can implement your own Adapter. (Maybe for JSON or reading from a database).
 
-To extend NILS you must implement the following classes (located in the package `com.codepulsar.nils.adapter`):
+To extend NILS you must implement the following classes (located in the package `com.codepulsar.nils.core.adapter`):
 
 * `Adapter`: The Adapter is the concrete implementation, accessing your translation source. 
 * `AdapterConfig`: The configuration for the adapter. Is used by the `NilsFactory`.
@@ -132,7 +132,7 @@ To extend NILS you must implement the following classes (located in the package 
 
 Beside these interfaces NILS provides the abstract class `BaseAdapter`. It is recommended that Adapters should extend from this class, because these base class handles common cases like the resolution of missing keys, argument replacements in translations etc.
 
-The test package provides a really simple implementation for a Adapter using a fix Map. (see `com.codepulsar.nils.testadapter`).
+The tests in the core modules provides a really simple implementation for a Adapter using a fix Map. (see `com.codepulsar.nils.core.testadapter`).
 
 ## Contribution
 

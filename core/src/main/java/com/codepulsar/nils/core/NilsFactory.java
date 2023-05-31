@@ -1,4 +1,4 @@
-package com.codepulsar.nils;
+package com.codepulsar.nils.core;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -7,10 +7,10 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.codepulsar.nils.adapter.Adapter;
-import com.codepulsar.nils.adapter.AdapterConfig;
-import com.codepulsar.nils.adapter.AdapterFactory;
-import com.codepulsar.nils.util.ParameterCheck;
+import com.codepulsar.nils.core.adapter.Adapter;
+import com.codepulsar.nils.core.adapter.AdapterConfig;
+import com.codepulsar.nils.core.adapter.AdapterFactory;
+import com.codepulsar.nils.core.util.ParameterCheck;
 /** Factory for getting access to the provided NLS. A requested NLS object is cached. */
 public class NilsFactory {
   private static final Logger LOG = LoggerFactory.getLogger(NilsFactory.class);

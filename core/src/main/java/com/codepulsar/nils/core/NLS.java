@@ -1,4 +1,4 @@
-package com.codepulsar.nils;
+package com.codepulsar.nils.core;
 
 import java.util.Locale;
 

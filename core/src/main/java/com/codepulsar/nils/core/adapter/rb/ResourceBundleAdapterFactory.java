@@ -1,9 +1,9 @@
-package com.codepulsar.nils.adapter.rb;
+package com.codepulsar.nils.core.adapter.rb;
 
 import java.util.Locale;
 
-import com.codepulsar.nils.NilsConfig;
-import com.codepulsar.nils.adapter.AdapterFactory;
+import com.codepulsar.nils.core.NilsConfig;
+import com.codepulsar.nils.core.adapter.AdapterFactory;
 /** The factory for the {@link ResourceBundleAdapter}. */
 public class ResourceBundleAdapterFactory implements AdapterFactory<ResourceBundleAdapter> {
 

@@ -1,9 +1,9 @@
-package com.codepulsar.nils;
+package com.codepulsar.nils.core;
 
 import java.text.MessageFormat;
 
-import com.codepulsar.nils.adapter.AdapterConfig;
-import com.codepulsar.nils.util.ParameterCheck;
+import com.codepulsar.nils.core.adapter.AdapterConfig;
+import com.codepulsar.nils.core.util.ParameterCheck;
 /** The configuration of the Nils library. */
 public class NilsConfig {
   private AdapterConfig adapterConfig;

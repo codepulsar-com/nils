@@ -1,4 +1,4 @@
-package com.codepulsar.nils.util;
+package com.codepulsar.nils.core.util;
 
 public class ParameterCheck {
   private ParameterCheck() {

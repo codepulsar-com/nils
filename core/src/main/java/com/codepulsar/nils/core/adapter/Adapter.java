@@ -1,7 +1,7 @@
-package com.codepulsar.nils.adapter;
+package com.codepulsar.nils.core.adapter;
 
-import com.codepulsar.nils.NLS;
-import com.codepulsar.nils.adapter.rb.ResourceBundleAdapter;
+import com.codepulsar.nils.core.NLS;
+import com.codepulsar.nils.core.adapter.rb.ResourceBundleAdapter;
 /**
  * An <tt>Adapter</tt> provides an implementation for a specific kind to access localization
  * information (i. e. from ResourceBundles).

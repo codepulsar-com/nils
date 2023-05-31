@@ -1,9 +1,9 @@
-package com.codepulsar.nils.testadapter;
+package com.codepulsar.nils.core.testadapter;
 
 import java.util.Locale;
 
-import com.codepulsar.nils.NilsConfig;
-import com.codepulsar.nils.adapter.AdapterFactory;
+import com.codepulsar.nils.core.NilsConfig;
+import com.codepulsar.nils.core.adapter.AdapterFactory;
 
 public class StaticAdapterFactory implements AdapterFactory<StaticAdapter> {
 

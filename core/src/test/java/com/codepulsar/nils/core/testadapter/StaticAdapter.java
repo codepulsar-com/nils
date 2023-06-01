@@ -10,7 +10,15 @@ import com.codepulsar.nils.core.adapter.BaseAdapter;
 public class StaticAdapter extends BaseAdapter {
 
   private Map<String, String> translations =
-      Map.of("simple", "A simple translation", "with_args", "A {0} with {1}.");
+      Map.of(
+          "simple",
+          "A simple translation",
+          "with_args",
+          "A {0} with {1}.",
+          "Dummy.attribute",
+          "Attribute",
+          "Dummy.with_args",
+          "A {0} with {1}.");
 
   public StaticAdapter(NilsConfig config, Locale locale) {
     super(config, locale);

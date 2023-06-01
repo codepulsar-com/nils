@@ -22,6 +22,29 @@ public class NilsFactoryTest {
   }
 
   @Test
+  public void init_nilsConfigNull() {
+    // Arrange
+    NilsConfig nilsConfig = null;
+    // Act / Assert
+    assertThatThrownBy(() -> NilsFactory.init(nilsConfig))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("Parameter 'config' cannot be null.");
+  }
+
+  @Test
+  public void init_nilsConfig() {
+    // Arrange
+    AdapterConfig adapterConfig = new StaticAdapterConfig();
+    NilsConfig nilsConfig = NilsConfig.init(adapterConfig);
+    NilsFactory underTest = NilsFactory.init(nilsConfig);
+    // Act
+    NLS nls = underTest.nls();
+    // Assert
+    assertThat(nls).isNotNull();
+    assertThat(nls.getLocale()).isEqualTo(Locale.getDefault());
+  }
+
+  @Test
   public void nls() {
     // Arrange
     AdapterConfig adapterConfig = new StaticAdapterConfig();

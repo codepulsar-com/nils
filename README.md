@@ -41,18 +41,21 @@ public class SimpleUse {
   
   ...
   
-  public void translateUI() {
+  public void translate() {
     var nls = NLS_FACTORY.nls(); // (2)
+
     var customerName = nls.get("customer.name"); // (3)
     var pageXOfY = nls.get("page_counter", 3, 5); // (4)
+    var street = nls.get(Address.class, "street"); // (5)
   }
 }
 ```
 
-* The example creates a `NilsFactory` using resource bundles located at "nls/translation.properties" (1).
-* In the method `translateUI()` a new NLS object is requested for the default locale (2).
-* Than a call for the translation with the key "customer.name" and no arguments is done (3).
-* Lastly a 2nd call for a translation with two arguments is done(4).
+* (1) The example creates a `NilsFactory` using resource bundles located at "nls/translation.properties".
+* (2) Get a new NLS object in the method you require the translation.
+* (3) Example call for the translation with the key "customer.name" and no arguments.
+* (4) Example call for the translation "page_counter" with two arguments.
+* (5) Example for a class and its attribute "street".
 
 The next example shows, if you use NLS directly for a specific locale (here German).
 
@@ -64,9 +67,10 @@ public class SimpleUse {
   
   ...
   
-  public void translateUI() {
+  public void translateDE() {
     var customerName = NLS_DE.get("customer.name");
     var pageXOfY = NLS_DE.get("page_counter", 3, 5);
+    var street = NLS_DE.get(Address.class, "street");
   }
 }
 ```

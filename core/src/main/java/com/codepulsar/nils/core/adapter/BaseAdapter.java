@@ -58,6 +58,22 @@ public abstract class BaseAdapter implements Adapter {
     return MessageFormat.format(unformattedValue, args);
   }
 
+  @Override
+  public String get(Class<?> key, String subKey) {
+    ParameterCheck.notNull(key, "key");
+    ParameterCheck.notNullEmptyOrBlank(subKey, "subKey");
+    String keyBase = key.getSimpleName();
+    return get(String.format("%s.%s", keyBase, subKey));
+  }
+
+  @Override
+  public String get(Class<?> key, String subKey, Object... args) {
+    ParameterCheck.notNull(key, "key");
+    ParameterCheck.notNullEmptyOrBlank(subKey, "subKey");
+    String keyBase = key.getSimpleName();
+    return get(String.format("%s.%s", keyBase, subKey), args);
+  }
+
   protected String buildMissingKey(String key) {
     return MessageFormat.format(config.getEscapePattern(), key);
   }

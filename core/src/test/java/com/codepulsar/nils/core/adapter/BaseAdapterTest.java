@@ -42,8 +42,8 @@ public class BaseAdapterTest {
   }
 
   @ParameterizedTest
-  @MethodSource("getByKey_invalidSource")
-  public void getByKey_invalid(String key, String errMsg) {
+  @MethodSource("string_getByKey_invalidSource")
+  public void string_getByKey_invalid(String key, String errMsg) {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
@@ -56,7 +56,7 @@ public class BaseAdapterTest {
   }
 
   @Test
-  public void getByKey_found() {
+  public void string_getByKey_found() {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
@@ -70,7 +70,7 @@ public class BaseAdapterTest {
   }
 
   @Test
-  public void getByKey_notFound_escaping() {
+  public void string_getByKey_notFound_escaping() {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
@@ -84,7 +84,7 @@ public class BaseAdapterTest {
   }
 
   @Test
-  public void getByKey_notFound_escaping_changed() {
+  public void string_getByKey_notFound_escaping_changed() {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig()).escapePattern(">>{0}<<");
@@ -98,7 +98,7 @@ public class BaseAdapterTest {
   }
 
   @Test
-  public void getByKey_notFound_escaping_changed2() {
+  public void string_getByKey_notFound_escaping_changed2() {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig()).escapePattern("Missing: {0}");
@@ -112,7 +112,7 @@ public class BaseAdapterTest {
   }
 
   @Test
-  public void getByKey_notFound_exception() {
+  public void string_getByKey_notFound_exception() {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig()).escapeIfMissing(false);
@@ -125,8 +125,8 @@ public class BaseAdapterTest {
   }
 
   @ParameterizedTest
-  @MethodSource("getByKeyAndArgs_invalidSource")
-  public void getByKeyAndArgs_invalid(String key, Object[] args, String errMsg) {
+  @MethodSource("string_getByKeyAndArgs_invalidSource")
+  public void string_getByKeyAndArgs_invalid(String key, Object[] args, String errMsg) {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
@@ -139,7 +139,7 @@ public class BaseAdapterTest {
   }
 
   @Test
-  public void getByKeyAndArgs_nullArgs() {
+  public void string_getByKeyAndArgs_nullArgs() {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
@@ -153,7 +153,7 @@ public class BaseAdapterTest {
   }
 
   @Test
-  public void getByKeyAndArgs_emptyArgs() {
+  public void string_getByKeyAndArgs_emptyArgs() {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
@@ -167,7 +167,7 @@ public class BaseAdapterTest {
   }
 
   @Test
-  public void getByKeyAndArgs_found() {
+  public void string_getByKeyAndArgs_found() {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
@@ -181,7 +181,7 @@ public class BaseAdapterTest {
   }
 
   @Test
-  public void getByKeyAndArgs_notFound_escaping() {
+  public void string_getByKeyAndArgs_notFound_escaping() {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
@@ -195,7 +195,7 @@ public class BaseAdapterTest {
   }
 
   @Test
-  public void getByKeyAndArgs_notFound_exception() {
+  public void string_getByKeyAndArgs_notFound_exception() {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig()).escapeIfMissing(false);
@@ -205,6 +205,159 @@ public class BaseAdapterTest {
     assertThatThrownBy(() -> underTest.get("not.found", "with a value"))
         .isInstanceOf(NilsException.class)
         .hasMessage("Could not find translation for key 'not.found'.");
+  }
+
+  @ParameterizedTest
+  @MethodSource("class_getByKey_invalidSource")
+  public void class_getByKey_invalid(Class<?> key, String subKey, String errMsg) {
+    // Arrange
+    Locale locale = Locale.ENGLISH;
+    NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
+    BaseAdapter underTest = new StaticAdapter(config, locale);
+
+    // Act / Assert
+    assertThatThrownBy(() -> underTest.get(key, subKey))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage(errMsg);
+  }
+
+  @Test
+  public void class_getByKey_found() {
+    // Arrange
+    Locale locale = Locale.ENGLISH;
+    NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
+    BaseAdapter underTest = new StaticAdapter(config, locale);
+
+    // Act
+    String value = underTest.get(Dummy.class, "attribute");
+
+    // Assert
+    assertThat(value).isEqualTo("Attribute");
+  }
+
+  @Test
+  public void class_getByKey_notFound_escaping() {
+    // Arrange
+    Locale locale = Locale.ENGLISH;
+    NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
+    BaseAdapter underTest = new StaticAdapter(config, locale);
+    assertThat(config.isEscapeIfMissing()).isTrue();
+    // Act
+    String value = underTest.get(Dummy.class, "not_found");
+
+    // Assert
+    assertThat(value).isEqualTo("[Dummy.not_found]");
+  }
+
+  @Test
+  public void class_getByKey_notFound_escaping_changed() {
+    // Arrange
+    Locale locale = Locale.ENGLISH;
+    NilsConfig config = NilsConfig.init(new StaticAdapterConfig()).escapePattern(">>{0}<<");
+    BaseAdapter underTest = new StaticAdapter(config, locale);
+    assertThat(config.isEscapeIfMissing()).isTrue();
+    // Act
+    String value = underTest.get(Dummy.class, "not_found");
+
+    // Assert
+    assertThat(value).isEqualTo(">>Dummy.not_found<<");
+  }
+
+  @Test
+  public void class_getByKey_notFound_exception() {
+    // Arrange
+    Locale locale = Locale.ENGLISH;
+    NilsConfig config = NilsConfig.init(new StaticAdapterConfig()).escapeIfMissing(false);
+    BaseAdapter underTest = new StaticAdapter(config, locale);
+    assertThat(config.isEscapeIfMissing()).isFalse();
+    // Act / Assert
+    assertThatThrownBy(() -> underTest.get(Dummy.class, "not_found"))
+        .isInstanceOf(NilsException.class)
+        .hasMessage("Could not find translation for key 'Dummy.not_found'.");
+  }
+
+  @ParameterizedTest
+  @MethodSource("class_getByKeyAndArgs_invalidSource")
+  public void class_getByKeyAndArgs_invalid(
+      Class<?> key, String subKey, Object[] args, String errMsg) {
+    // Arrange
+    Locale locale = Locale.ENGLISH;
+    NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
+    BaseAdapter underTest = new StaticAdapter(config, locale);
+
+    // Act / Assert
+    assertThatThrownBy(() -> underTest.get(key, subKey, args))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage(errMsg);
+  }
+
+  @Test
+  public void class_getByKeyAndArgs_nullArgs() {
+    // Arrange
+    Locale locale = Locale.ENGLISH;
+    NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
+    BaseAdapter underTest = new StaticAdapter(config, locale);
+    assertThat(config.isEscapeIfMissing()).isTrue();
+    // Act
+    String value = underTest.get(Dummy.class, "with_args", (Object[]) null);
+
+    // Assert
+    assertThat(value).isEqualTo("A {0} with {1}.");
+  }
+
+  @Test
+  public void class_getByKeyAndArgs_emptyArgs() {
+    // Arrange
+    Locale locale = Locale.ENGLISH;
+    NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
+    BaseAdapter underTest = new StaticAdapter(config, locale);
+    assertThat(config.isEscapeIfMissing()).isTrue();
+    // Act
+    String value = underTest.get(Dummy.class, "with_args", new Object[] {});
+
+    // Assert
+    assertThat(value).isEqualTo("A {0} with {1}.");
+  }
+
+  @Test
+  public void class_getByKeyAndArgs_found() {
+    // Arrange
+    Locale locale = Locale.ENGLISH;
+    NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
+    BaseAdapter underTest = new StaticAdapter(config, locale);
+    assertThat(config.isEscapeIfMissing()).isTrue();
+    // Act
+    String value = underTest.get(Dummy.class, "with_args", "First", 200L);
+
+    // Assert
+    assertThat(value).isEqualTo("A First with 200.");
+  }
+
+  @Test
+  public void class_getByKeyAndArgs_notFound_escaping() {
+    // Arrange
+    Locale locale = Locale.ENGLISH;
+    NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
+    BaseAdapter underTest = new StaticAdapter(config, locale);
+    assertThat(config.isEscapeIfMissing()).isTrue();
+    // Act
+    String value = underTest.get(Dummy.class, "not_found", "with a value");
+
+    // Assert
+    assertThat(value).isEqualTo("[Dummy.not_found]");
+  }
+
+  @Test
+  public void class_getByKeyAndArgs_notFound_exception() {
+    // Arrange
+    Locale locale = Locale.ENGLISH;
+    NilsConfig config = NilsConfig.init(new StaticAdapterConfig()).escapeIfMissing(false);
+    BaseAdapter underTest = new StaticAdapter(config, locale);
+    assertThat(config.isEscapeIfMissing()).isFalse();
+    // Act / Assert
+    assertThatThrownBy(() -> underTest.get(Dummy.class, "not_found", "with a value"))
+        .isInstanceOf(NilsException.class)
+        .hasMessage("Could not find translation for key 'Dummy.not_found'.");
   }
 
   @Test
@@ -219,17 +372,45 @@ public class BaseAdapterTest {
     assertThat(underTest.getConfig()).isEqualTo(config);
   }
 
-  private static Stream<Arguments> getByKey_invalidSource() {
+  private static Stream<Arguments> string_getByKey_invalidSource() {
     return Stream.of(
         arguments(null, "Parameter 'key' cannot be null."),
         arguments("", "Parameter 'key' cannot be empty or blank."),
         arguments(" ", "Parameter 'key' cannot be empty or blank."));
   }
 
-  private static Stream<Arguments> getByKeyAndArgs_invalidSource() {
+  private static Stream<Arguments> string_getByKeyAndArgs_invalidSource() {
     return Stream.of(
         arguments(null, new Object[] {"Value"}, "Parameter 'key' cannot be null."),
         arguments("", new Object[] {"Value"}, "Parameter 'key' cannot be empty or blank."),
         arguments(" ", new Object[] {"Value"}, "Parameter 'key' cannot be empty or blank."));
+  }
+
+  private static Stream<Arguments> class_getByKey_invalidSource() {
+    return Stream.of(
+        arguments(null, "attr", "Parameter 'key' cannot be null."),
+        arguments(Dummy.class, null, "Parameter 'subKey' cannot be null."),
+        arguments(Dummy.class, "", "Parameter 'subKey' cannot be empty or blank."),
+        arguments(Dummy.class, " ", "Parameter 'subKey' cannot be empty or blank."));
+  }
+
+  private static Stream<Arguments> class_getByKeyAndArgs_invalidSource() {
+    return Stream.of(
+        arguments(null, "attr", new Object[] {"Value"}, "Parameter 'key' cannot be null."),
+        arguments(Dummy.class, null, new Object[] {"Value"}, "Parameter 'subKey' cannot be null."),
+        arguments(
+            Dummy.class,
+            "",
+            new Object[] {"Value"},
+            "Parameter 'subKey' cannot be empty or blank."),
+        arguments(
+            Dummy.class,
+            " ",
+            new Object[] {"Value"},
+            "Parameter 'subKey' cannot be empty or blank."));
+  }
+
+  private static class Dummy {
+    // Dummy class
   }
 }

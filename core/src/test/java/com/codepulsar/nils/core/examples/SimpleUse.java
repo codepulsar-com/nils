@@ -16,14 +16,19 @@ public class SimpleUse {
       NilsFactory.init(ResourceBundleAdapterConfig.init(SimpleUse.class)).nls(Locale.GERMAN);
 
   @SuppressWarnings("unused")
-  public void access() {
-    var nls = NLS_FACTORY.nls();
+  public void translate() {
+    var nls = NLS_FACTORY.nls(); // (2)
 
-    var customerName_dft = nls.get("customer.name");
-    var pageXOfY_dft = nls.get("page_counter", 3, 5);
+    var customerName = nls.get("customer.name"); // (3)
+    var pageXOfY = nls.get("page_counter", 3, 5); // (4)
+    var street = nls.get(Address.class, "street"); // (5)
+  }
 
+  @SuppressWarnings("unused")
+  public void translateDE() {
     var customerName = NLS_DE.get("customer.name");
     var pageXOfY = NLS_DE.get("page_counter", 3, 5);
+    var street = NLS_DE.get(Address.class, "street");
   }
 
   public void config1() {

@@ -86,7 +86,6 @@ public class NilsFactory {
     return new NilsFactory(NilsConfig.init(adapterConfig));
   }
 
-  // TODO add test
   /**
    * Initialize the factory using a {@link NilsConfig}.
    *

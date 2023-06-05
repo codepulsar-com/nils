@@ -1,45 +1,41 @@
-package com.codepulsar.nils.core.adapter;
+package com.codepulsar.nils.core.impl;
 
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.Optional;
 
+import com.codepulsar.nils.core.NLS;
 import com.codepulsar.nils.core.NilsConfig;
 import com.codepulsar.nils.core.NilsException;
+import com.codepulsar.nils.core.adapter.Adapter;
 import com.codepulsar.nils.core.util.ParameterCheck;
 /**
- * Base class for <tt>Adapter</tt> implementations, providing functionalities to
+ * Implementation of the {@link NLS} interface.
+ *
+ * <p>Providing functionalities to
  *
  * <ul>
  *   <li>Check parameters
  *   <li>Replace arguments in translations
  *   <li>Handle unknown translation keys
  * </ul>
- *
- * <p>An implementation can extend this base class.
  */
-public abstract class BaseAdapter implements Adapter {
+public class NLSImpl implements NLS {
 
+  private final Adapter adapter;
   private final Locale locale;
   private final NilsConfig config;
 
-  protected BaseAdapter(NilsConfig config, Locale locale) {
+  public NLSImpl(Adapter adapter, NilsConfig config, Locale locale) {
+    this.adapter = ParameterCheck.notNull(adapter, "adapter");
     this.config = ParameterCheck.notNull(config, "config");
     this.locale = ParameterCheck.notNull(locale, "locale");
   }
 
-  /**
-   * Resolve the translation value from the adapter implementation.
-   *
-   * @param key The translation key
-   * @return The value or an empty <tt>Optional</tt>
-   */
-  protected abstract Optional<String> resolveTranslation(String key);
-
   @Override
   public String get(String key) {
     ParameterCheck.notNullEmptyOrBlank(key, "key");
-    Optional<String> translation = resolveTranslation(key);
+    Optional<String> translation = adapter.getTranslation(key);
     if (translation.isEmpty()) {
       if (!config.isEscapeIfMissing()) {
         throw new NilsException("Could not find translation for key '" + key + "'.");
@@ -81,14 +77,5 @@ public abstract class BaseAdapter implements Adapter {
   @Override
   public Locale getLocale() {
     return locale;
-  }
-
-  /**
-   * Gets the <tt>NilsConfig</tt>.
-   *
-   * @return A <tt>NilsConfig</tt> object.
-   */
-  protected NilsConfig getConfig() {
-    return config;
   }
 }

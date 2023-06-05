@@ -11,7 +11,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.codepulsar.nils.core.NilsConfig;
+import com.codepulsar.nils.core.adapter.AdapterConfig;
 import com.codepulsar.nils.core.testadapter.StaticAdapterConfig;
 
 public class ResourceBundleAdapterTest {
@@ -33,7 +33,7 @@ public class ResourceBundleAdapterTest {
   public void resourceBundleAdapter_nullLocale() {
     // Arrange
     Locale locale = null;
-    NilsConfig config = NilsConfig.init(ResourceBundleAdapterConfig.init(this));
+    AdapterConfig config = ResourceBundleAdapterConfig.init(this);
     // Act / Assert
     assertThatThrownBy(() -> new ResourceBundleAdapter(config, locale))
         .isInstanceOf(IllegalArgumentException.class)
@@ -44,7 +44,7 @@ public class ResourceBundleAdapterTest {
   public void resourceBundleAdapter_nullConfig() {
     // Arrange
     Locale locale = Locale.ENGLISH;
-    NilsConfig config = null;
+    AdapterConfig config = null;
     // Act / Assert
     assertThatThrownBy(() -> new ResourceBundleAdapter(config, locale))
         .isInstanceOf(IllegalArgumentException.class)
@@ -55,7 +55,7 @@ public class ResourceBundleAdapterTest {
   public void resourceBundleAdapter_invalidAdapterConfig() {
     // Arrange
     Locale locale = Locale.ENGLISH;
-    NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
+    AdapterConfig config = new StaticAdapterConfig();
     // Act / Assert
     assertThatThrownBy(() -> new ResourceBundleAdapter(config, locale))
         .isInstanceOf(IllegalArgumentException.class)
@@ -67,7 +67,7 @@ public class ResourceBundleAdapterTest {
   public void resourceBundleAdapter_defautltConfig() {
     // Arrange
     Locale locale = Locale.ENGLISH;
-    NilsConfig config = NilsConfig.init(ResourceBundleAdapterConfig.init(this));
+    AdapterConfig config = ResourceBundleAdapterConfig.init(this);
     // Act
     ResourceBundleAdapter underTest = new ResourceBundleAdapter(config, locale);
     // Assert
@@ -78,9 +78,8 @@ public class ResourceBundleAdapterTest {
   public void invalidResourceBundle() {
     // Arrange
     Locale locale = Locale.ENGLISH;
-    NilsConfig config =
-        NilsConfig.init(
-            ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/non_existing"));
+    AdapterConfig config =
+        ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/non_existing");
     // Act / Assert
     assertThatThrownBy(() -> new ResourceBundleAdapter(config, locale))
         .isInstanceOf(MissingResourceException.class);
@@ -90,12 +89,11 @@ public class ResourceBundleAdapterTest {
   public void missingResourceBundle() {
     // Arrange
     Locale locale = Locale.ITALIAN;
-    NilsConfig config =
-        NilsConfig.init(
-            ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing"));
+    AdapterConfig config =
+        ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing");
     // Act
     ResourceBundleAdapter underTest = new ResourceBundleAdapter(config, locale);
-    Optional<String> value = underTest.resolveTranslation("translate.me");
+    Optional<String> value = underTest.getTranslation("translate.me");
     // Assert
     assertThat(value).isNotEmpty();
     assertThat(value.get()).isEqualTo("I'm am translated!");
@@ -105,12 +103,11 @@ public class ResourceBundleAdapterTest {
   public void translateKeyFound1() {
     // Arrange
     Locale locale = Locale.ENGLISH;
-    NilsConfig config =
-        NilsConfig.init(
-            ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing"));
+    AdapterConfig config =
+        ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing");
     // Act
     ResourceBundleAdapter underTest = new ResourceBundleAdapter(config, locale);
-    Optional<String> value = underTest.resolveTranslation("translate.me");
+    Optional<String> value = underTest.getTranslation("translate.me");
     // Assert
     assertThat(value).isNotEmpty();
     assertThat(value.get()).isEqualTo("I'm am translated!");
@@ -120,12 +117,11 @@ public class ResourceBundleAdapterTest {
   public void translateKeyFound2() {
     // Arrange
     Locale locale = Locale.GERMAN;
-    NilsConfig config =
-        NilsConfig.init(
-            ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing"));
+    AdapterConfig config =
+        ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing");
     // Act
     ResourceBundleAdapter underTest = new ResourceBundleAdapter(config, locale);
-    Optional<String> value = underTest.resolveTranslation("translate.me");
+    Optional<String> value = underTest.getTranslation("translate.me");
     // Assert
     assertThat(value).isNotEmpty();
     assertThat(value.get()).isEqualTo("Ich bin übersetzt!");
@@ -135,33 +131,12 @@ public class ResourceBundleAdapterTest {
   public void translateKeyNotFound() {
     // Arrange
     Locale locale = Locale.ENGLISH;
-    NilsConfig config =
-        NilsConfig.init(
-            ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing"));
+    AdapterConfig config =
+        ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing");
     // Act
     ResourceBundleAdapter underTest = new ResourceBundleAdapter(config, locale);
-    Optional<String> value = underTest.resolveTranslation("translate.me.butImNotThere");
+    Optional<String> value = underTest.getTranslation("translate.me.butImNotThere");
     // Assert
     assertThat(value).isEmpty();
-  }
-
-  @Test
-  public void get() {
-    // Arrange
-    Locale locale = Locale.ENGLISH;
-    NilsConfig config =
-        NilsConfig.init(
-            ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing"));
-    // Act
-    ResourceBundleAdapter underTest = new ResourceBundleAdapter(config, locale);
-    Optional<String> resolvedValue = underTest.resolveTranslation("translate.get");
-    String getValue = underTest.get("translate.get");
-    String getWithArgsValue = underTest.get("translate.get", "A", 400L);
-
-    // Assert
-    assertThat(resolvedValue).isNotEmpty();
-    assertThat(resolvedValue.get()).isEqualTo("Get from {0} to {1} from file.");
-    assertThat(getValue).isEqualTo("Get from {0} to {1} from file.");
-    assertThat(getWithArgsValue).isEqualTo("Get from A to 400 from file.");
   }
 }

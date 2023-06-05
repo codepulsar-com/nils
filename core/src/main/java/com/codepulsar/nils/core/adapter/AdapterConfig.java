@@ -2,7 +2,7 @@ package com.codepulsar.nils.core.adapter;
 
 /**
  * An <tt>AdapterConfig</tt> provides further configuration values for an <tt>Adapter</tt>
- * implementation
+ * implementation.
  *
  * @see Adapter
  */

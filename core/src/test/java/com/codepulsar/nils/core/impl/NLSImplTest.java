@@ -1,4 +1,4 @@
-package com.codepulsar.nils.core.adapter;
+package com.codepulsar.nils.core.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -14,29 +14,43 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import com.codepulsar.nils.core.NilsConfig;
 import com.codepulsar.nils.core.NilsException;
+import com.codepulsar.nils.core.adapter.Adapter;
 import com.codepulsar.nils.core.testadapter.StaticAdapter;
 import com.codepulsar.nils.core.testadapter.StaticAdapterConfig;
 
-public class BaseAdapterTest {
+public class NLSImplTest {
+  @Test
+  public void constructor_nullAdapter() {
+    // Arrange
+    Locale locale = Locale.ENGLISH;
+    NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
+    Adapter adapter = null;
+    // Act / Assert
+    assertThatThrownBy(() -> new NLSImpl(adapter, config, locale))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("Parameter 'adapter' cannot be null.");
+  }
 
   @Test
-  public void resourceBundleAdapter_nullLocale() {
+  public void constructor_nullLocale() {
     // Arrange
     Locale locale = null;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
+    Adapter adapter = new StaticAdapter(config.getAdapterConfig(), locale);
     // Act / Assert
-    assertThatThrownBy(() -> new StaticAdapter(config, locale))
+    assertThatThrownBy(() -> new NLSImpl(adapter, config, locale))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Parameter 'locale' cannot be null.");
   }
 
   @Test
-  public void resourceBundleAdapter_nullConfig() {
+  public void constructor_nullConfig() {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = null;
+    Adapter adapter = new StaticAdapter(new StaticAdapterConfig(), locale);
     // Act / Assert
-    assertThatThrownBy(() -> new StaticAdapter(config, locale))
+    assertThatThrownBy(() -> new NLSImpl(adapter, config, locale))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Parameter 'config' cannot be null.");
   }
@@ -47,7 +61,8 @@ public class BaseAdapterTest {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
-    BaseAdapter underTest = new StaticAdapter(config, locale);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
 
     // Act / Assert
     assertThatThrownBy(() -> underTest.get(key))
@@ -60,7 +75,8 @@ public class BaseAdapterTest {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
-    BaseAdapter underTest = new StaticAdapter(config, locale);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
 
     // Act
     String value = underTest.get("simple");
@@ -74,7 +90,8 @@ public class BaseAdapterTest {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
-    BaseAdapter underTest = new StaticAdapter(config, locale);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
     assertThat(config.isEscapeIfMissing()).isTrue();
     // Act
     String value = underTest.get("not.found");
@@ -88,7 +105,8 @@ public class BaseAdapterTest {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig()).escapePattern(">>{0}<<");
-    BaseAdapter underTest = new StaticAdapter(config, locale);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
     assertThat(config.isEscapeIfMissing()).isTrue();
     // Act
     String value = underTest.get("not.found");
@@ -102,7 +120,8 @@ public class BaseAdapterTest {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig()).escapePattern("Missing: {0}");
-    BaseAdapter underTest = new StaticAdapter(config, locale);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
     assertThat(config.isEscapeIfMissing()).isTrue();
     // Act
     String value = underTest.get("not.found");
@@ -116,7 +135,8 @@ public class BaseAdapterTest {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig()).escapeIfMissing(false);
-    BaseAdapter underTest = new StaticAdapter(config, locale);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
     assertThat(config.isEscapeIfMissing()).isFalse();
     // Act / Assert
     assertThatThrownBy(() -> underTest.get("not.found"))
@@ -130,7 +150,8 @@ public class BaseAdapterTest {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
-    BaseAdapter underTest = new StaticAdapter(config, locale);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
 
     // Act / Assert
     assertThatThrownBy(() -> underTest.get(key, args))
@@ -143,7 +164,8 @@ public class BaseAdapterTest {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
-    BaseAdapter underTest = new StaticAdapter(config, locale);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
     assertThat(config.isEscapeIfMissing()).isTrue();
     // Act
     String value = underTest.get("with_args", (Object[]) null);
@@ -157,7 +179,8 @@ public class BaseAdapterTest {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
-    BaseAdapter underTest = new StaticAdapter(config, locale);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
     assertThat(config.isEscapeIfMissing()).isTrue();
     // Act
     String value = underTest.get("with_args", new Object[] {});
@@ -171,7 +194,8 @@ public class BaseAdapterTest {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
-    BaseAdapter underTest = new StaticAdapter(config, locale);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
     assertThat(config.isEscapeIfMissing()).isTrue();
     // Act
     String value = underTest.get("with_args", "First", 200L);
@@ -185,7 +209,8 @@ public class BaseAdapterTest {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
-    BaseAdapter underTest = new StaticAdapter(config, locale);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
     assertThat(config.isEscapeIfMissing()).isTrue();
     // Act
     String value = underTest.get("not.found", "with a value");
@@ -199,8 +224,10 @@ public class BaseAdapterTest {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig()).escapeIfMissing(false);
-    BaseAdapter underTest = new StaticAdapter(config, locale);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
     assertThat(config.isEscapeIfMissing()).isFalse();
+
     // Act / Assert
     assertThatThrownBy(() -> underTest.get("not.found", "with a value"))
         .isInstanceOf(NilsException.class)
@@ -213,7 +240,8 @@ public class BaseAdapterTest {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
-    BaseAdapter underTest = new StaticAdapter(config, locale);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
 
     // Act / Assert
     assertThatThrownBy(() -> underTest.get(key, subKey))
@@ -226,7 +254,8 @@ public class BaseAdapterTest {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
-    BaseAdapter underTest = new StaticAdapter(config, locale);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
 
     // Act
     String value = underTest.get(Dummy.class, "attribute");
@@ -240,8 +269,10 @@ public class BaseAdapterTest {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
-    BaseAdapter underTest = new StaticAdapter(config, locale);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
     assertThat(config.isEscapeIfMissing()).isTrue();
+
     // Act
     String value = underTest.get(Dummy.class, "not_found");
 
@@ -254,8 +285,10 @@ public class BaseAdapterTest {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig()).escapePattern(">>{0}<<");
-    BaseAdapter underTest = new StaticAdapter(config, locale);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
     assertThat(config.isEscapeIfMissing()).isTrue();
+
     // Act
     String value = underTest.get(Dummy.class, "not_found");
 
@@ -268,7 +301,9 @@ public class BaseAdapterTest {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig()).escapeIfMissing(false);
-    BaseAdapter underTest = new StaticAdapter(config, locale);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
+
     assertThat(config.isEscapeIfMissing()).isFalse();
     // Act / Assert
     assertThatThrownBy(() -> underTest.get(Dummy.class, "not_found"))
@@ -283,7 +318,8 @@ public class BaseAdapterTest {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
-    BaseAdapter underTest = new StaticAdapter(config, locale);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
 
     // Act / Assert
     assertThatThrownBy(() -> underTest.get(key, subKey, args))
@@ -296,8 +332,10 @@ public class BaseAdapterTest {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
-    BaseAdapter underTest = new StaticAdapter(config, locale);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
     assertThat(config.isEscapeIfMissing()).isTrue();
+
     // Act
     String value = underTest.get(Dummy.class, "with_args", (Object[]) null);
 
@@ -310,8 +348,10 @@ public class BaseAdapterTest {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
-    BaseAdapter underTest = new StaticAdapter(config, locale);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
     assertThat(config.isEscapeIfMissing()).isTrue();
+
     // Act
     String value = underTest.get(Dummy.class, "with_args", new Object[] {});
 
@@ -324,8 +364,10 @@ public class BaseAdapterTest {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
-    BaseAdapter underTest = new StaticAdapter(config, locale);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
     assertThat(config.isEscapeIfMissing()).isTrue();
+
     // Act
     String value = underTest.get(Dummy.class, "with_args", "First", 200L);
 
@@ -338,8 +380,10 @@ public class BaseAdapterTest {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
-    BaseAdapter underTest = new StaticAdapter(config, locale);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
     assertThat(config.isEscapeIfMissing()).isTrue();
+
     // Act
     String value = underTest.get(Dummy.class, "not_found", "with a value");
 
@@ -352,8 +396,10 @@ public class BaseAdapterTest {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig()).escapeIfMissing(false);
-    BaseAdapter underTest = new StaticAdapter(config, locale);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
     assertThat(config.isEscapeIfMissing()).isFalse();
+
     // Act / Assert
     assertThatThrownBy(() -> underTest.get(Dummy.class, "not_found", "with a value"))
         .isInstanceOf(NilsException.class)
@@ -365,11 +411,11 @@ public class BaseAdapterTest {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
-    BaseAdapter underTest = new StaticAdapter(config, locale);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
 
     // Act / Assert
     assertThat(underTest.getLocale()).isEqualTo(Locale.ENGLISH);
-    assertThat(underTest.getConfig()).isEqualTo(config);
   }
 
   private static Stream<Arguments> string_getByKey_invalidSource() {

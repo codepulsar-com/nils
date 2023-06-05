@@ -8,30 +8,29 @@ import java.util.ResourceBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.codepulsar.nils.core.NilsConfig;
-import com.codepulsar.nils.core.adapter.BaseAdapter;
-/** A NLS adapter implementation using Java ResourceBundles for the translations. */
-public class ResourceBundleAdapter extends BaseAdapter {
+import com.codepulsar.nils.core.adapter.Adapter;
+import com.codepulsar.nils.core.adapter.AdapterConfig;
+/** An {@link Adapter} implementation using Java ResourceBundles for the translations. */
+public class ResourceBundleAdapter implements Adapter {
   private static final Logger LOG = LoggerFactory.getLogger(ResourceBundleAdapter.class);
   private final ResourceBundle bundle;
   private final ResourceBundleAdapterConfig adapterConfig;
 
-  public ResourceBundleAdapter(NilsConfig config, Locale locale) {
-    super(config, locale);
-    if (!(config.getAdapterConfig() instanceof ResourceBundleAdapterConfig)) {
+  public ResourceBundleAdapter(AdapterConfig config, Locale locale) {
+    if (!(config instanceof ResourceBundleAdapterConfig)) {
       throw new IllegalArgumentException(
           String.format(
               "The provided AdapterConfig (%s) is not of type %s",
-              config.getAdapterConfig(), ResourceBundleAdapterConfig.class.getName()));
+              config, ResourceBundleAdapterConfig.class.getName()));
     }
-    this.adapterConfig = (ResourceBundleAdapterConfig) config.getAdapterConfig();
+    this.adapterConfig = (ResourceBundleAdapterConfig) config;
     this.bundle =
         ResourceBundle.getBundle(
             adapterConfig.getResourcesBundleName(), locale, adapterConfig.getOwner());
   }
 
   @Override
-  protected Optional<String> resolveTranslation(String key) {
+  public Optional<String> getTranslation(String key) {
     try {
       return Optional.of(bundle.getString(key));
     } catch (MissingResourceException ex) {

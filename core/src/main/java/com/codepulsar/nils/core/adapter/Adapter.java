@@ -1,6 +1,7 @@
 package com.codepulsar.nils.core.adapter;
 
-import com.codepulsar.nils.core.NLS;
+import java.util.Optional;
+
 import com.codepulsar.nils.core.adapter.rb.ResourceBundleAdapter;
 /**
  * An <tt>Adapter</tt> provides an implementation for a specific kind to access localization
@@ -17,4 +18,12 @@ import com.codepulsar.nils.core.adapter.rb.ResourceBundleAdapter;
  * @see AdapterConfig
  * @see ResourceBundleAdapter
  */
-public interface Adapter extends NLS {}
+public interface Adapter {
+  /**
+   * Resolve the translation value from the adapter implementation.
+   *
+   * @param key The translation key
+   * @return The value or an empty <tt>Optional</tt>
+   */
+  Optional<String> getTranslation(String key);
+}

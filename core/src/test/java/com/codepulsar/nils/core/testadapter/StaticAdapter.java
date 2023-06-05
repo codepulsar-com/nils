@@ -4,10 +4,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
-import com.codepulsar.nils.core.NilsConfig;
-import com.codepulsar.nils.core.adapter.BaseAdapter;
+import com.codepulsar.nils.core.adapter.Adapter;
+import com.codepulsar.nils.core.adapter.AdapterConfig;
 
-public class StaticAdapter extends BaseAdapter {
+public class StaticAdapter implements Adapter {
 
   private Map<String, String> translations =
       Map.of(
@@ -20,12 +20,10 @@ public class StaticAdapter extends BaseAdapter {
           "Dummy.with_args",
           "A {0} with {1}.");
 
-  public StaticAdapter(NilsConfig config, Locale locale) {
-    super(config, locale);
-  }
+  public StaticAdapter(AdapterConfig config, Locale locale) {}
 
   @Override
-  protected Optional<String> resolveTranslation(String key) {
+  public Optional<String> getTranslation(String key) {
     return Optional.ofNullable(translations.get(key));
   }
 }

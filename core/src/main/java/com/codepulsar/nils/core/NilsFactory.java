@@ -7,9 +7,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.codepulsar.nils.core.adapter.Adapter;
 import com.codepulsar.nils.core.adapter.AdapterConfig;
 import com.codepulsar.nils.core.adapter.AdapterFactory;
+import com.codepulsar.nils.core.impl.NLSImpl;
 import com.codepulsar.nils.core.util.ParameterCheck;
 /** Factory for getting access to the provided NLS. A requested NLS object is cached. */
 public class NilsFactory {
@@ -54,13 +54,14 @@ public class NilsFactory {
         translationCache.computeIfAbsent(
             locale,
             (l) -> {
-              return createAdapter(locale, config);
+              return createImpl(locale, config);
             });
     return result;
   }
 
-  private Adapter createAdapter(Locale locale, NilsConfig config) {
-    return getAdapterFactory().create(config, locale);
+  private NLSImpl createImpl(Locale locale, NilsConfig config) {
+    return new NLSImpl(
+        getAdapterFactory().create(config.getAdapterConfig(), locale), config, locale);
   }
 
   private AdapterFactory<?> getAdapterFactory() {

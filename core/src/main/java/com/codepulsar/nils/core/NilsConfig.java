@@ -12,6 +12,8 @@ public class NilsConfig {
 
   private String escapePattern = "[{0}]";
 
+  private String includeTag = "@include";
+
   private NilsConfig(AdapterConfig adapterConfig) {
     this.adapterConfig = adapterConfig;
   }
@@ -79,6 +81,31 @@ public class NilsConfig {
     ParameterCheck.notNullEmptyOrBlank(escapePattern, "escapePattern");
 
     this.escapePattern = checkEscapePattern(escapePattern);
+    return this;
+  }
+  /**
+   * Gets the tag for include translations from other key.
+   *
+   * <p>The default value is <code>@include</code>.
+   *
+   * @param includeTag
+   * @return The tag used including translations.
+   * @see #includeTag(String)
+   */
+  public String getIncludeTag() {
+    return includeTag;
+  }
+  /**
+   * Sets the tag for include translations from other key.
+   *
+   * @param includeTag The tag used including translations.
+   * @return This config object.
+   * @see #getIncludeTag()
+   */
+  public NilsConfig includeTag(String includeTag) {
+    ParameterCheck.notNullEmptyOrBlank(includeTag, "includeTag");
+
+    this.includeTag = includeTag;
     return this;
   }
 

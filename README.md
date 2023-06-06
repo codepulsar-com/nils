@@ -15,6 +15,8 @@ The library requires
 
 ### Include
 
+**NO RELEASE SO FAR. STILL IN DEVELOPMENT**
+
 You can include _NILS_ from the release page or even easier as dependency if you use a build tool like Maven or Gradle.
 
 Maven:
@@ -77,68 +79,9 @@ public class SimpleUse {
 
 ## Further reading
 
-### Missing Translations
+See the [Documentation](docs/index.md) for more information.
 
-_NILS_ provides two behaviours if translations could not be found:
-
-1. Return the key with some characters around it.
-2. Throw an exception, that the translation could not be found.
-
-The first one is the default case. If a translation key was not found the translation surrounded by `[` and `]` will be returned (i. e. `[persons.name]`).
-
-The `NilsConfig` provides methods to configure this: 
-
-* `escapeIfMissing(false)` : A flag, if an exception should be thrown, if the translation could not be found. `false` means throw an exception.
-* `escapePattern("@{0}")` : Escape a missing exception in the format `@persons.name`. The default is `[{0}]`. The escapePattern must contain the string "{0}". 
-
-### Different locales
-
-_NILS_ can handle with different locales at a time. The `NilsFactory` provides access to different NLS objects.
-
-* `nls()` : Returns an NLS object for the default locale of the used JVM.
-* `nls(Locale)` : Returns an NLS object for a specific locale.
-* `nls(String)` : Returns an NLS object, where the locale is reolved by its language code.
-
-### Translation format for arguments
-
-If you want to use arguments in a translated value, the value must be in the format "Here is the first {0} replacement". Each arguments is represented by a "{..}" section in the translation, starting with 0 for the first argument.
-
-The argument replacement is done by the `MessageFormat` class of the JRE. Look there for more information about the formatting.
-
-### Caveats / hacks
-
-#### NILS and Java's module-info.java
-
-If you use _NILS_ with a module based application and want to use the resource bundles of your application you must give access to the folder containing the resource bundles using the `open` keyword.
-
-```
-module xyz {
-  export my.package;
-  open lang;
-}
-```
-
-In the example lang is the folder containing the resource files.
-
-### Extending
-
-In general _NILS_ is an abstraction layer to NLS. The access to the translation is encapsulated.
-
-Currently there is only one implementation for this layer: ResourceBundles.
-
-If you need another kind of translation source you can implement your own Adapter. (Maybe for JSON or reading from a database).
-
-To extend NILS you must implement the following classes (located in the package `com.codepulsar.nils.core.adapter`):
-
-* `Adapter`: The Adapter is the concrete implementation, accessing your translation source. 
-* `AdapterConfig`: The configuration for the adapter. Is used by the `NilsFactory`.
-* `AdapterFactory`: A factory using the AdapterConfig to create a new Adapter object. The Factory must provide a parameterless default constructor.
-
-Beside these interfaces NILS provides the abstract class `BaseAdapter`. It is recommended that Adapters should extend from this class, because these base class handles common cases like the resolution of missing keys, argument replacements in translations etc.
-
-The tests in the core modules provides a really simple implementation for a Adapter using a fix Map. (see `com.codepulsar.nils.core.testadapter`).
-
-## Contribution
+## Contributing
 
 Contribution are welcome! Please check the issues, if there is/was already a ticket for your bug, suggestions etc. If you have code changes please create a pull request.
 

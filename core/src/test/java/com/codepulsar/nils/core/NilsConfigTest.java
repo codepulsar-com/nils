@@ -38,6 +38,7 @@ public class NilsConfigTest {
     assertThat(underTest.getAdapterConfig()).isEqualTo(adapterConfig);
     assertThat(underTest.isEscapeIfMissing()).isTrue();
     assertThat(underTest.getEscapePattern()).isEqualTo("[{0}]");
+    assertThat(underTest.getIncludeTag()).isEqualTo("@include");
   }
 
   @Test
@@ -79,6 +80,31 @@ public class NilsConfigTest {
     assertThat(underTest.getEscapePattern()).isEqualTo(">>{0}<<");
   }
 
+  @Test
+  public void includeTag() {
+    // Arrange
+    AdapterConfig adapterConfig = new StaticAdapterConfig();
+    NilsConfig underTest = NilsConfig.init(adapterConfig);
+
+    // Act
+    NilsConfig returnValue = underTest.includeTag("TEST");
+    assertThat(returnValue).isNotNull();
+    assertThat(returnValue).isEqualTo(underTest);
+    assertThat(underTest.getIncludeTag()).isEqualTo("TEST");
+  }
+
+  @ParameterizedTest
+  @MethodSource("includeTag_invalidInputSource")
+  public void includeTag_invalidInput(String tag, String errMsg) {
+    // Arrange
+    AdapterConfig adapterConfig = new StaticAdapterConfig();
+    NilsConfig underTest = NilsConfig.init(adapterConfig);
+    // Act / Assert
+    assertThatThrownBy(() -> underTest.includeTag(tag))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage(errMsg);
+  }
+
   private static Stream<Arguments> escapePattern_invalidInputSource() {
     return Stream.of(
         arguments(null, "Parameter 'escapePattern' cannot be null."),
@@ -97,5 +123,12 @@ public class NilsConfigTest {
         arguments(
             "Missing: '{0}'",
             "Parameter 'escapePattern' is invalid: It must contain the string \"{0}\"."));
+  }
+
+  private static Stream<Arguments> includeTag_invalidInputSource() {
+    return Stream.of(
+        arguments(null, "Parameter 'includeTag' cannot be null."),
+        arguments("", "Parameter 'includeTag' cannot be empty or blank."),
+        arguments(" ", "Parameter 'includeTag' cannot be empty or blank."));
   }
 }

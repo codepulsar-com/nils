@@ -15,7 +15,6 @@ import com.codepulsar.nils.core.NilsConfig;
 import com.codepulsar.nils.core.NilsException;
 import com.codepulsar.nils.core.util.ParameterCheck;
 
-// TODO update readme.
 class IncludeHandler {
 
   private static final Logger LOG = LoggerFactory.getLogger(IncludeHandler.class);

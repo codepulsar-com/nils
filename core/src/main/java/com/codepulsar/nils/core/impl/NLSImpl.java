@@ -10,6 +10,7 @@ import com.codepulsar.nils.core.NLS;
 import com.codepulsar.nils.core.NilsConfig;
 import com.codepulsar.nils.core.NilsException;
 import com.codepulsar.nils.core.adapter.Adapter;
+import com.codepulsar.nils.core.config.ErrorType;
 import com.codepulsar.nils.core.util.ParameterCheck;
 /**
  * Implementation of the {@link NLS} interface.
@@ -28,6 +29,7 @@ public class NLSImpl implements NLS {
   private final Locale locale;
   private final NilsConfig config;
   private final IncludeHandler includeHandler;
+  private final ErrorHandler errorHandler;
 
   private Map<String, Optional<String>> cache = new HashMap<>();
 
@@ -36,6 +38,7 @@ public class NLSImpl implements NLS {
     this.config = ParameterCheck.notNull(config, "config");
     this.locale = ParameterCheck.notNull(locale, "locale");
     this.includeHandler = new IncludeHandler(config, adapter::getTranslation);
+    this.errorHandler = new ErrorHandler(config);
   }
 
   @Override
@@ -43,9 +46,9 @@ public class NLSImpl implements NLS {
     ParameterCheck.notNullEmptyOrBlank(key, "key");
     Optional<String> translation = resolveTranslation(key);
     if (translation.isEmpty()) {
-      if (!config.isEscapeIfMissing()) {
-        throw new NilsException("Could not find translation for key '" + key + "'.");
-      }
+      errorHandler.handle(
+          ErrorType.MISSING_TRANSLATION,
+          new NilsException("Could not find translation for key '" + key + "'."));
       return buildMissingKey(key);
     }
     return translation.get();

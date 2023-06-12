@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import com.codepulsar.nils.core.adapter.Adapter;
 import com.codepulsar.nils.core.adapter.AdapterConfig;
+import com.codepulsar.nils.core.util.ParameterCheck;
 /** An {@link Adapter} implementation using Java ResourceBundles for the translations. */
 public class ResourceBundleAdapter implements Adapter {
   private static final Logger LOG = LoggerFactory.getLogger(ResourceBundleAdapter.class);
@@ -17,6 +18,8 @@ public class ResourceBundleAdapter implements Adapter {
   private final ResourceBundleAdapterConfig adapterConfig;
 
   public ResourceBundleAdapter(AdapterConfig config, Locale locale) {
+    ParameterCheck.notNull(config, "config");
+    ParameterCheck.notNull(locale, "locale");
     if (!(config instanceof ResourceBundleAdapterConfig)) {
       throw new IllegalArgumentException(
           String.format(

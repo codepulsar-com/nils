@@ -1,18 +1,20 @@
 package com.codepulsar.nils.core;
 
 import java.text.MessageFormat;
+import java.util.EnumSet;
 
 import com.codepulsar.nils.core.adapter.AdapterConfig;
+import com.codepulsar.nils.core.config.ErrorType;
 import com.codepulsar.nils.core.util.ParameterCheck;
 /** The configuration of the Nils library. */
 public class NilsConfig {
   private AdapterConfig adapterConfig;
-
-  private boolean escapeIfMissing = true;
+  // TODO remove from docu -> escapeIfMissing = true;
 
   private String escapePattern = "[{0}]";
 
   private String includeTag = "@include";
+  private EnumSet<ErrorType> suppressErrors = EnumSet.of(ErrorType.ALL);
 
   private NilsConfig(AdapterConfig adapterConfig) {
     this.adapterConfig = adapterConfig;
@@ -27,44 +29,16 @@ public class NilsConfig {
   }
 
   /**
-   * Gets the flag if the translation key should be escaped instead of throwing an exception if a
-   * translation could not be by the adapter.
-   *
-   * <p>The default value is <code>true</code>.
-   *
-   * @return The value of the flag.
-   * @see #escapeIfMissing(boolean)
-   */
-  public boolean isEscapeIfMissing() {
-    return escapeIfMissing;
-  }
-
-  /**
    * Gets the escape pattern if a translation is missing, but no exception should be thrown.
    *
    * <p>The escape pattern must contain <tt>{0}</tt>.
    *
    * @return The pattern.
-   * @see #isEscapeIfMissing()
+   * @see #getSuppressErrors()
    * @see #escapePattern(String)
    */
   public String getEscapePattern() {
     return escapePattern;
-  }
-
-  /**
-   * Sets the flag, if the translation key should be escaped instead of throwing an exception if an
-   * translation could not be found.
-   *
-   * <p>The default value is <code>true</code>.
-   *
-   * @param escapeIfMissing The value of the flag.
-   * @return This config object.
-   * @see #isEscapeIfMissing()
-   */
-  public NilsConfig escapeIfMissing(boolean escapeIfMissing) {
-    this.escapeIfMissing = escapeIfMissing;
-    return this;
   }
 
   /**
@@ -74,7 +48,7 @@ public class NilsConfig {
    *
    * @param escapePattern the pattern
    * @return This config object.
-   * @see #isEscapeIfMissing()
+   * @see #getSuppressErrors()
    * @see #getEscapePattern()
    */
   public NilsConfig escapePattern(String escapePattern) {
@@ -106,6 +80,41 @@ public class NilsConfig {
     ParameterCheck.notNullEmptyOrBlank(includeTag, "includeTag");
 
     this.includeTag = includeTag;
+    return this;
+  }
+  /**
+   * Gets the ErrorTypes that should be suppressed during the runtime.
+   *
+   * @return A Set of ErrorTypes.
+   * @see #suppressErrors(ErrorType, ErrorType...)
+   */
+  public EnumSet<ErrorType> getSuppressErrors() {
+    return suppressErrors;
+  }
+  /**
+   * Sets the ErrorTypes that should be suppressed during the runtime.
+   *
+   * <p><em>Note:</em>The ErrorType.ALL and the ErrorType.NONE cannot be combined with other
+   * ErrorTypes and must be set exclusively.
+   *
+   * @param type A ErrorType.
+   * @param types Further ErrorTypes.
+   * @see #getSuppressErrors()
+   */
+  public NilsConfig suppressErrors(ErrorType type, ErrorType... types) {
+    ParameterCheck.notNull(type, "type");
+    EnumSet<ErrorType> set = EnumSet.of(type, types);
+    if (set.contains(ErrorType.NONE) && set.size() > 1) {
+      throw new IllegalArgumentException(
+          "Parameter 'type' is invalid: ErrorType.NONE cannot combined with other ErrorTypes.");
+    }
+
+    if (set.contains(ErrorType.ALL) && set.size() > 1) {
+      throw new IllegalArgumentException(
+          "Parameter 'type' is invalid: ErrorType.ALL cannot combined with other ErrorTypes.");
+    }
+
+    suppressErrors = set;
     return this;
   }
 

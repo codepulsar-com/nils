@@ -6,6 +6,7 @@ import com.codepulsar.nils.core.NLS;
 import com.codepulsar.nils.core.NilsConfig;
 import com.codepulsar.nils.core.NilsFactory;
 import com.codepulsar.nils.core.adapter.rb.ResourceBundleAdapterConfig;
+import com.codepulsar.nils.core.config.ErrorType;
 
 public class SimpleUse {
 
@@ -31,9 +32,11 @@ public class SimpleUse {
     var street = NLS_DE.get(Address.class, "street");
   }
 
+  // TODO Update public docu
   public void config1() {
     NilsConfig config =
-        NilsConfig.init(ResourceBundleAdapterConfig.init(SimpleUse.class)).escapeIfMissing(false);
+        NilsConfig.init(ResourceBundleAdapterConfig.init(SimpleUse.class))
+            .suppressErrors(ErrorType.INCLUDE_LOOP, ErrorType.MISSING_TRANSLATION);
     NilsFactory.init(config);
   }
 

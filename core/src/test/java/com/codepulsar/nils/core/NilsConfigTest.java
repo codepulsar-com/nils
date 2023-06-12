@@ -1,5 +1,10 @@
 package com.codepulsar.nils.core;
 
+import static com.codepulsar.nils.core.config.ErrorType.ALL;
+import static com.codepulsar.nils.core.config.ErrorType.INCLUDE_LOOP;
+import static com.codepulsar.nils.core.config.ErrorType.MISSING_TRANSLATION;
+import static com.codepulsar.nils.core.config.ErrorType.NLS_PARAMETER_CHECK;
+import static com.codepulsar.nils.core.config.ErrorType.NONE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
@@ -36,23 +41,120 @@ public class NilsConfigTest {
     // Assert
     assertThat(underTest).isNotNull();
     assertThat(underTest.getAdapterConfig()).isEqualTo(adapterConfig);
-    assertThat(underTest.isEscapeIfMissing()).isTrue();
+    assertThat(underTest.getSuppressErrors()).containsExactly(ALL);
     assertThat(underTest.getEscapePattern()).isEqualTo("[{0}]");
     assertThat(underTest.getIncludeTag()).isEqualTo("@include");
   }
 
   @Test
-  public void throwWhenMissing() {
+  public void suppressErrors_nullParam() {
     // Arrange
     AdapterConfig adapterConfig = new StaticAdapterConfig();
-    // Act
+    NilsConfig underTest = NilsConfig.init(adapterConfig);
+
+    // Act / Assert
+    assertThatThrownBy(() -> underTest.suppressErrors(null))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("Parameter 'type' cannot be null.");
+  }
+
+  @Test
+  public void suppressErrors_noneAndOthers() {
+    // Arrange
+    AdapterConfig adapterConfig = new StaticAdapterConfig();
+    NilsConfig underTest = NilsConfig.init(adapterConfig);
+
+    // Act / Assert
+    assertThatThrownBy(() -> underTest.suppressErrors(NONE, INCLUDE_LOOP, MISSING_TRANSLATION))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage(
+            "Parameter 'type' is invalid: ErrorType.NONE cannot combined with other ErrorTypes.");
+  }
+
+  @Test
+  public void suppressErrors_noneAndOthers2() {
+    // Arrange
+    AdapterConfig adapterConfig = new StaticAdapterConfig();
+    NilsConfig underTest = NilsConfig.init(adapterConfig);
+
+    // Act / Assert
+    assertThatThrownBy(() -> underTest.suppressErrors(INCLUDE_LOOP, MISSING_TRANSLATION, NONE))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage(
+            "Parameter 'type' is invalid: ErrorType.NONE cannot combined with other ErrorTypes.");
+  }
+
+  @Test
+  public void suppressErrors_allAndOthers() {
+    // Arrange
+    AdapterConfig adapterConfig = new StaticAdapterConfig();
+    NilsConfig underTest = NilsConfig.init(adapterConfig);
+
+    // Act / Assert
+    assertThatThrownBy(() -> underTest.suppressErrors(ALL, INCLUDE_LOOP, MISSING_TRANSLATION))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage(
+            "Parameter 'type' is invalid: ErrorType.ALL cannot combined with other ErrorTypes.");
+  }
+
+  @Test
+  public void suppressErrors_allAndOthers2() {
+    // Arrange
+    AdapterConfig adapterConfig = new StaticAdapterConfig();
+    NilsConfig underTest = NilsConfig.init(adapterConfig);
+
+    // Act / Assert
+    assertThatThrownBy(() -> underTest.suppressErrors(INCLUDE_LOOP, MISSING_TRANSLATION, ALL))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage(
+            "Parameter 'type' is invalid: ErrorType.ALL cannot combined with other ErrorTypes.");
+  }
+
+  @Test
+  public void suppressErrors_noneAlone() {
+    // Arrange
+    AdapterConfig adapterConfig = new StaticAdapterConfig();
     NilsConfig underTest = NilsConfig.init(adapterConfig);
 
     // Act
-    NilsConfig returnValue = underTest.escapeIfMissing(false);
+    NilsConfig returnValue = underTest.suppressErrors(NONE);
+
+    // Assert
     assertThat(returnValue).isNotNull();
     assertThat(returnValue).isEqualTo(underTest);
-    assertThat(underTest.isEscapeIfMissing()).isFalse();
+    assertThat(underTest.getSuppressErrors()).containsExactly(NONE);
+  }
+
+  @Test
+  public void suppressErrors_allAlone() {
+    // Arrange
+    AdapterConfig adapterConfig = new StaticAdapterConfig();
+    NilsConfig underTest = NilsConfig.init(adapterConfig);
+
+    // Act
+    NilsConfig returnValue = underTest.suppressErrors(ALL);
+
+    // Assert
+    assertThat(returnValue).isNotNull();
+    assertThat(returnValue).isEqualTo(underTest);
+    assertThat(underTest.getSuppressErrors()).containsExactly(ALL);
+  }
+
+  @Test
+  public void suppressErrors_some() {
+    // Arrange
+    AdapterConfig adapterConfig = new StaticAdapterConfig();
+    NilsConfig underTest = NilsConfig.init(adapterConfig);
+
+    // Act
+    NilsConfig returnValue =
+        underTest.suppressErrors(INCLUDE_LOOP, MISSING_TRANSLATION, NLS_PARAMETER_CHECK);
+
+    // Assert
+    assertThat(returnValue).isNotNull();
+    assertThat(returnValue).isEqualTo(underTest);
+    assertThat(underTest.getSuppressErrors())
+        .containsExactly(INCLUDE_LOOP, MISSING_TRANSLATION, NLS_PARAMETER_CHECK);
   }
 
   @ParameterizedTest

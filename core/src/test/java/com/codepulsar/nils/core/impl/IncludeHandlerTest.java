@@ -13,6 +13,7 @@ import com.codepulsar.nils.core.NilsConfig;
 import com.codepulsar.nils.core.adapter.AdapterConfig;
 import com.codepulsar.nils.core.adapter.rb.ResourceBundleAdapter;
 import com.codepulsar.nils.core.adapter.rb.ResourceBundleAdapterConfig;
+import com.codepulsar.nils.core.config.SuppressableErrorTypes;
 import com.codepulsar.nils.core.error.NilsException;
 
 public class IncludeHandlerTest {
@@ -20,14 +21,15 @@ public class IncludeHandlerTest {
   private ResourceBundleAdapter adapter;
   private NLSImpl nls;
   private IncludeHandler underTest;
+  private AdapterConfig adapterConfig;
 
   @BeforeEach
   public void arrange() {
     // Arrange
-    AdapterConfig adapterConfig =
-        ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/includes");
+    adapterConfig = ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/includes");
     adapter = new ResourceBundleAdapter(adapterConfig, Locale.ENGLISH);
-    NilsConfig nilsConfig = NilsConfig.init(adapterConfig);
+    NilsConfig nilsConfig =
+        NilsConfig.init(adapterConfig).suppressErrors(SuppressableErrorTypes.NONE);
     nls = new NLSImpl(adapter, nilsConfig, Locale.ENGLISH);
     underTest = new IncludeHandler(nilsConfig, adapter::getTranslation);
   }
@@ -188,6 +190,56 @@ public class IncludeHandlerTest {
     assertThatThrownBy(() -> nls.get("Cycle1.value"))
         .isInstanceOf(NilsException.class)
         .hasMessage("NILS-002: Found circular include on 'Cycle2'.");
+  }
+
+  @Test
+  public void circularInclude_suppressException() {
+    // Arrange
+    var nilsConfig =
+        NilsConfig.init(adapterConfig).suppressErrors(SuppressableErrorTypes.INCLUDE_LOOP_DETECTED);
+    var nls_ = new NLSImpl(adapter, nilsConfig, Locale.ENGLISH);
+    var underTest_ = new IncludeHandler(nilsConfig, adapter::getTranslation);
+
+    // Actual
+    assertThat(adapter.getTranslation("Cycle1@include").isPresent()).isTrue();
+    assertThat(adapter.getTranslation("Cycle2@include").isPresent()).isTrue();
+    assertThat(adapter.getTranslation("Cycle1.value").isPresent()).isFalse();
+    assertThat(adapter.getTranslation("Cycle2.value").isPresent()).isFalse();
+
+    // Act / Assert
+    assertThatThrownBy(() -> underTest_.findKey("Cycle1.value"))
+        .isInstanceOf(NilsException.class)
+        .hasMessage("NILS-002: Found circular include on 'Cycle2'.");
+
+    // Act / Assert
+    assertThatThrownBy(() -> nls_.get("Cycle1.value"))
+        .isInstanceOf(NilsException.class)
+        .hasMessage("NILS-001: Could not find translation for key 'Cycle1.value'.");
+  }
+
+  @Test
+  public void circularInclude_suppressAll() {
+    // Arrange
+    var nilsConfig = NilsConfig.init(adapterConfig).suppressErrors(SuppressableErrorTypes.ALL);
+    var nls_ = new NLSImpl(adapter, nilsConfig, Locale.ENGLISH);
+    var underTest_ = new IncludeHandler(nilsConfig, adapter::getTranslation);
+
+    // Actual
+    assertThat(adapter.getTranslation("Cycle1@include").isPresent()).isTrue();
+    assertThat(adapter.getTranslation("Cycle2@include").isPresent()).isTrue();
+    assertThat(adapter.getTranslation("Cycle1.value").isPresent()).isFalse();
+    assertThat(adapter.getTranslation("Cycle2.value").isPresent()).isFalse();
+
+    // Act / Assert
+    assertThatThrownBy(() -> underTest_.findKey("Cycle1.value"))
+        .isInstanceOf(NilsException.class)
+        .hasMessage("NILS-002: Found circular include on 'Cycle2'.");
+
+    // Act
+    String result = nls_.get("Cycle1.value");
+
+    // Assert
+    assertThat(result).isEqualTo("[Cycle1.value]");
   }
 
   @Test

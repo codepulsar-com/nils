@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.codepulsar.nils.core.adapter.AdapterConfig;
+import com.codepulsar.nils.core.error.NilsConfigException;
 import com.codepulsar.nils.core.testadapter.StaticAdapterConfig;
 
 public class ResourceBundleAdapterTest {
@@ -58,7 +59,7 @@ public class ResourceBundleAdapterTest {
     AdapterConfig config = new StaticAdapterConfig();
     // Act / Assert
     assertThatThrownBy(() -> new ResourceBundleAdapter(config, locale))
-        .isInstanceOf(IllegalArgumentException.class)
+        .isInstanceOf(NilsConfigException.class)
         .hasMessageContaining("The provided AdapterConfig")
         .hasMessageContaining("is not of type");
   }

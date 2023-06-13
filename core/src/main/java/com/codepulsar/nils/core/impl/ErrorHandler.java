@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.codepulsar.nils.core.NilsConfig;
-import com.codepulsar.nils.core.NilsException;
-import com.codepulsar.nils.core.config.ErrorType;
+import com.codepulsar.nils.core.error.ErrorType;
+import com.codepulsar.nils.core.error.NilsException;
 // TODO Add tests
 class ErrorHandler {
 
@@ -14,6 +14,11 @@ class ErrorHandler {
 
   ErrorHandler(NilsConfig nilsConfig) {
     this.nilsConfig = nilsConfig;
+  }
+
+  public void handle(ErrorType suppressType, String errorMessage) throws NilsException {
+    NilsException ex = new NilsException(suppressType, errorMessage);
+    handle(suppressType, ex);
   }
 
   public void handle(ErrorType suppressType, NilsException ex) throws NilsException {
@@ -35,6 +40,6 @@ class ErrorHandler {
       return;
     }
     LOG.error(ex.getMessage(), ex);
-    throw new NilsException(ex.getMessage(), ex);
+    throw new NilsException(suppressType, ex.getMessage(), ex);
   }
 }

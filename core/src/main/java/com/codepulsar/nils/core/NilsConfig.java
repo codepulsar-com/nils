@@ -1,20 +1,25 @@
 package com.codepulsar.nils.core;
 
+import static com.codepulsar.nils.core.util.ParameterCheck.NILS_CONFIG;
+
 import java.text.MessageFormat;
-import java.util.EnumSet;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.codepulsar.nils.core.adapter.AdapterConfig;
-import com.codepulsar.nils.core.config.ErrorType;
+import com.codepulsar.nils.core.config.SuppressableErrorTypes;
+import com.codepulsar.nils.core.error.ErrorType;
+import com.codepulsar.nils.core.error.NilsConfigException;
 import com.codepulsar.nils.core.util.ParameterCheck;
 /** The configuration of the Nils library. */
 public class NilsConfig {
   private AdapterConfig adapterConfig;
-  // TODO remove from docu -> escapeIfMissing = true;
-
+  // TODO Public docu: remove from docu -> escapeIfMissing = true; // add suppressErrors
   private String escapePattern = "[{0}]";
 
   private String includeTag = "@include";
-  private EnumSet<ErrorType> suppressErrors = EnumSet.of(ErrorType.ALL);
+  private Set<ErrorType> suppressErrors = Set.of(SuppressableErrorTypes.ALL);
 
   private NilsConfig(AdapterConfig adapterConfig) {
     this.adapterConfig = adapterConfig;
@@ -52,7 +57,7 @@ public class NilsConfig {
    * @see #getEscapePattern()
    */
   public NilsConfig escapePattern(String escapePattern) {
-    ParameterCheck.notNullEmptyOrBlank(escapePattern, "escapePattern");
+    ParameterCheck.notNullEmptyOrBlank(escapePattern, "escapePattern", NILS_CONFIG);
 
     this.escapePattern = checkEscapePattern(escapePattern);
     return this;
@@ -77,8 +82,7 @@ public class NilsConfig {
    * @see #getIncludeTag()
    */
   public NilsConfig includeTag(String includeTag) {
-    ParameterCheck.notNullEmptyOrBlank(includeTag, "includeTag");
-
+    ParameterCheck.notNullEmptyOrBlank(includeTag, "includeTag", NILS_CONFIG);
     this.includeTag = includeTag;
     return this;
   }
@@ -88,7 +92,7 @@ public class NilsConfig {
    * @return A Set of ErrorTypes.
    * @see #suppressErrors(ErrorType, ErrorType...)
    */
-  public EnumSet<ErrorType> getSuppressErrors() {
+  public Set<ErrorType> getSuppressErrors() {
     return suppressErrors;
   }
   /**
@@ -102,17 +106,30 @@ public class NilsConfig {
    * @see #getSuppressErrors()
    */
   public NilsConfig suppressErrors(ErrorType type, ErrorType... types) {
-    ParameterCheck.notNull(type, "type");
-    EnumSet<ErrorType> set = EnumSet.of(type, types);
+    ParameterCheck.notNull(type, "type", NILS_CONFIG);
+    Set<ErrorType> set = new HashSet<>();
+    set.add(type);
+    if (types != null && types.length > 0) {
+      set.addAll(Arrays.asList(types));
+    }
     if (set.contains(ErrorType.NONE) && set.size() > 1) {
-      throw new IllegalArgumentException(
+      throw new NilsConfigException(
           "Parameter 'type' is invalid: ErrorType.NONE cannot combined with other ErrorTypes.");
     }
 
     if (set.contains(ErrorType.ALL) && set.size() > 1) {
-      throw new IllegalArgumentException(
+      throw new NilsConfigException(
           "Parameter 'type' is invalid: ErrorType.ALL cannot combined with other ErrorTypes.");
     }
+    set.forEach(
+        c -> {
+          if (!c.isSuppressable()) {
+            throw new NilsConfigException(
+                "Parameter 'type' is invalid: ErrorType '"
+                    + c.getErrCode()
+                    + "' is not suppressable.");
+          }
+        });
 
     suppressErrors = set;
     return this;
@@ -120,18 +137,17 @@ public class NilsConfig {
 
   private String checkEscapePattern(String pattern) {
     if (!pattern.contains("{0}")) {
-      throw new IllegalArgumentException(
+      throw new NilsConfigException(
           "Parameter 'escapePattern' is invalid: It must contain the string \"{0}\".");
     }
     if (pattern.contains("'{0}'")) {
-      throw new IllegalArgumentException(
+      throw new NilsConfigException(
           "Parameter 'escapePattern' is invalid: It must contain the string \"{0}\".");
     }
     try {
       MessageFormat.format(pattern, "TEST");
     } catch (IllegalArgumentException ex) {
-      throw new IllegalArgumentException(
-          "Parameter 'escapePattern' is invalid: " + ex.getMessage());
+      throw new NilsConfigException("Parameter 'escapePattern' is invalid: " + ex.getMessage());
     }
     return pattern;
   }
@@ -142,7 +158,7 @@ public class NilsConfig {
    * @return The created NilsConfig.
    */
   public static NilsConfig init(AdapterConfig adapterConfig) {
-    ParameterCheck.notNull(adapterConfig, "adapterConfig");
+    ParameterCheck.notNull(adapterConfig, "adapterConfig", NILS_CONFIG);
     return new NilsConfig(adapterConfig);
   }
 }

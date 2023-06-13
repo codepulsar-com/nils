@@ -10,10 +10,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.codepulsar.nils.core.NilsConfig;
-import com.codepulsar.nils.core.NilsException;
 import com.codepulsar.nils.core.adapter.AdapterConfig;
 import com.codepulsar.nils.core.adapter.rb.ResourceBundleAdapter;
 import com.codepulsar.nils.core.adapter.rb.ResourceBundleAdapterConfig;
+import com.codepulsar.nils.core.error.NilsException;
 
 public class IncludeHandlerTest {
 
@@ -182,12 +182,12 @@ public class IncludeHandlerTest {
     // Act / Assert
     assertThatThrownBy(() -> underTest.findKey("Cycle1.value"))
         .isInstanceOf(NilsException.class)
-        .hasMessage("Found circular include on 'Cycle2'.");
+        .hasMessage("NILS-002: Found circular include on 'Cycle2'.");
 
     // Act / Assert
     assertThatThrownBy(() -> nls.get("Cycle1.value"))
         .isInstanceOf(NilsException.class)
-        .hasMessage("Found circular include on 'Cycle2'.");
+        .hasMessage("NILS-002: Found circular include on 'Cycle2'.");
   }
 
   @Test
@@ -203,12 +203,12 @@ public class IncludeHandlerTest {
     // Act / Assert
     assertThatThrownBy(() -> underTest.findKey("LargerCycle1.value"))
         .isInstanceOf(NilsException.class)
-        .hasMessage("Found circular include on 'LargerCycle3'.");
+        .hasMessage("NILS-002: Found circular include on 'LargerCycle3'.");
 
     // Act / Assert
     assertThatThrownBy(() -> nls.get("LargerCycle1.value"))
         .isInstanceOf(NilsException.class)
-        .hasMessage("Found circular include on 'LargerCycle3'.");
+        .hasMessage("NILS-002: Found circular include on 'LargerCycle3'.");
   }
 
   @Test

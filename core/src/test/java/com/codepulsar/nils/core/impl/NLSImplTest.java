@@ -1,9 +1,9 @@
 package com.codepulsar.nils.core.impl;
 
-import static com.codepulsar.nils.core.config.ErrorType.ALL;
-import static com.codepulsar.nils.core.config.ErrorType.INCLUDE_LOOP;
-import static com.codepulsar.nils.core.config.ErrorType.MISSING_TRANSLATION;
-import static com.codepulsar.nils.core.config.ErrorType.NONE;
+import static com.codepulsar.nils.core.config.SuppressableErrorTypes.ALL;
+import static com.codepulsar.nils.core.config.SuppressableErrorTypes.INCLUDE_LOOP_DETECTED;
+import static com.codepulsar.nils.core.config.SuppressableErrorTypes.MISSING_TRANSLATION;
+import static com.codepulsar.nils.core.config.SuppressableErrorTypes.NONE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
@@ -17,8 +17,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import com.codepulsar.nils.core.NilsConfig;
-import com.codepulsar.nils.core.NilsException;
 import com.codepulsar.nils.core.adapter.Adapter;
+import com.codepulsar.nils.core.error.NilsException;
 import com.codepulsar.nils.core.testadapter.StaticAdapter;
 import com.codepulsar.nils.core.testadapter.StaticAdapterConfig;
 
@@ -159,20 +159,21 @@ public class NLSImplTest {
     // Act / Assert
     assertThatThrownBy(() -> underTest.get("not.found"))
         .isInstanceOf(NilsException.class)
-        .hasMessage("Could not find translation for key 'not.found'.");
+        .hasMessage("NILS-001: Could not find translation for key 'not.found'.");
   }
 
   @Test
   public void string_getByKey_notFound_exception_errorType_Notset() {
     // Arrange
     Locale locale = Locale.ENGLISH;
-    NilsConfig config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(INCLUDE_LOOP);
+    NilsConfig config =
+        NilsConfig.init(new StaticAdapterConfig()).suppressErrors(INCLUDE_LOOP_DETECTED);
     NLSImpl underTest =
         new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
     // Act / Assert
     assertThatThrownBy(() -> underTest.get("not.found"))
         .isInstanceOf(NilsException.class)
-        .hasMessage("Could not find translation for key 'not.found'.");
+        .hasMessage("NILS-001: Could not find translation for key 'not.found'.");
   }
 
   @ParameterizedTest
@@ -257,7 +258,7 @@ public class NLSImplTest {
     // Act / Assert
     assertThatThrownBy(() -> underTest.get("not.found", "with a value"))
         .isInstanceOf(NilsException.class)
-        .hasMessage("Could not find translation for key 'not.found'.");
+        .hasMessage("NILS-001: Could not find translation for key 'not.found'.");
   }
 
   @ParameterizedTest
@@ -326,14 +327,15 @@ public class NLSImplTest {
   public void class_getByKey_notFound_exception() {
     // Arrange
     Locale locale = Locale.ENGLISH;
-    NilsConfig config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(INCLUDE_LOOP);
+    NilsConfig config =
+        NilsConfig.init(new StaticAdapterConfig()).suppressErrors(INCLUDE_LOOP_DETECTED);
     NLSImpl underTest =
         new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
 
     // Act / Assert
     assertThatThrownBy(() -> underTest.get(Dummy.class, "not_found"))
         .isInstanceOf(NilsException.class)
-        .hasMessage("Could not find translation for key 'Dummy.not_found'.");
+        .hasMessage("NILS-001: Could not find translation for key 'Dummy.not_found'.");
   }
 
   @ParameterizedTest
@@ -424,7 +426,7 @@ public class NLSImplTest {
     // Act / Assert
     assertThatThrownBy(() -> underTest.get(Dummy.class, "not_found", "with a value"))
         .isInstanceOf(NilsException.class)
-        .hasMessage("Could not find translation for key 'Dummy.not_found'.");
+        .hasMessage("NILS-001: Could not find translation for key 'Dummy.not_found'.");
   }
 
   @Test

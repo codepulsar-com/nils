@@ -1,5 +1,7 @@
 package com.codepulsar.nils.core.adapter.rb;
 
+import static com.codepulsar.nils.core.util.ParameterCheck.NILS_CONFIG;
+
 import com.codepulsar.nils.core.adapter.AdapterConfig;
 import com.codepulsar.nils.core.adapter.AdapterFactory;
 import com.codepulsar.nils.core.util.ParameterCheck;
@@ -52,7 +54,7 @@ public class ResourceBundleAdapterConfig implements AdapterConfig {
    */
   public ResourceBundleAdapterConfig resourcesBundleName(String resourcesBundleName) {
     this.resourcesBundleName =
-        ParameterCheck.notNullEmptyOrBlank(resourcesBundleName, "resourcesBundleName");
+        ParameterCheck.notNullEmptyOrBlank(resourcesBundleName, "resourcesBundleName", NILS_CONFIG);
     return this;
   }
 
@@ -65,7 +67,7 @@ public class ResourceBundleAdapterConfig implements AdapterConfig {
    * @return The created NilsConfig.
    */
   public static ResourceBundleAdapterConfig init(Class<?> owner) {
-    ParameterCheck.notNull(owner, "owner");
+    ParameterCheck.notNull(owner, "owner", NILS_CONFIG);
     return new ResourceBundleAdapterConfig(owner.getModule());
   }
 
@@ -78,7 +80,7 @@ public class ResourceBundleAdapterConfig implements AdapterConfig {
    * @return The created NilsConfig.
    */
   public static ResourceBundleAdapterConfig init(Object owner) {
-    ParameterCheck.notNull(owner, "owner");
+    ParameterCheck.notNull(owner, "owner", NILS_CONFIG);
     return init(owner.getClass());
   }
 }

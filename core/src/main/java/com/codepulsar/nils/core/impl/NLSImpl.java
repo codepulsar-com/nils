@@ -10,6 +10,7 @@ import com.codepulsar.nils.core.NLS;
 import com.codepulsar.nils.core.NilsConfig;
 import com.codepulsar.nils.core.adapter.Adapter;
 import com.codepulsar.nils.core.config.SuppressableErrorTypes;
+import com.codepulsar.nils.core.error.NilsException;
 import com.codepulsar.nils.core.util.ParameterCheck;
 /**
  * Implementation of the {@link NLS} interface.
@@ -96,13 +97,16 @@ public class NLSImpl implements NLS {
       cache.put(key, directRequest);
       return directRequest;
     }
-
-    Optional<String> includeRequest = includeHandler.findKey(key);
-    if (includeRequest.isPresent()) {
-      cache.put(key, includeRequest);
-      return includeRequest;
+    try {
+      Optional<String> includeRequest = includeHandler.findKey(key);
+      if (includeRequest.isPresent()) {
+        cache.put(key, includeRequest);
+        return includeRequest;
+      }
+    } catch (NilsException ex) {
+      errorHandler.handle(SuppressableErrorTypes.INCLUDE_LOOP_DETECTED, ex);
+      return Optional.empty();
     }
-
     return Optional.empty();
   }
 }

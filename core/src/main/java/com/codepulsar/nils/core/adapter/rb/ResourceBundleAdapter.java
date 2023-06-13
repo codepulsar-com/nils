@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import com.codepulsar.nils.core.adapter.Adapter;
 import com.codepulsar.nils.core.adapter.AdapterConfig;
+import com.codepulsar.nils.core.error.NilsConfigException;
 import com.codepulsar.nils.core.util.ParameterCheck;
 /** An {@link Adapter} implementation using Java ResourceBundles for the translations. */
 public class ResourceBundleAdapter implements Adapter {
@@ -21,7 +22,7 @@ public class ResourceBundleAdapter implements Adapter {
     ParameterCheck.notNull(config, "config");
     ParameterCheck.notNull(locale, "locale");
     if (!(config instanceof ResourceBundleAdapterConfig)) {
-      throw new IllegalArgumentException(
+      throw new NilsConfigException(
           String.format(
               "The provided AdapterConfig (%s) is not of type %s",
               config, ResourceBundleAdapterConfig.class.getName()));

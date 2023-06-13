@@ -12,7 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.codepulsar.nils.core.NilsConfig;
-import com.codepulsar.nils.core.NilsException;
+import com.codepulsar.nils.core.error.ErrorType;
+import com.codepulsar.nils.core.error.NilsException;
 import com.codepulsar.nils.core.util.ParameterCheck;
 
 class IncludeHandler {
@@ -44,7 +45,8 @@ class IncludeHandler {
     while (tokenizer.hasMoreTokens()) {
       String token = tokenizer.nextToken().trim();
       if (visitedIncludes.contains(token)) {
-        throw new NilsException("Found circular include on '" + token + "'.");
+        throw new NilsException(
+            ErrorType.INCLUDE_LOOP_DETECTED, "Found circular include on '" + token + "'.");
       }
       visitedIncludes.add(token);
       String includedKey = token + includePart;

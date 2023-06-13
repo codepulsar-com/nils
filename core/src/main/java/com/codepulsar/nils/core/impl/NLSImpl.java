@@ -8,9 +8,8 @@ import java.util.Optional;
 
 import com.codepulsar.nils.core.NLS;
 import com.codepulsar.nils.core.NilsConfig;
-import com.codepulsar.nils.core.NilsException;
 import com.codepulsar.nils.core.adapter.Adapter;
-import com.codepulsar.nils.core.config.ErrorType;
+import com.codepulsar.nils.core.config.SuppressableErrorTypes;
 import com.codepulsar.nils.core.util.ParameterCheck;
 /**
  * Implementation of the {@link NLS} interface.
@@ -47,8 +46,8 @@ public class NLSImpl implements NLS {
     Optional<String> translation = resolveTranslation(key);
     if (translation.isEmpty()) {
       errorHandler.handle(
-          ErrorType.MISSING_TRANSLATION,
-          new NilsException("Could not find translation for key '" + key + "'."));
+          SuppressableErrorTypes.MISSING_TRANSLATION,
+          "Could not find translation for key '" + key + "'.");
       return buildMissingKey(key);
     }
     return translation.get();
@@ -97,6 +96,7 @@ public class NLSImpl implements NLS {
       cache.put(key, directRequest);
       return directRequest;
     }
+
     Optional<String> includeRequest = includeHandler.findKey(key);
     if (includeRequest.isPresent()) {
       cache.put(key, includeRequest);

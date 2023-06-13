@@ -6,7 +6,7 @@ import com.codepulsar.nils.core.NLS;
 import com.codepulsar.nils.core.NilsConfig;
 import com.codepulsar.nils.core.NilsFactory;
 import com.codepulsar.nils.core.adapter.rb.ResourceBundleAdapterConfig;
-import com.codepulsar.nils.core.config.ErrorType;
+import com.codepulsar.nils.core.config.SuppressableErrorTypes;
 
 public class SimpleUse {
 
@@ -36,7 +36,9 @@ public class SimpleUse {
   public void config1() {
     NilsConfig config =
         NilsConfig.init(ResourceBundleAdapterConfig.init(SimpleUse.class))
-            .suppressErrors(ErrorType.INCLUDE_LOOP, ErrorType.MISSING_TRANSLATION);
+            .suppressErrors(
+                SuppressableErrorTypes.INCLUDE_LOOP_DETECTED,
+                SuppressableErrorTypes.MISSING_TRANSLATION);
     NilsFactory.init(config);
   }
 

@@ -8,6 +8,7 @@ import java.util.Locale;
 import org.junit.jupiter.api.Test;
 
 import com.codepulsar.nils.core.adapter.AdapterConfig;
+import com.codepulsar.nils.core.error.NilsConfigException;
 import com.codepulsar.nils.core.testadapter.StaticAdapterConfig;
 
 public class NilsFactoryTest {
@@ -17,8 +18,8 @@ public class NilsFactoryTest {
     AdapterConfig adapterConfig = null;
     // Act / Assert
     assertThatThrownBy(() -> NilsFactory.init(adapterConfig))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Parameter 'adapterConfig' cannot be null.");
+        .isInstanceOf(NilsConfigException.class)
+        .hasMessage("NILS-004: Parameter 'adapterConfig' cannot be null.");
   }
 
   @Test
@@ -27,8 +28,8 @@ public class NilsFactoryTest {
     NilsConfig nilsConfig = null;
     // Act / Assert
     assertThatThrownBy(() -> NilsFactory.init(nilsConfig))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Parameter 'config' cannot be null.");
+        .isInstanceOf(NilsConfigException.class)
+        .hasMessage("NILS-004: Parameter 'config' cannot be null.");
   }
 
   @Test

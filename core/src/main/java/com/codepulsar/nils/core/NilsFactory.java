@@ -1,5 +1,7 @@
 package com.codepulsar.nils.core;
 
+import static com.codepulsar.nils.core.util.ParameterCheck.NILS_CONFIG;
+
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -9,6 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import com.codepulsar.nils.core.adapter.AdapterConfig;
 import com.codepulsar.nils.core.adapter.AdapterFactory;
+import com.codepulsar.nils.core.error.ErrorType;
+import com.codepulsar.nils.core.error.NilsException;
 import com.codepulsar.nils.core.impl.NLSImpl;
 import com.codepulsar.nils.core.util.ParameterCheck;
 /** Factory for getting access to the provided NLS. A requested NLS object is cached. */
@@ -20,7 +24,7 @@ public class NilsFactory {
   private final Map<Locale, NLS> translationCache = new HashMap<>();
 
   private NilsFactory(NilsConfig config) {
-    this.config = ParameterCheck.notNull(config, "config");
+    this.config = ParameterCheck.notNull(config, "config", NILS_CONFIG);
   }
   /**
    * Gets the NLS object for the default <tt>Locale</tt>.
@@ -71,7 +75,7 @@ public class NilsFactory {
             config.getAdapterConfig().getFactoryClass().getConstructor().newInstance();
       } catch (ReflectiveOperationException | IllegalArgumentException | SecurityException e) {
         LOG.error("Could not create AdapterFactory. Reason {}", e.getMessage(), e);
-        throw new NilsException("Could not create AdapterFactory.", e);
+        throw new NilsException(ErrorType.ADAPTER_ERROR, "Could not create AdapterFactory.", e);
       }
     }
     return adapterFactory;

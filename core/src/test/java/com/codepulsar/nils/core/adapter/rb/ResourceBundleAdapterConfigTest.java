@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.Test;
 
+import com.codepulsar.nils.core.error.NilsConfigException;
+
 public class ResourceBundleAdapterConfigTest {
   @Test
   public void initClassNull() {
@@ -12,8 +14,8 @@ public class ResourceBundleAdapterConfigTest {
     Class<?> nullClass = null;
     // Act / Assert
     assertThatThrownBy(() -> ResourceBundleAdapterConfig.init(nullClass))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Parameter 'owner' cannot be null.");
+        .isInstanceOf(NilsConfigException.class)
+        .hasMessage("NILS-004: Parameter 'owner' cannot be null.");
   }
 
   @Test
@@ -22,8 +24,8 @@ public class ResourceBundleAdapterConfigTest {
     Object nullObject = null;
     // Act / Assert
     assertThatThrownBy(() -> ResourceBundleAdapterConfig.init(nullObject))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Parameter 'owner' cannot be null.");
+        .isInstanceOf(NilsConfigException.class)
+        .hasMessage("NILS-004: Parameter 'owner' cannot be null.");
   }
 
   @Test

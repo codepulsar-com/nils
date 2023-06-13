@@ -12,6 +12,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<versions.slf4j>2.0.7</versions.slf4j>
+		<versions.junit>5.9.3</versions.junit>
 	</properties>
 
 	<modules>
@@ -22,21 +24,21 @@
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
-				<version>1.7.36</version>
+				<version>${versions.slf4j}</version>
 				<scope>compile</scope>
 			</dependency>
 
 			<dependency>
 				<groupId>org.junit.jupiter</groupId>
 				<artifactId>junit-jupiter-engine</artifactId>
-				<version>5.8.2</version>
+				<version>${versions.junit}</version>
 				<scope>test</scope>
 			</dependency>
 
 			<dependency>
 				<groupId>org.junit.jupiter</groupId>
 				<artifactId>junit-jupiter-params</artifactId>
-				<version>5.8.2</version>
+				<version>${versions.junit}</version>
 				<scope>test</scope>
 			</dependency>
 
@@ -46,6 +48,14 @@
 				<version>3.22.0</version>
 				<scope>test</scope>
 			</dependency>
+
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-simple</artifactId>
+				<version>${versions.slf4j}</version>
+				<scope>test</scope>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 

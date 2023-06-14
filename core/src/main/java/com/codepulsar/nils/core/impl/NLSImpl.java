@@ -1,5 +1,8 @@
 package com.codepulsar.nils.core.impl;
 
+import static com.codepulsar.nils.core.config.SuppressableErrorTypes.NLS_PARAMETER_CHECK;
+import static com.codepulsar.nils.core.util.ParameterCheck.nilsException;
+
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Locale;
@@ -43,7 +46,13 @@ public class NLSImpl implements NLS {
 
   @Override
   public String get(String key) {
-    ParameterCheck.notNullEmptyOrBlank(key, "key");
+    try {
+      ParameterCheck.notNullEmptyOrBlank(key, "key", nilsException(NLS_PARAMETER_CHECK));
+    } catch (NilsException ex) {
+      errorHandler.handle(NLS_PARAMETER_CHECK, ex);
+      return buildMissingKey(key);
+    }
+
     Optional<String> translation = resolveTranslation(key);
     if (translation.isEmpty()) {
       errorHandler.handle(
@@ -65,16 +74,39 @@ public class NLSImpl implements NLS {
 
   @Override
   public String get(Class<?> key, String subKey) {
-    ParameterCheck.notNull(key, "key");
-    ParameterCheck.notNullEmptyOrBlank(subKey, "subKey");
+    try {
+      ParameterCheck.notNull(key, "key", nilsException(NLS_PARAMETER_CHECK));
+    } catch (NilsException ex) {
+      errorHandler.handle(NLS_PARAMETER_CHECK, ex);
+      return buildMissingKey(String.format("%s.%s", key, subKey));
+    }
+    try {
+      ParameterCheck.notNullEmptyOrBlank(subKey, "subKey", nilsException(NLS_PARAMETER_CHECK));
+    } catch (NilsException ex) {
+      errorHandler.handle(NLS_PARAMETER_CHECK, ex);
+      String keyBase = key.getSimpleName();
+      return buildMissingKey(String.format("%s.%s", keyBase, subKey));
+    }
+
     String keyBase = key.getSimpleName();
     return get(String.format("%s.%s", keyBase, subKey));
   }
 
   @Override
   public String get(Class<?> key, String subKey, Object... args) {
-    ParameterCheck.notNull(key, "key");
-    ParameterCheck.notNullEmptyOrBlank(subKey, "subKey");
+    try {
+      ParameterCheck.notNull(key, "key", nilsException(NLS_PARAMETER_CHECK));
+    } catch (NilsException ex) {
+      errorHandler.handle(NLS_PARAMETER_CHECK, ex);
+      return buildMissingKey(String.format("%s.%s", key, subKey));
+    }
+    try {
+      ParameterCheck.notNullEmptyOrBlank(subKey, "subKey", nilsException(NLS_PARAMETER_CHECK));
+    } catch (NilsException ex) {
+      errorHandler.handle(NLS_PARAMETER_CHECK, ex);
+      String keyBase = key.getSimpleName();
+      return buildMissingKey(String.format("%s.%s", keyBase, subKey));
+    }
     String keyBase = key.getSimpleName();
     return get(String.format("%s.%s", keyBase, subKey), args);
   }

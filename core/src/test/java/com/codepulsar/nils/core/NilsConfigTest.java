@@ -43,7 +43,7 @@ public class NilsConfigTest {
     // Assert
     assertThat(underTest).isNotNull();
     assertThat(underTest.getAdapterConfig()).isEqualTo(adapterConfig);
-    assertThat(underTest.getSuppressErrors()).containsExactly(ALL);
+    assertThat(underTest.getSuppressErrors()).containsExactly(NONE);
     assertThat(underTest.getEscapePattern()).isEqualTo("[{0}]");
     assertThat(underTest.getIncludeTag()).isEqualTo("@include");
   }

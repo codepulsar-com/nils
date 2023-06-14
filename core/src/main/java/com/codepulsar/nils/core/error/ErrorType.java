@@ -19,8 +19,7 @@ public class ErrorType {
   /** The translation source does not provide a translation for the requested key. */
   public static final ErrorType MISSING_TRANSLATION = new ErrorType("NILS-001", SUPPRESSABLE);
   /** The parameter call at the NLS interface is invalid. */
-  public static final ErrorType NLS_PARAMETER_CHECK =
-      new ErrorType("NILS-003", SUPPRESSABLE); // TODO Implement
+  public static final ErrorType NLS_PARAMETER_CHECK = new ErrorType("NILS-003", SUPPRESSABLE);
   /** The configuration or a configuration value is invalid. */
   public static final ErrorType CONFIG_ERROR = new ErrorType("NILS-004");
   /** An error using an adapter. */

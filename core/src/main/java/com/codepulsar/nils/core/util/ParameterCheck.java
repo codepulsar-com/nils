@@ -2,7 +2,9 @@ package com.codepulsar.nils.core.util;
 
 import java.util.function.Function;
 
+import com.codepulsar.nils.core.error.ErrorType;
 import com.codepulsar.nils.core.error.NilsConfigException;
+import com.codepulsar.nils.core.error.NilsException;
 
 public class ParameterCheck {
 
@@ -44,5 +46,9 @@ public class ParameterCheck {
           String.format("Parameter '%s' cannot be empty or blank.", parameterName));
     }
     return value;
+  }
+
+  public static Function<String, ? extends RuntimeException> nilsException(ErrorType type) {
+    return s -> new NilsException(type, s);
   }
 }

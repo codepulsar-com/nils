@@ -3,6 +3,7 @@ package com.codepulsar.nils.core.impl;
 import static com.codepulsar.nils.core.config.SuppressableErrorTypes.ALL;
 import static com.codepulsar.nils.core.config.SuppressableErrorTypes.INCLUDE_LOOP_DETECTED;
 import static com.codepulsar.nils.core.config.SuppressableErrorTypes.MISSING_TRANSLATION;
+import static com.codepulsar.nils.core.config.SuppressableErrorTypes.NLS_PARAMETER_CHECK;
 import static com.codepulsar.nils.core.config.SuppressableErrorTypes.NONE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -60,7 +61,7 @@ public class NLSImplTest {
   }
 
   @ParameterizedTest
-  @MethodSource("string_getByKey_invalidSource")
+  @MethodSource("source_string_getByKey_invalid")
   public void string_getByKey_invalid(String key, String errMsg) {
     // Arrange
     Locale locale = Locale.ENGLISH;
@@ -70,8 +71,25 @@ public class NLSImplTest {
 
     // Act / Assert
     assertThatThrownBy(() -> underTest.get(key))
-        .isInstanceOf(IllegalArgumentException.class)
+        .isInstanceOf(NilsException.class)
         .hasMessage(errMsg);
+  }
+
+  @ParameterizedTest
+  @MethodSource("source_string_getByKey_invalid_suppressed")
+  public void string_getByKey_invalid_suppressed(String key, String expected) {
+    // Arrange
+    Locale locale = Locale.ENGLISH;
+    NilsConfig config =
+        NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NLS_PARAMETER_CHECK);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
+
+    // Act
+    String result = underTest.get(key);
+
+    // Assert
+    assertThat(result).isEqualTo(expected);
   }
 
   @Test
@@ -122,10 +140,12 @@ public class NLSImplTest {
   public void string_getByKey_notFound_escaping_changed() {
     // Arrange
     Locale locale = Locale.ENGLISH;
-    NilsConfig config = NilsConfig.init(new StaticAdapterConfig()).escapePattern(">>{0}<<");
+    NilsConfig config =
+        NilsConfig.init(new StaticAdapterConfig())
+            .escapePattern(">>{0}<<")
+            .suppressErrors(MISSING_TRANSLATION);
     NLSImpl underTest =
         new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
-    assertThat(config.getSuppressErrors()).containsExactly(ALL);
     // Act
     String value = underTest.get("not.found");
 
@@ -137,10 +157,12 @@ public class NLSImplTest {
   public void string_getByKey_notFound_escaping_changed2() {
     // Arrange
     Locale locale = Locale.ENGLISH;
-    NilsConfig config = NilsConfig.init(new StaticAdapterConfig()).escapePattern("Missing: {0}");
+    NilsConfig config =
+        NilsConfig.init(new StaticAdapterConfig())
+            .escapePattern("Missing: {0}")
+            .suppressErrors(MISSING_TRANSLATION);
     NLSImpl underTest =
         new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
-    assertThat(config.getSuppressErrors()).containsExactly(ALL);
 
     // Act
     String value = underTest.get("not.found");
@@ -177,7 +199,7 @@ public class NLSImplTest {
   }
 
   @ParameterizedTest
-  @MethodSource("string_getByKeyAndArgs_invalidSource")
+  @MethodSource("source_string_getByKeyAndArgs_invalid")
   public void string_getByKeyAndArgs_invalid(String key, Object[] args, String errMsg) {
     // Arrange
     Locale locale = Locale.ENGLISH;
@@ -187,8 +209,26 @@ public class NLSImplTest {
 
     // Act / Assert
     assertThatThrownBy(() -> underTest.get(key, args))
-        .isInstanceOf(IllegalArgumentException.class)
+        .isInstanceOf(NilsException.class)
         .hasMessage(errMsg);
+  }
+
+  @ParameterizedTest
+  @MethodSource("source_string_getByKeyAndArgs_invalid_suppressed")
+  public void string_getByKeyAndArgs_invalid_suppressed(
+      String key, Object[] args, String expected) {
+    // Arrange
+    Locale locale = Locale.ENGLISH;
+    NilsConfig config =
+        NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NLS_PARAMETER_CHECK);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
+
+    // Act
+    String result = underTest.get(key, args);
+
+    // Assert
+    assertThat(result).isEqualTo(expected);
   }
 
   @Test
@@ -262,7 +302,7 @@ public class NLSImplTest {
   }
 
   @ParameterizedTest
-  @MethodSource("class_getByKey_invalidSource")
+  @MethodSource("source_class_getByKey_invalid")
   public void class_getByKey_invalid(Class<?> key, String subKey, String errMsg) {
     // Arrange
     Locale locale = Locale.ENGLISH;
@@ -272,8 +312,25 @@ public class NLSImplTest {
 
     // Act / Assert
     assertThatThrownBy(() -> underTest.get(key, subKey))
-        .isInstanceOf(IllegalArgumentException.class)
+        .isInstanceOf(NilsException.class)
         .hasMessage(errMsg);
+  }
+
+  @ParameterizedTest
+  @MethodSource("source_class_getByKey_invalid_suppressed")
+  public void class_getByKey_invalid_suppressed(Class<?> key, String subKey, String expected) {
+    // Arrange
+    Locale locale = Locale.ENGLISH;
+    NilsConfig config =
+        NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NLS_PARAMETER_CHECK);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
+
+    // Act
+    String result = underTest.get(key, subKey);
+
+    // Assert
+    assertThat(result).isEqualTo(expected);
   }
 
   @Test
@@ -295,10 +352,10 @@ public class NLSImplTest {
   public void class_getByKey_notFound_escaping() {
     // Arrange
     Locale locale = Locale.ENGLISH;
-    NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
+    NilsConfig config =
+        NilsConfig.init(new StaticAdapterConfig()).suppressErrors(MISSING_TRANSLATION);
     NLSImpl underTest =
         new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
-    assertThat(config.getSuppressErrors()).containsExactly(ALL);
 
     // Act
     String value = underTest.get(Dummy.class, "not_found");
@@ -311,10 +368,12 @@ public class NLSImplTest {
   public void class_getByKey_notFound_escaping_changed() {
     // Arrange
     Locale locale = Locale.ENGLISH;
-    NilsConfig config = NilsConfig.init(new StaticAdapterConfig()).escapePattern(">>{0}<<");
+    NilsConfig config =
+        NilsConfig.init(new StaticAdapterConfig())
+            .escapePattern(">>{0}<<")
+            .suppressErrors(MISSING_TRANSLATION);
     NLSImpl underTest =
         new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
-    assertThat(config.getSuppressErrors()).containsExactly(ALL);
 
     // Act
     String value = underTest.get(Dummy.class, "not_found");
@@ -339,7 +398,7 @@ public class NLSImplTest {
   }
 
   @ParameterizedTest
-  @MethodSource("class_getByKeyAndArgs_invalidSource")
+  @MethodSource("source_class_getByKeyAndArgs_invalid")
   public void class_getByKeyAndArgs_invalid(
       Class<?> key, String subKey, Object[] args, String errMsg) {
     // Arrange
@@ -350,8 +409,26 @@ public class NLSImplTest {
 
     // Act / Assert
     assertThatThrownBy(() -> underTest.get(key, subKey, args))
-        .isInstanceOf(IllegalArgumentException.class)
+        .isInstanceOf(NilsException.class)
         .hasMessage(errMsg);
+  }
+
+  @ParameterizedTest
+  @MethodSource("source_class_getByKeyAndArgs_invalid_suppressed")
+  public void class_getByKeyAndArgs_invalid_suppressed(
+      Class<?> key, String subKey, Object[] args, String expected) {
+    // Arrange
+    Locale locale = Locale.ENGLISH;
+    NilsConfig config =
+        NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NLS_PARAMETER_CHECK);
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
+
+    // Act
+    String result = underTest.get(key, subKey, args);
+
+    // Assert
+    assertThat(result).isEqualTo(expected);
   }
 
   @Test
@@ -403,10 +480,10 @@ public class NLSImplTest {
   public void class_getByKeyAndArgs_notFound_escaping() {
     // Arrange
     Locale locale = Locale.ENGLISH;
-    NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
+    NilsConfig config =
+        NilsConfig.init(new StaticAdapterConfig()).suppressErrors(MISSING_TRANSLATION);
     NLSImpl underTest =
         new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
-    assertThat(config.getSuppressErrors()).containsExactly(ALL);
 
     // Act
     String value = underTest.get(Dummy.class, "not_found", "with a value");
@@ -441,42 +518,76 @@ public class NLSImplTest {
     assertThat(underTest.getLocale()).isEqualTo(Locale.ENGLISH);
   }
 
-  private static Stream<Arguments> string_getByKey_invalidSource() {
+  private static Stream<Arguments> source_string_getByKey_invalid() {
     return Stream.of(
-        arguments(null, "Parameter 'key' cannot be null."),
-        arguments("", "Parameter 'key' cannot be empty or blank."),
-        arguments(" ", "Parameter 'key' cannot be empty or blank."));
+        arguments(null, "NILS-003: Parameter 'key' cannot be null."),
+        arguments("", "NILS-003: Parameter 'key' cannot be empty or blank."),
+        arguments(" ", "NILS-003: Parameter 'key' cannot be empty or blank."));
   }
 
-  private static Stream<Arguments> string_getByKeyAndArgs_invalidSource() {
-    return Stream.of(
-        arguments(null, new Object[] {"Value"}, "Parameter 'key' cannot be null."),
-        arguments("", new Object[] {"Value"}, "Parameter 'key' cannot be empty or blank."),
-        arguments(" ", new Object[] {"Value"}, "Parameter 'key' cannot be empty or blank."));
+  private static Stream<Arguments> source_string_getByKey_invalid_suppressed() {
+    return Stream.of(arguments(null, "[null]"), arguments("", "[]"), arguments(" ", "[ ]"));
   }
 
-  private static Stream<Arguments> class_getByKey_invalidSource() {
+  private static Stream<Arguments> source_string_getByKeyAndArgs_invalid() {
     return Stream.of(
-        arguments(null, "attr", "Parameter 'key' cannot be null."),
-        arguments(Dummy.class, null, "Parameter 'subKey' cannot be null."),
-        arguments(Dummy.class, "", "Parameter 'subKey' cannot be empty or blank."),
-        arguments(Dummy.class, " ", "Parameter 'subKey' cannot be empty or blank."));
+        arguments(null, new Object[] {"Value"}, "NILS-003: Parameter 'key' cannot be null."),
+        arguments(
+            "", new Object[] {"Value"}, "NILS-003: Parameter 'key' cannot be empty or blank."),
+        arguments(
+            " ", new Object[] {"Value"}, "NILS-003: Parameter 'key' cannot be empty or blank."));
   }
 
-  private static Stream<Arguments> class_getByKeyAndArgs_invalidSource() {
+  private static Stream<Arguments> source_string_getByKeyAndArgs_invalid_suppressed() {
     return Stream.of(
-        arguments(null, "attr", new Object[] {"Value"}, "Parameter 'key' cannot be null."),
-        arguments(Dummy.class, null, new Object[] {"Value"}, "Parameter 'subKey' cannot be null."),
+        arguments(null, new Object[] {"Value"}, "[null]"),
+        arguments("", new Object[] {"Value"}, "[]"),
+        arguments(" ", new Object[] {"Value"}, "[ ]"));
+  }
+
+  private static Stream<Arguments> source_class_getByKey_invalid() {
+    return Stream.of(
+        arguments(null, "attr", "NILS-003: Parameter 'key' cannot be null."),
+        arguments(Dummy.class, null, "NILS-003: Parameter 'subKey' cannot be null."),
+        arguments(Dummy.class, "", "NILS-003: Parameter 'subKey' cannot be empty or blank."),
+        arguments(Dummy.class, " ", "NILS-003: Parameter 'subKey' cannot be empty or blank."));
+  }
+
+  private static Stream<Arguments> source_class_getByKey_invalid_suppressed() {
+    return Stream.of(
+        arguments(null, "attr", "[null.attr]"),
+        arguments(Dummy.class, null, "[Dummy.null]"),
+        arguments(Dummy.class, "", "[Dummy.]"),
+        arguments(Dummy.class, " ", "[Dummy. ]"));
+  }
+
+  private static Stream<Arguments> source_class_getByKeyAndArgs_invalid() {
+    return Stream.of(
+        arguments(
+            null, "attr", new Object[] {"Value"}, "NILS-003: Parameter 'key' cannot be null."),
+        arguments(
+            Dummy.class,
+            null,
+            new Object[] {"Value"},
+            "NILS-003: Parameter 'subKey' cannot be null."),
         arguments(
             Dummy.class,
             "",
             new Object[] {"Value"},
-            "Parameter 'subKey' cannot be empty or blank."),
+            "NILS-003: Parameter 'subKey' cannot be empty or blank."),
         arguments(
             Dummy.class,
             " ",
             new Object[] {"Value"},
-            "Parameter 'subKey' cannot be empty or blank."));
+            "NILS-003: Parameter 'subKey' cannot be empty or blank."));
+  }
+
+  private static Stream<Arguments> source_class_getByKeyAndArgs_invalid_suppressed() {
+    return Stream.of(
+        arguments(null, "attr", new Object[] {"Value"}, "[null.attr]"),
+        arguments(Dummy.class, null, new Object[] {"Value"}, "[Dummy.null]"),
+        arguments(Dummy.class, "", new Object[] {"Value"}, "[Dummy.]"),
+        arguments(Dummy.class, " ", new Object[] {"Value"}, "[Dummy. ]"));
   }
 
   private static class Dummy {

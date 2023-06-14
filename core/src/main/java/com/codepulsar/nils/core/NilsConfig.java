@@ -19,7 +19,7 @@ public class NilsConfig {
   private String escapePattern = "[{0}]";
 
   private String includeTag = "@include";
-  private Set<ErrorType> suppressErrors = Set.of(SuppressableErrorTypes.ALL);
+  private Set<ErrorType> suppressErrors = Set.of(SuppressableErrorTypes.NONE);
 
   private NilsConfig(AdapterConfig adapterConfig) {
     this.adapterConfig = adapterConfig;

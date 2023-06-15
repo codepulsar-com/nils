@@ -25,8 +25,33 @@ The first one is the default case. If a translation key was not found the transl
 
 The `NilsConfig` provides methods to configure this: 
 
-* `escapeIfMissing(false)` : A flag, if an exception should be thrown, if the translation could not be found. `false` means throw an exception.
+* `suppressErrors(SuppressableErrorTypes.MISSING_TRANSLATION)` : Sets a flag, if an exception should be thrown. If the flag `MISSING_TRANSLATION` is set, no exception is thrown. The default is that an exception is thrown.
 * `escapePattern("@{0}")` : Escape a missing exception in the format `@persons.name`. The default is `[{0}]`. The escapePattern must contain the string "{0}". 
+
+## Suppress errors
+
+During development or testing it is useful to get exceptions if for example a translation is missing.
+
+On a production system a more relaxed way is sometimes better for the end user instead of getting an
+error page because of a missing translation.
+
+
+_NILS_ provides therefore a way to suppress certain error types. If one type is suppressed the user gets the escaped version of the requested translation (like '[Person.name]'). The error itself is logged via slf4j.
+
+The `NilsConfig` provides with the method `suppressErrors(ErrorType, ...)` a way to configure the behaviour.
+
+The class `SuppressableErrorTypes` defines the error types that can be suppressed. The following types are available:
+
+
+| Type                    | Description
+| ----------------------- | --------------------
+| `ALL`                   | Suppress all error that can be suppressed (see other types).
+| `NONE`                  | No error is suppressed.
+| `INCLUDE_LOOP_DETECTED` | Include other keys leads into a loop.
+| `MISSING_TRANSLATION`   | The translation source does not provide a translation for the requested key.
+| `NLS_PARAMETER_CHECK`   |  The parameter call at the NLS interface is invalid.
+ 
+The default is `NONE`.
 
 ## Include Translations
 

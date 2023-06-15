@@ -32,7 +32,6 @@ public class SimpleUse {
     var street = NLS_DE.get(Address.class, "street");
   }
 
-  // TODO Update public docu
   public void config1() {
     NilsConfig config =
         NilsConfig.init(ResourceBundleAdapterConfig.init(SimpleUse.class))

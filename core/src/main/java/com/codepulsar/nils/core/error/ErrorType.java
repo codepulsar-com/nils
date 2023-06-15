@@ -2,7 +2,6 @@ package com.codepulsar.nils.core.error;
 
 import java.util.Objects;
 
-// TODO public docu
 /**
  * A ErrorType configures a type of error.
  *

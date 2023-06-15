@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import com.codepulsar.nils.core.NilsConfig;
 import com.codepulsar.nils.core.error.ErrorType;
 import com.codepulsar.nils.core.error.NilsException;
-// TODO Add tests
+
 class ErrorHandler {
 
   private Logger LOG = LoggerFactory.getLogger(ErrorHandler.class);
@@ -22,9 +22,9 @@ class ErrorHandler {
   }
 
   public void handle(ErrorType suppressType, NilsException ex) throws NilsException {
-
-    if (nilsConfig.getSuppressErrors().contains(ErrorType.ALL)
-        || nilsConfig.getSuppressErrors().contains(suppressType)) {
+    if ((nilsConfig.getSuppressErrors().contains(ErrorType.ALL)
+            || nilsConfig.getSuppressErrors().contains(suppressType))
+        && suppressType.equals(ex.getErrorType())) {
       LOG.error("Suppressed error: {}", ex, ex.getMessage());
       return;
     }

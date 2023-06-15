@@ -72,6 +72,12 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<instructions>
+						<Private-Package>
+							com.codepulsar.nils.core.impl,com.codepulsar.nils.core.util</Private-Package>
+					</instructions>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

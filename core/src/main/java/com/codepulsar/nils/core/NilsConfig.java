@@ -15,9 +15,7 @@ import com.codepulsar.nils.core.util.ParameterCheck;
 /** The configuration of the Nils library. */
 public class NilsConfig {
   private AdapterConfig adapterConfig;
-  // TODO Public docu: remove from docu -> escapeIfMissing = true; // add suppressErrors
   private String escapePattern = "[{0}]";
-
   private String includeTag = "@include";
   private Set<ErrorType> suppressErrors = Set.of(SuppressableErrorTypes.NONE);
 

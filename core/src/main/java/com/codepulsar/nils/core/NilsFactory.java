@@ -27,9 +27,9 @@ public class NilsFactory {
     this.config = ParameterCheck.notNull(config, "config", NILS_CONFIG);
   }
   /**
-   * Gets the NLS object for the default <tt>Locale</tt>.
+   * Gets the NLS object for the default <code>Locale</code>.
    *
-   * @return The NLS object for the default <tt>Locale</tt>.
+   * @return The NLS object for the default <code>Locale</code>.
    */
   public NLS nls() {
     return nls(Locale.getDefault());
@@ -47,10 +47,10 @@ public class NilsFactory {
     return nls(Locale.forLanguageTag(lang));
   }
   /**
-   * Gets the NLS object for a specific <tt>Locale</tt>.
+   * Gets the NLS object for a specific <code>Locale</code>.
    *
-   * @param locale The <tt>Locale</tt>.
-   * @return The NLS object for the <tt>Locale</tt>.
+   * @param locale The <code>Locale</code>.
+   * @return The NLS object for the <code>Locale</code>.
    */
   public NLS nls(Locale locale) {
 

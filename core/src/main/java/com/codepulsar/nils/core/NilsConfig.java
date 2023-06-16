@@ -34,7 +34,7 @@ public class NilsConfig {
   /**
    * Gets the escape pattern if a translation is missing, but no exception should be thrown.
    *
-   * <p>The escape pattern must contain <tt>{0}</tt>.
+   * <p>The escape pattern must contain <code>{0}</code>.
    *
    * @return The pattern.
    * @see #getSuppressErrors()
@@ -47,7 +47,7 @@ public class NilsConfig {
   /**
    * Sets the escape pattern if a translation is missing, but no exception should be thrown.
    *
-   * <p>The escape pattern must contain <tt>{0}</tt>.
+   * <p>The escape pattern must contain <code>{0}</code>.
    *
    * @param escapePattern the pattern
    * @return This config object.
@@ -65,7 +65,6 @@ public class NilsConfig {
    *
    * <p>The default value is <code>@include</code>.
    *
-   * @param includeTag
    * @return The tag used including translations.
    * @see #includeTag(String)
    */
@@ -96,11 +95,12 @@ public class NilsConfig {
   /**
    * Sets the ErrorTypes that should be suppressed during the runtime.
    *
-   * <p><em>Note:</em>The ErrorType.ALL and the ErrorType.NONE cannot be combined with other
-   * ErrorTypes and must be set exclusively.
+   * <p><em>Note:</em> The {@link ErrorType#ALL} and the {@link ErrorType#NONE} cannot be combined
+   * with other ErrorTypes and must be set exclusively.
    *
    * @param type A ErrorType.
    * @param types Further ErrorTypes.
+   * @return This config object.
    * @see #getSuppressErrors()
    */
   public NilsConfig suppressErrors(ErrorType type, ErrorType... types) {
@@ -150,7 +150,7 @@ public class NilsConfig {
     return pattern;
   }
   /**
-   * Create a <code>NilsConfig</code> from an {@link AdapterConfig}.
+   * Create a <strong>NilsConfig</strong> from an {@link AdapterConfig}.
    *
    * @param adapterConfig An {@link AdapterConfig} object.
    * @return The created NilsConfig.

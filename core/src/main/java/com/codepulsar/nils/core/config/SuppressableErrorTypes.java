@@ -10,6 +10,7 @@ import com.codepulsar.nils.core.error.ErrorType;
  * <ul>
  *   <li>{@link #ALL} - All are suppressed
  *   <li>{@link #NONE} - None are suppressed
+ * </ul>
  */
 public class SuppressableErrorTypes {
   /** Suppress all errors at runtime. */

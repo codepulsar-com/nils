@@ -105,11 +105,12 @@ If you use _NILS_ with a module based application and want to use the resource b
 ```
 module xyz {
   export my.package;
-  open lang;
+  requires com.codepulsar.nils.core;
+  open nls;
 }
 ```
 
-In the example lang is the folder containing the resource files.
+In the example `nls` is the folder containing the resource files.
 
 ## Extending NILS
 

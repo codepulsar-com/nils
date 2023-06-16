@@ -3,7 +3,7 @@ package com.codepulsar.nils.core.error;
 import java.util.Objects;
 
 /**
- * A ErrorType configures a type of error.
+ * A <strong>ErrorType</strong> configures a type of error.
  *
  * <p>Each ErrorType should have its unique error code in the system. Contains all errors that can
  */

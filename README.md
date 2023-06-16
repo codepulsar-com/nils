@@ -15,20 +15,22 @@ The library requires
 
 ### Include
 
-**NO RELEASE SO FAR. STILL IN DEVELOPMENT**
-
 You can include _NILS_ from the release page or even easier as dependency if you use a build tool like Maven or Gradle.
 
 Maven:
 
 ```
-Not published yet.
+<dependency>
+  <groupId>com.codepulsar.nils</groupId>
+  <artifactId>nils-core</artifactId>
+  <version>1.0.0</version>
+</dependency>
 ```
 
 Gradle:
 
 ```
-Not published yet.
+implementation group: 'com.codepulsar.nils', name: 'nils-core', version: '1.0.0'
 ```
 
 ### Using

@@ -49,7 +49,7 @@ class IncludeHandler {
             ErrorType.INCLUDE_LOOP_DETECTED, "Found circular include on '" + token + "'.");
       }
       visitedIncludes.add(token);
-      String includedKey = token + includePart;
+      String includedKey = token + "." + includePart;
       Optional<String> value = keyResolver.apply(includedKey);
       if (value.isPresent()) {
         LOG.trace("Found matching value for '{}' at '{}'.", request, includedKey);
@@ -71,7 +71,7 @@ class IncludeHandler {
       return Optional.empty();
     }
     String requestPart = request.substring(0, dot);
-    String requestPartWithSuffix = requestPart + getIncludeSuffix();
+    String requestPartWithSuffix = requestPart + "." + getIncludeSuffix();
     Optional<String> includeKey = keyResolver.apply(requestPartWithSuffix);
     if (includeKey.isPresent()) {
       LOG.trace("Found include at '{}'.", requestPartWithSuffix);

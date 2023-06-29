@@ -37,7 +37,7 @@ public class IncludeHandlerTest {
   @Test
   public void requestKeyHasTranslationItself() {
     // Actual
-    assertThat(adapter.getTranslation("com.xy.model.Customer@include").isPresent()).isTrue();
+    assertThat(adapter.getTranslation("com.xy.model.Customer.@include").isPresent()).isTrue();
     assertThat(adapter.getTranslation("com.xy.model.Customer.name").isPresent()).isTrue();
     assertThat(adapter.getTranslation("com.xy.model.Parent.name").isPresent()).isTrue();
 
@@ -54,7 +54,7 @@ public class IncludeHandlerTest {
   @Test
   public void getTranslationFrom1stElementInIncludeListButBothProvideAValue() {
     // Actual
-    assertThat(adapter.getTranslation("com.xy.model.Customer@include").isPresent()).isTrue();
+    assertThat(adapter.getTranslation("com.xy.model.Customer.@include").isPresent()).isTrue();
     assertThat(adapter.getTranslation("com.xy.model.Customer.id").isEmpty()).isTrue();
     assertThat(adapter.getTranslation("com.xy.model.Parent.id").isPresent()).isTrue();
     assertThat(adapter.getTranslation("BaseData.id").isPresent()).isTrue();
@@ -71,7 +71,7 @@ public class IncludeHandlerTest {
   @Test
   public void getTranslationFrom1stElementInIncludeList() {
     // Actual
-    assertThat(adapter.getTranslation("com.xy.model.Customer@include").isPresent()).isTrue();
+    assertThat(adapter.getTranslation("com.xy.model.Customer.@include").isPresent()).isTrue();
     assertThat(adapter.getTranslation("com.xy.model.Customer.createDate").isPresent()).isFalse();
     assertThat(adapter.getTranslation("com.xy.model.Parent.createDate").isPresent()).isTrue();
     assertThat(adapter.getTranslation("BaseData.createDate").isPresent()).isFalse();
@@ -88,7 +88,7 @@ public class IncludeHandlerTest {
   @Test
   public void requestKeyHasTranslationItselfBut2ndIncludeProvideAlsoATranslation() {
     // Actual
-    assertThat(adapter.getTranslation("com.xy.model.Customer@include").isPresent()).isTrue();
+    assertThat(adapter.getTranslation("com.xy.model.Customer.@include").isPresent()).isTrue();
     assertThat(adapter.getTranslation("com.xy.model.Customer.street").isPresent()).isTrue();
     assertThat(adapter.getTranslation("com.xy.model.Parent.street").isPresent()).isFalse();
     assertThat(adapter.getTranslation("BaseData.street").isPresent()).isTrue();
@@ -106,7 +106,7 @@ public class IncludeHandlerTest {
   @Test
   public void getTranslationFrom2stElementInIncludeList() {
     // Actual
-    assertThat(adapter.getTranslation("com.xy.model.Customer@include").isPresent()).isTrue();
+    assertThat(adapter.getTranslation("com.xy.model.Customer.@include").isPresent()).isTrue();
     assertThat(adapter.getTranslation("com.xy.model.Customer.city").isPresent()).isFalse();
     assertThat(adapter.getTranslation("com.xy.model.Parent.city").isPresent()).isFalse();
     assertThat(adapter.getTranslation("BaseData.city").isPresent()).isTrue();
@@ -123,7 +123,7 @@ public class IncludeHandlerTest {
   @Test
   public void resolveKeyFromHigherlevelInclude() {
     // Actual
-    assertThat(adapter.getTranslation("data.Message@include").isPresent()).isTrue();
+    assertThat(adapter.getTranslation("data.Message.@include").isPresent()).isTrue();
     assertThat(adapter.getTranslation("data.Message.buttons.ok").isPresent()).isFalse();
     assertThat(adapter.getTranslation("data.Message.buttons").isPresent()).isFalse();
     assertThat(adapter.getTranslation("data.BaseMessage.buttons.ok").isPresent()).isTrue();
@@ -140,7 +140,7 @@ public class IncludeHandlerTest {
   @Test
   public void resolveKeyDirectlyButKeyIsAlsoInHigherLevelIncludeAvailable() {
     // Actual
-    assertThat(adapter.getTranslation("data.Message@include").isPresent()).isTrue();
+    assertThat(adapter.getTranslation("data.Message.@include").isPresent()).isTrue();
     assertThat(adapter.getTranslation("data.Message.buttons.cancel").isPresent()).isTrue();
     assertThat(adapter.getTranslation("data.Message.buttons").isPresent()).isFalse();
     assertThat(adapter.getTranslation("data.BaseMessage.buttons.cancel").isPresent()).isTrue();
@@ -158,8 +158,8 @@ public class IncludeHandlerTest {
   @Test
   public void resolveValueWithMoreLevels() {
     // Actual
-    assertThat(adapter.getTranslation("Level2@include").isPresent()).isTrue();
-    assertThat(adapter.getTranslation("Level1@include").isPresent()).isTrue();
+    assertThat(adapter.getTranslation("Level2.@include").isPresent()).isTrue();
+    assertThat(adapter.getTranslation("Level1.@include").isPresent()).isTrue();
     assertThat(adapter.getTranslation("Level1.value").isPresent()).isFalse();
     assertThat(adapter.getTranslation("Level0.value").isPresent()).isTrue();
 
@@ -176,8 +176,8 @@ public class IncludeHandlerTest {
   @Test
   public void circularInclude() {
     // Actual
-    assertThat(adapter.getTranslation("Cycle1@include").isPresent()).isTrue();
-    assertThat(adapter.getTranslation("Cycle2@include").isPresent()).isTrue();
+    assertThat(adapter.getTranslation("Cycle1.@include").isPresent()).isTrue();
+    assertThat(adapter.getTranslation("Cycle2.@include").isPresent()).isTrue();
     assertThat(adapter.getTranslation("Cycle1.value").isPresent()).isFalse();
     assertThat(adapter.getTranslation("Cycle2.value").isPresent()).isFalse();
 
@@ -201,8 +201,8 @@ public class IncludeHandlerTest {
     var underTest_ = new IncludeHandler(nilsConfig, adapter::getTranslation);
 
     // Actual
-    assertThat(adapter.getTranslation("Cycle1@include").isPresent()).isTrue();
-    assertThat(adapter.getTranslation("Cycle2@include").isPresent()).isTrue();
+    assertThat(adapter.getTranslation("Cycle1.@include").isPresent()).isTrue();
+    assertThat(adapter.getTranslation("Cycle2.@include").isPresent()).isTrue();
     assertThat(adapter.getTranslation("Cycle1.value").isPresent()).isFalse();
     assertThat(adapter.getTranslation("Cycle2.value").isPresent()).isFalse();
 
@@ -225,8 +225,8 @@ public class IncludeHandlerTest {
     var underTest_ = new IncludeHandler(nilsConfig, adapter::getTranslation);
 
     // Actual
-    assertThat(adapter.getTranslation("Cycle1@include").isPresent()).isTrue();
-    assertThat(adapter.getTranslation("Cycle2@include").isPresent()).isTrue();
+    assertThat(adapter.getTranslation("Cycle1.@include").isPresent()).isTrue();
+    assertThat(adapter.getTranslation("Cycle2.@include").isPresent()).isTrue();
     assertThat(adapter.getTranslation("Cycle1.value").isPresent()).isFalse();
     assertThat(adapter.getTranslation("Cycle2.value").isPresent()).isFalse();
 
@@ -245,9 +245,9 @@ public class IncludeHandlerTest {
   @Test
   public void circularIncludeLarger() {
     // Actual
-    assertThat(adapter.getTranslation("LargerCycle1@include").isPresent()).isTrue();
-    assertThat(adapter.getTranslation("LargerCycle2@include").isPresent()).isTrue();
-    assertThat(adapter.getTranslation("LargerCycle3@include").isPresent()).isTrue();
+    assertThat(adapter.getTranslation("LargerCycle1.@include").isPresent()).isTrue();
+    assertThat(adapter.getTranslation("LargerCycle2.@include").isPresent()).isTrue();
+    assertThat(adapter.getTranslation("LargerCycle3.@include").isPresent()).isTrue();
     assertThat(adapter.getTranslation("LargerCycle1.value").isPresent()).isFalse();
     assertThat(adapter.getTranslation("LargerCycle2.value").isPresent()).isFalse();
     assertThat(adapter.getTranslation("LargerCycle3.value").isPresent()).isFalse();
@@ -274,7 +274,7 @@ public class IncludeHandlerTest {
     var _underTest = new IncludeHandler(_nilsConfig, adapter::getTranslation);
 
     // Actual
-    assertThat(_adapter.getTranslation("data.Message[include]").isPresent()).isTrue();
+    assertThat(_adapter.getTranslation("data.Message.[include]").isPresent()).isTrue();
     assertThat(_adapter.getTranslation("data.Message.buttons.ok").isPresent()).isFalse();
     assertThat(_adapter.getTranslation("data.AlternativeMessage.buttons.ok").isPresent()).isTrue();
 

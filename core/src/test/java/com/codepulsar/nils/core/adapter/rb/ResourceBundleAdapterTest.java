@@ -129,6 +129,20 @@ public class ResourceBundleAdapterTest {
   }
 
   @Test
+  public void translateKeyFallback() {
+    // Arrange
+    Locale locale = Locale.GERMAN;
+    AdapterConfig config =
+        ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing");
+    // Act
+    ResourceBundleAdapter underTest = new ResourceBundleAdapter(config, locale);
+    Optional<String> value = underTest.getTranslation("translate.fallback");
+    // Assert
+    assertThat(value).isNotEmpty();
+    assertThat(value.get()).isEqualTo("I'm a fallback!");
+  }
+
+  @Test
   public void translateKeyNotFound() {
     // Arrange
     Locale locale = Locale.ENGLISH;

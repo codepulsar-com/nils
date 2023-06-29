@@ -214,7 +214,8 @@ public class IncludeHandlerTest {
     // Act / Assert
     assertThatThrownBy(() -> nls_.get("Cycle1.value"))
         .isInstanceOf(NilsException.class)
-        .hasMessage("NILS-001: Could not find translation for key 'Cycle1.value'.");
+        .hasMessage(
+            "NILS-001: Could not find a translation for key 'Cycle1.value' and locale 'en'.");
   }
 
   @Test

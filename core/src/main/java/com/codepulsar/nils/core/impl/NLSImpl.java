@@ -57,7 +57,7 @@ public class NLSImpl implements NLS {
     if (translation.isEmpty()) {
       errorHandler.handle(
           SuppressableErrorTypes.MISSING_TRANSLATION,
-          "Could not find translation for key '" + key + "'.");
+          "Could not find a translation for key '" + key + "' and locale '" + locale + "'.");
       return buildMissingKey(key);
     }
     return translation.get();

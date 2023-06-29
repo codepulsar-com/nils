@@ -181,7 +181,7 @@ public class NLSImplTest {
     // Act / Assert
     assertThatThrownBy(() -> underTest.get("not.found"))
         .isInstanceOf(NilsException.class)
-        .hasMessage("NILS-001: Could not find translation for key 'not.found'.");
+        .hasMessage("NILS-001: Could not find a translation for key 'not.found' and locale 'en'.");
   }
 
   @Test
@@ -195,7 +195,7 @@ public class NLSImplTest {
     // Act / Assert
     assertThatThrownBy(() -> underTest.get("not.found"))
         .isInstanceOf(NilsException.class)
-        .hasMessage("NILS-001: Could not find translation for key 'not.found'.");
+        .hasMessage("NILS-001: Could not find a translation for key 'not.found' and locale 'en'.");
   }
 
   @ParameterizedTest
@@ -298,7 +298,7 @@ public class NLSImplTest {
     // Act / Assert
     assertThatThrownBy(() -> underTest.get("not.found", "with a value"))
         .isInstanceOf(NilsException.class)
-        .hasMessage("NILS-001: Could not find translation for key 'not.found'.");
+        .hasMessage("NILS-001: Could not find a translation for key 'not.found' and locale 'en'.");
   }
 
   @ParameterizedTest
@@ -394,7 +394,8 @@ public class NLSImplTest {
     // Act / Assert
     assertThatThrownBy(() -> underTest.get(Dummy.class, "not_found"))
         .isInstanceOf(NilsException.class)
-        .hasMessage("NILS-001: Could not find translation for key 'Dummy.not_found'.");
+        .hasMessage(
+            "NILS-001: Could not find a translation for key 'Dummy.not_found' and locale 'en'.");
   }
 
   @ParameterizedTest
@@ -503,7 +504,8 @@ public class NLSImplTest {
     // Act / Assert
     assertThatThrownBy(() -> underTest.get(Dummy.class, "not_found", "with a value"))
         .isInstanceOf(NilsException.class)
-        .hasMessage("NILS-001: Could not find translation for key 'Dummy.not_found'.");
+        .hasMessage(
+            "NILS-001: Could not find a translation for key 'Dummy.not_found' and locale 'en'.");
   }
 
   @Test

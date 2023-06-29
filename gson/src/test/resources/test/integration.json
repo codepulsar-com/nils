@@ -1,0 +1,43 @@
+{
+	"simple": "A simple translation",
+	"fallback": "A fallback translation",
+	"with_args": "A {0} with {1}.",
+	"Dummy": {
+		"attribute": "Attribute"
+	},
+	"data": {
+		"BaseMessage": {
+			"buttons": {
+				"ok": "OK (BaseMessage)",
+				"cancel": "Cancel (BaseMessage)"
+			}
+		},
+		"Message": {
+			"@include": "data.BaseMessage",
+			"[include]": "data.AlternativeMessage",
+			"buttons": {
+				"cancel": "Cancel (Message)"
+			}
+		},
+		"AlternativeMessage": {
+			"buttons": {
+				"ok": "Ok (AlternativeMessage)"
+			}
+		}
+	},
+	"Level0": {
+		"value": "Value (Level0)"
+	},
+	"Level1": {
+		"@include": "Level0"
+	},
+	"Level2": {
+		"@include": "Level1"
+	},
+	"Cycle1": {
+		"@include": "Cycle2"
+	},
+	"Cycle2": {
+		"@include": "Cycle1"
+	}
+}

@@ -7,16 +7,27 @@
 		<artifactId>nils-parent</artifactId>
 		<version>1.1.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>nils-core</artifactId>
-	<name>NILS - Core</name>
-	<description>A Java NLS library</description>
+	<artifactId>nils-gson-adapter</artifactId>
+	<name>NILS - Gson Adapter</name>
+	<description>Gson Adapter for NILS</description>
 	<url>https://github.com/codepulsar-com/nils</url>
 
 	<dependencies>
 
 		<dependency>
+			<groupId>com.codepulsar.nils</groupId>
+			<artifactId>nils-core</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
+		</dependency>
+
+		<dependency>
+		    <groupId>com.google.code.gson</groupId>
+		    <artifactId>gson</artifactId>
+		    <version>2.10.1</version>
 		</dependency>
 
 		<dependency>
@@ -71,12 +82,6 @@
 						</goals>
 					</execution>
 				</executions>
-				<configuration>
-					<instructions>
-						<Private-Package>
-							com.codepulsar.nils.core.impl</Private-Package>
-					</instructions>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

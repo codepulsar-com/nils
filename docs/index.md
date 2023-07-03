@@ -77,7 +77,7 @@ Person.surname = Surname
 Person.firstname = First name
 Person.birthday = Birthday
 
-Employee@include = Person       # (1)
+Employee.@include = Person      # (1)
 Employee.surname = Family name  # (2)
 ```
 
@@ -87,7 +87,7 @@ Employee.surname = Family name  # (2)
 If you want to include more that one base you can add the values semicolon separated:
 
 ```
-Employee@include = Person;com.myproject.BaseClass
+Employee.@include = Person;com.myproject.BaseClass
 ```
 
 The ordering is important. The first look up will be taken on `Person`. The person has not a translation for the requested key, `com.myproject.BaseClass` will be called.
@@ -112,15 +112,20 @@ module xyz {
 
 In the example `nls` is the folder containing the resource files.
 
+## Existing Adapters
+
+_NILS_ is an abstraction layer to NLS. The access to the translation is encapsulated by adapters.
+
+Currently there are two implementations for adapters provided by _NILS_ :
+
+* For ResourceBundles: Use the class `ResourceBundleAdapter` from `nils-core`.
+* For JSON files: Use the class `GsonAdapter` from `nils-gson-adapter`. See [Gson Adapter](gson-adapter.md) for more information.
+
 ## Extending NILS
 
 ### Writing your own adapter
 
-_NILS_ is an abstraction layer to NLS. The access to the translation is encapsulated by adapters.
-
-Currently there is only one implementation for an adapter: ResourceBundles.
-
-If you need another kind of translation source you can implement your own Adapter. (Maybe for JSON or reading from a database).
+If you need another kind of translation source (as the existing ones) you can implement your own Adapter. (Maybe for reading translation from a database).
 
 To extend NILS you must implement the following classes (located in the package `com.codepulsar.nils.core.adapter`):
 

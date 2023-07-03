@@ -4,18 +4,27 @@ _NILS_ is a lightweight Java library for NLS (aka "national language support", "
 
 It enables developers to integrate NLS into their Java projects easily.
 
+Currently there are adapters for using with 
+
+* Java Resource Bundles (as part of `nils-core`. See below for usage).
+* Using JSON files (see [Gson Adapter](docs/gson-adapter.md) for usage).
+
 ## Getting started 
 
 ### Requirements
 
-The library requires
+The core library requires
 
 * **Java 11** or higher.
 * The [SLF4J Api](https://mvnrepository.com/artifact/org.slf4j/slf4j-api) for logging.
 
+Existings adapters can depend more libraries. See [Documentation](docs/index.md) section 'Existing Adapters'. 
+
 ### Include
 
-You can include _NILS_ from the release page or even easier as dependency if you use a build tool like Maven or Gradle.
+The easiest way to include _NILS_ is via as dependency in you build tool like Maven or Gradle.
+
+You can find the current versions in the [Maven central repository](https://mvnrepository.com/artifact/com.codepulsar.nils).
 
 Maven:
 

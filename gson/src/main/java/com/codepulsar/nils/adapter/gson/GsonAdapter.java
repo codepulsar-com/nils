@@ -4,6 +4,7 @@ import static com.codepulsar.nils.adapter.gson.utils.GsonErrorTypes.CORRUPT_JSON
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -23,7 +24,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
-
+/** An {@link Adapter} implementation using JSON files for the translations. */
 public class GsonAdapter implements Adapter {
   private static final Logger LOG = LoggerFactory.getLogger(GsonAdapter.class);
 
@@ -48,7 +49,8 @@ public class GsonAdapter implements Adapter {
     this.locale = locale;
     Gson gson = new GsonBuilder().create();
     var resolver = new JsonStreamResolver();
-    try (var fileReader = new InputStreamReader(resolver.resolve(adapterConfig, locale));
+    try (var fileReader =
+            new InputStreamReader(resolver.resolve(adapterConfig, locale), StandardCharsets.UTF_8);
         var jsonReader = new JsonReader(fileReader); ) {
       translations = gson.fromJson(jsonReader, Map.class);
       LOG.debug("Translation for locale {} read.", locale);

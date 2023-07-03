@@ -66,7 +66,7 @@ public class ResourceBundleAdapterConfig implements AdapterConfig {
    * <p><em>Note:</em> The class will be used to resolve the module the class is located in.
    *
    * @param owner A Class
-   * @return The created NilsConfig.
+   * @return The created ResourceBundleAdapterConfig.
    */
   public static ResourceBundleAdapterConfig init(Class<?> owner) {
     ParameterCheck.notNull(owner, "owner", NILS_CONFIG);
@@ -79,7 +79,7 @@ public class ResourceBundleAdapterConfig implements AdapterConfig {
    * <p><em>Note:</em> The object will be used to resolve the module the object class is located in.
    *
    * @param owner An object
-   * @return The created NilsConfig.
+   * @return The created ResourceBundleAdapterConfig.
    */
   public static ResourceBundleAdapterConfig init(Object owner) {
     ParameterCheck.notNull(owner, "owner", NILS_CONFIG);

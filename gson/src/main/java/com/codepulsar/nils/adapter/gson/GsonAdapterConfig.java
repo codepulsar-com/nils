@@ -5,12 +5,13 @@ import static com.codepulsar.nils.core.util.ParameterCheck.NILS_CONFIG;
 import com.codepulsar.nils.core.adapter.AdapterConfig;
 import com.codepulsar.nils.core.adapter.AdapterFactory;
 import com.codepulsar.nils.core.util.ParameterCheck;
-// TODO docs
+
+/** Configuration for the {@link GsonAdapter} implementation. */
 public class GsonAdapterConfig implements AdapterConfig {
 
   private Module owner;
 
-  private String jsonBaseFileName = "nls/translation";
+  private String baseFileName = "nls/translation";
 
   private GsonAdapterConfig(Module owner) {
     this.owner = owner;
@@ -26,13 +27,33 @@ public class GsonAdapterConfig implements AdapterConfig {
 
   // TODO useFallback (cascade for not found keys in the current locale)
 
+  /**
+   * Gets the base name of the json files.
+   *
+   * <p>The name can include the paths, but must not contains the file suffix <code>.json</code>.
+   *
+   * <p>The default value is <code>nls/translation</code>.
+   *
+   * @return The base name of the json files.
+   * @see #baseFileName(String)
+   */
   public String getBaseFileName() {
-    return jsonBaseFileName;
+    return baseFileName;
   }
-  // TODO docu: without .json
-  public GsonAdapterConfig baseFileName(String jsonBaseFileName) {
-    this.jsonBaseFileName =
-        ParameterCheck.notNullEmptyOrBlank(jsonBaseFileName, "jsonBaseFileName", NILS_CONFIG);
+  /**
+   * Sets the base name of the json files.
+   *
+   * <p>The name can include the paths, but must not contains the file suffix <code>.json</code>.
+   *
+   * <p>The default value is <code>nls/translation</code>.
+   *
+   * @param baseFileName The base name of the json files.
+   * @return This config object.
+   * @see #getBaseFileName()
+   */
+  public GsonAdapterConfig baseFileName(String baseFileName) {
+    this.baseFileName =
+        ParameterCheck.notNullEmptyOrBlank(baseFileName, "baseFileName", NILS_CONFIG);
     return this;
   }
 
@@ -40,12 +61,27 @@ public class GsonAdapterConfig implements AdapterConfig {
   public Class<? extends AdapterFactory<?>> getFactoryClass() {
     return GsonAdapterFactory.class;
   }
-
+  /**
+   * Create a <code>GsonAdapterConfig</code> from a class as reference.
+   *
+   * <p><em>Note:</em> The class will be used to resolve the module the class is located in.
+   *
+   * @param owner A Class
+   * @return The created GsonAdapterConfig.
+   */
   public static GsonAdapterConfig init(Class<?> owner) {
     ParameterCheck.notNull(owner, "owner", NILS_CONFIG);
     return new GsonAdapterConfig(owner.getModule());
   }
 
+  /**
+   * Create a <code>GsonAdapterConfig</code> from an object as reference.
+   *
+   * <p><em>Note:</em> The object will be used to resolve the module the object class is located in.
+   *
+   * @param owner An object
+   * @return The created GsonAdapterConfig.
+   */
   public static GsonAdapterConfig init(Object owner) {
     ParameterCheck.notNull(owner, "owner", NILS_CONFIG);
     return init(owner.getClass());

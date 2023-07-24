@@ -23,6 +23,8 @@ public class ErrorType {
   public static final ErrorType CONFIG_ERROR = new ErrorType("NILS-004");
   /** An error using an adapter. */
   public static final ErrorType ADAPTER_ERROR = new ErrorType("NILS-005");
+  /** The value of a translation could not be formatted with the used TranslationFormatter. */
+  public static final ErrorType TRANSLATION_FORMAT_ERROR = new ErrorType("NILS-006", SUPPRESSABLE);
 
   private final String errCode;
 

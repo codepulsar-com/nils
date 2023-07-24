@@ -23,4 +23,6 @@ public class SuppressableErrorTypes {
   public static final ErrorType MISSING_TRANSLATION = ErrorType.MISSING_TRANSLATION;
   /** The parameter call at the NLS interface is invalid. */
   public static final ErrorType NLS_PARAMETER_CHECK = ErrorType.NLS_PARAMETER_CHECK;
+  /** The value of a translation could not be formatted with the used TranslationFormatter. */
+  public static final ErrorType TRANSLATION_FORMAT_ERROR = ErrorType.TRANSLATION_FORMAT_ERROR;
 }

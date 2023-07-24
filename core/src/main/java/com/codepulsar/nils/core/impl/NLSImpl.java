@@ -1,6 +1,7 @@
 package com.codepulsar.nils.core.impl;
 
 import static com.codepulsar.nils.core.config.SuppressableErrorTypes.NLS_PARAMETER_CHECK;
+import static com.codepulsar.nils.core.config.SuppressableErrorTypes.TRANSLATION_FORMAT_ERROR;
 import static com.codepulsar.nils.core.util.ParameterCheck.nilsException;
 
 import java.text.MessageFormat;
@@ -15,6 +16,7 @@ import com.codepulsar.nils.core.adapter.Adapter;
 import com.codepulsar.nils.core.config.SuppressableErrorTypes;
 import com.codepulsar.nils.core.error.NilsException;
 import com.codepulsar.nils.core.handler.ClassPrefixResolver;
+import com.codepulsar.nils.core.handler.TranslationFormatter;
 import com.codepulsar.nils.core.util.ParameterCheck;
 /**
  * Implementation of the {@link NLS} interface.
@@ -35,7 +37,7 @@ public class NLSImpl implements NLS {
   private final IncludeHandler includeHandler;
   private final ErrorHandler errorHandler;
   private final ClassPrefixResolver classPrefixResolver;
-
+  private final TranslationFormatter translationFormatter;
   private Map<String, Optional<String>> cache = new HashMap<>();
 
   public NLSImpl(Adapter adapter, NilsConfig config, Locale locale) {
@@ -45,6 +47,7 @@ public class NLSImpl implements NLS {
     this.includeHandler = new IncludeHandler(config, adapter::getTranslation);
     this.errorHandler = new ErrorHandler(config);
     this.classPrefixResolver = config.getClassPrefixResolver();
+    this.translationFormatter = config.getTranslationFormatter();
   }
 
   @Override
@@ -72,7 +75,16 @@ public class NLSImpl implements NLS {
     if (unformattedValue.equals(buildMissingKey(key))) {
       return unformattedValue;
     }
-    return MessageFormat.format(unformattedValue, args);
+
+    try {
+      return translationFormatter.format(getLocale(), unformattedValue, args);
+    } catch (Exception ex) {
+      errorHandler.handle(
+          TRANSLATION_FORMAT_ERROR,
+          new NilsException(
+              TRANSLATION_FORMAT_ERROR, "Error in key '" + key + "': " + ex.getMessage(), ex));
+      return buildMissingKey(key);
+    }
   }
 
   @Override

@@ -19,6 +19,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import com.codepulsar.nils.core.adapter.AdapterConfig;
 import com.codepulsar.nils.core.error.ErrorType;
 import com.codepulsar.nils.core.error.NilsConfigException;
+import com.codepulsar.nils.core.handler.ClassPrefixResolver;
 import com.codepulsar.nils.core.testadapter.StaticAdapterConfig;
 
 public class NilsConfigTest {
@@ -36,9 +37,9 @@ public class NilsConfigTest {
   @Test
   public void initFromAdapterConfig() {
     // Arrange
-    AdapterConfig adapterConfig = new StaticAdapterConfig();
+    var adapterConfig = new StaticAdapterConfig();
     // Act
-    NilsConfig underTest = NilsConfig.init(adapterConfig);
+    var underTest = NilsConfig.init(adapterConfig);
 
     // Assert
     assertThat(underTest).isNotNull();
@@ -46,13 +47,14 @@ public class NilsConfigTest {
     assertThat(underTest.getSuppressErrors()).containsExactly(NONE);
     assertThat(underTest.getEscapePattern()).isEqualTo("[{0}]");
     assertThat(underTest.getIncludeTag()).isEqualTo("@include");
+    assertThat(underTest.getClassPrefixResolver()).isEqualTo(ClassPrefixResolver.SIMPLE_CLASSNAME);
   }
 
   @Test
   public void suppressErrors_nullParam() {
     // Arrange
-    AdapterConfig adapterConfig = new StaticAdapterConfig();
-    NilsConfig underTest = NilsConfig.init(adapterConfig);
+    var adapterConfig = new StaticAdapterConfig();
+    var underTest = NilsConfig.init(adapterConfig);
 
     // Act / Assert
     assertThatThrownBy(() -> underTest.suppressErrors(null))
@@ -63,8 +65,8 @@ public class NilsConfigTest {
   @Test
   public void suppressErrors_noneAndOthers() {
     // Arrange
-    AdapterConfig adapterConfig = new StaticAdapterConfig();
-    NilsConfig underTest = NilsConfig.init(adapterConfig);
+    var adapterConfig = new StaticAdapterConfig();
+    var underTest = NilsConfig.init(adapterConfig);
 
     // Act / Assert
     assertThatThrownBy(
@@ -77,8 +79,8 @@ public class NilsConfigTest {
   @Test
   public void suppressErrors_noneAndOthers2() {
     // Arrange
-    AdapterConfig adapterConfig = new StaticAdapterConfig();
-    NilsConfig underTest = NilsConfig.init(adapterConfig);
+    var adapterConfig = new StaticAdapterConfig();
+    var underTest = NilsConfig.init(adapterConfig);
 
     // Act / Assert
     assertThatThrownBy(
@@ -91,8 +93,8 @@ public class NilsConfigTest {
   @Test
   public void suppressErrors_allAndOthers() {
     // Arrange
-    AdapterConfig adapterConfig = new StaticAdapterConfig();
-    NilsConfig underTest = NilsConfig.init(adapterConfig);
+    var adapterConfig = new StaticAdapterConfig();
+    var underTest = NilsConfig.init(adapterConfig);
 
     // Act / Assert
     assertThatThrownBy(
@@ -105,8 +107,8 @@ public class NilsConfigTest {
   @Test
   public void suppressErrors_allAndOthers2() {
     // Arrange
-    AdapterConfig adapterConfig = new StaticAdapterConfig();
-    NilsConfig underTest = NilsConfig.init(adapterConfig);
+    var adapterConfig = new StaticAdapterConfig();
+    var underTest = NilsConfig.init(adapterConfig);
 
     // Act / Assert
     assertThatThrownBy(
@@ -119,11 +121,11 @@ public class NilsConfigTest {
   @Test
   public void suppressErrors_noneAlone() {
     // Arrange
-    AdapterConfig adapterConfig = new StaticAdapterConfig();
-    NilsConfig underTest = NilsConfig.init(adapterConfig);
+    var adapterConfig = new StaticAdapterConfig();
+    var underTest = NilsConfig.init(adapterConfig);
 
     // Act
-    NilsConfig returnValue = underTest.suppressErrors(NONE);
+    var returnValue = underTest.suppressErrors(NONE);
 
     // Assert
     assertThat(returnValue).isNotNull();
@@ -134,11 +136,11 @@ public class NilsConfigTest {
   @Test
   public void suppressErrors_allAlone() {
     // Arrange
-    AdapterConfig adapterConfig = new StaticAdapterConfig();
-    NilsConfig underTest = NilsConfig.init(adapterConfig);
+    var adapterConfig = new StaticAdapterConfig();
+    var underTest = NilsConfig.init(adapterConfig);
 
     // Act
-    NilsConfig returnValue = underTest.suppressErrors(ALL);
+    var returnValue = underTest.suppressErrors(ALL);
 
     // Assert
     assertThat(returnValue).isNotNull();
@@ -149,11 +151,11 @@ public class NilsConfigTest {
   @Test
   public void suppressErrors_some() {
     // Arrange
-    AdapterConfig adapterConfig = new StaticAdapterConfig();
-    NilsConfig underTest = NilsConfig.init(adapterConfig);
+    var adapterConfig = new StaticAdapterConfig();
+    var underTest = NilsConfig.init(adapterConfig);
 
     // Act
-    NilsConfig returnValue =
+    var returnValue =
         underTest.suppressErrors(INCLUDE_LOOP_DETECTED, MISSING_TRANSLATION, NLS_PARAMETER_CHECK);
 
     // Assert
@@ -166,9 +168,9 @@ public class NilsConfigTest {
   @Test
   public void suppressErrors_invalidErrorType() {
     // Arrange
-    AdapterConfig adapterConfig = new StaticAdapterConfig();
-    NilsConfig underTest = NilsConfig.init(adapterConfig);
-    ErrorType invalid = new ErrorType("X-999", false);
+    var adapterConfig = new StaticAdapterConfig();
+    var underTest = NilsConfig.init(adapterConfig);
+    var invalid = new ErrorType("X-999", false);
 
     // Act / Assert
     assertThatThrownBy(() -> underTest.suppressErrors(INCLUDE_LOOP_DETECTED, invalid))
@@ -181,8 +183,8 @@ public class NilsConfigTest {
   @MethodSource("escapePattern_invalidInputSource")
   public void escapePattern_invalidInput(String pattern, String errMsg) {
     // Arrange
-    AdapterConfig adapterConfig = new StaticAdapterConfig();
-    NilsConfig underTest = NilsConfig.init(adapterConfig);
+    var adapterConfig = new StaticAdapterConfig();
+    var underTest = NilsConfig.init(adapterConfig);
     // Act / Assert
     assertThatThrownBy(() -> underTest.escapePattern(pattern))
         .isInstanceOf(NilsConfigException.class)
@@ -192,11 +194,13 @@ public class NilsConfigTest {
   @Test
   public void escapePattern() {
     // Arrange
-    AdapterConfig adapterConfig = new StaticAdapterConfig();
-    NilsConfig underTest = NilsConfig.init(adapterConfig);
+    var adapterConfig = new StaticAdapterConfig();
+    var underTest = NilsConfig.init(adapterConfig);
 
     // Act
-    NilsConfig returnValue = underTest.escapePattern(">>{0}<<");
+    var returnValue = underTest.escapePattern(">>{0}<<");
+
+    // Assert
     assertThat(returnValue).isNotNull();
     assertThat(returnValue).isEqualTo(underTest);
     assertThat(underTest.getEscapePattern()).isEqualTo(">>{0}<<");
@@ -205,11 +209,13 @@ public class NilsConfigTest {
   @Test
   public void includeTag() {
     // Arrange
-    AdapterConfig adapterConfig = new StaticAdapterConfig();
-    NilsConfig underTest = NilsConfig.init(adapterConfig);
+    var adapterConfig = new StaticAdapterConfig();
+    var underTest = NilsConfig.init(adapterConfig);
 
     // Act
-    NilsConfig returnValue = underTest.includeTag("TEST");
+    var returnValue = underTest.includeTag("TEST");
+
+    // Assert
     assertThat(returnValue).isNotNull();
     assertThat(returnValue).isEqualTo(underTest);
     assertThat(underTest.getIncludeTag()).isEqualTo("TEST");
@@ -219,12 +225,42 @@ public class NilsConfigTest {
   @MethodSource("includeTag_invalidInputSource")
   public void includeTag_invalidInput(String tag, String errMsg) {
     // Arrange
-    AdapterConfig adapterConfig = new StaticAdapterConfig();
-    NilsConfig underTest = NilsConfig.init(adapterConfig);
+    var adapterConfig = new StaticAdapterConfig();
+    var underTest = NilsConfig.init(adapterConfig);
+
     // Act / Assert
     assertThatThrownBy(() -> underTest.includeTag(tag))
         .isInstanceOf(NilsConfigException.class)
         .hasMessage(errMsg);
+  }
+
+  @Test
+  public void classPrefixResolver() {
+    // Arrange
+    var adapterConfig = new StaticAdapterConfig();
+    var underTest = NilsConfig.init(adapterConfig);
+
+    assertThat(underTest.getClassPrefixResolver()).isEqualTo(ClassPrefixResolver.SIMPLE_CLASSNAME);
+
+    // Act
+    var returnValue = underTest.classPrefixResolver(ClassPrefixResolver.FQN_CLASSNAME);
+
+    // Assert
+    assertThat(returnValue).isNotNull();
+    assertThat(returnValue).isEqualTo(underTest);
+    assertThat(underTest.getClassPrefixResolver()).isEqualTo(ClassPrefixResolver.FQN_CLASSNAME);
+  }
+
+  @Test
+  public void classPrefixResolver_null() {
+    // Arrange
+    var adapterConfig = new StaticAdapterConfig();
+    var underTest = NilsConfig.init(adapterConfig);
+
+    // Act / Assert
+    assertThatThrownBy(() -> underTest.classPrefixResolver(null))
+        .isInstanceOf(NilsConfigException.class)
+        .hasMessage("NILS-004: Parameter 'classPrefixResolver' cannot be null.");
   }
 
   private static Stream<Arguments> escapePattern_invalidInputSource() {

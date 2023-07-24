@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import com.codepulsar.nils.core.NilsConfig;
 import com.codepulsar.nils.core.NilsFactory;
 import com.codepulsar.nils.core.error.NilsException;
+import com.codepulsar.nils.core.testdata.Dummy;
 
 public class ResourceBundleIntegrationTest {
   private ResourceBundleAdapterConfig adapterConfig;
@@ -207,9 +208,5 @@ public class ResourceBundleIntegrationTest {
     assertThatThrownBy(() -> underTest.get("Cycle1.value"))
         .isInstanceOf(NilsException.class)
         .hasMessage("NILS-002: Found circular include on 'Cycle2'.");
-  }
-
-  private static class Dummy {
-    // Dummy class
   }
 }

@@ -18,7 +18,11 @@ public class StaticAdapter implements Adapter {
           "Dummy.attribute",
           "Attribute",
           "Dummy.with_args",
-          "A {0} with {1}.");
+          "A {0} with {1}.",
+          "com.codepulsar.nils.core.testdata.Dummy.attribute",
+          "Attribute (FQN)",
+          "StaticClassResolver.attribute",
+          "Attribute (StaticResolver)");
 
   public StaticAdapter(AdapterConfig config, Locale locale) {}
 

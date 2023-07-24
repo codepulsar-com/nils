@@ -20,8 +20,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 import com.codepulsar.nils.core.NilsConfig;
 import com.codepulsar.nils.core.adapter.Adapter;
 import com.codepulsar.nils.core.error.NilsException;
+import com.codepulsar.nils.core.handler.ClassPrefixResolver;
 import com.codepulsar.nils.core.testadapter.StaticAdapter;
 import com.codepulsar.nils.core.testadapter.StaticAdapterConfig;
+import com.codepulsar.nils.core.testdata.Dummy;
 
 public class NLSImplTest {
   @Test
@@ -334,10 +336,29 @@ public class NLSImplTest {
   }
 
   @Test
-  public void class_getByKey_found() {
+  public void class_getByKey_foundSimpleClassnameResolver() {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
+
+    assertThat(config.getClassPrefixResolver()).isEqualTo(ClassPrefixResolver.SIMPLE_CLASSNAME);
+
+    // Act
+    String value = underTest.get(Dummy.class, "attribute");
+
+    // Assert
+    assertThat(value).isEqualTo("Attribute");
+  }
+
+  @Test
+  public void class_getByKey_foundFqnClassnameResolver() {
+    // Arrange
+    Locale locale = Locale.ENGLISH;
+    NilsConfig config =
+        NilsConfig.init(new StaticAdapterConfig())
+            .classPrefixResolver(ClassPrefixResolver.FQN_CLASSNAME);
     NLSImpl underTest =
         new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
 
@@ -345,7 +366,23 @@ public class NLSImplTest {
     String value = underTest.get(Dummy.class, "attribute");
 
     // Assert
-    assertThat(value).isEqualTo("Attribute");
+    assertThat(value).isEqualTo("Attribute (FQN)");
+  }
+
+  @Test
+  public void class_getByKey_foundOwnResolver() {
+    // Arrange
+    Locale locale = Locale.ENGLISH;
+    NilsConfig config =
+        NilsConfig.init(new StaticAdapterConfig()).classPrefixResolver(c -> "StaticClassResolver");
+    NLSImpl underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
+
+    // Act
+    String value = underTest.get(Dummy.class, "attribute");
+
+    // Assert
+    assertThat(value).isEqualTo("Attribute (StaticResolver)");
   }
 
   @Test
@@ -590,9 +627,5 @@ public class NLSImplTest {
         arguments(Dummy.class, null, new Object[] {"Value"}, "[Dummy.null]"),
         arguments(Dummy.class, "", new Object[] {"Value"}, "[Dummy.]"),
         arguments(Dummy.class, " ", new Object[] {"Value"}, "[Dummy. ]"));
-  }
-
-  private static class Dummy {
-    // Dummy class
   }
 }

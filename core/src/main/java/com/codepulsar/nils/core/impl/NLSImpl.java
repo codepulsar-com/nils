@@ -14,6 +14,7 @@ import com.codepulsar.nils.core.NilsConfig;
 import com.codepulsar.nils.core.adapter.Adapter;
 import com.codepulsar.nils.core.config.SuppressableErrorTypes;
 import com.codepulsar.nils.core.error.NilsException;
+import com.codepulsar.nils.core.handler.ClassPrefixResolver;
 import com.codepulsar.nils.core.util.ParameterCheck;
 /**
  * Implementation of the {@link NLS} interface.
@@ -33,6 +34,7 @@ public class NLSImpl implements NLS {
   private final NilsConfig config;
   private final IncludeHandler includeHandler;
   private final ErrorHandler errorHandler;
+  private final ClassPrefixResolver classPrefixResolver;
 
   private Map<String, Optional<String>> cache = new HashMap<>();
 
@@ -42,6 +44,7 @@ public class NLSImpl implements NLS {
     this.locale = ParameterCheck.notNull(locale, "locale");
     this.includeHandler = new IncludeHandler(config, adapter::getTranslation);
     this.errorHandler = new ErrorHandler(config);
+    this.classPrefixResolver = config.getClassPrefixResolver();
   }
 
   @Override
@@ -84,11 +87,11 @@ public class NLSImpl implements NLS {
       ParameterCheck.notNullEmptyOrBlank(subKey, "subKey", nilsException(NLS_PARAMETER_CHECK));
     } catch (NilsException ex) {
       errorHandler.handle(NLS_PARAMETER_CHECK, ex);
-      String keyBase = key.getSimpleName();
+      String keyBase = resolveKeyPrefix(key);
       return buildMissingKey(String.format("%s.%s", keyBase, subKey));
     }
 
-    String keyBase = key.getSimpleName();
+    String keyBase = resolveKeyPrefix(key);
     return get(String.format("%s.%s", keyBase, subKey));
   }
 
@@ -104,10 +107,10 @@ public class NLSImpl implements NLS {
       ParameterCheck.notNullEmptyOrBlank(subKey, "subKey", nilsException(NLS_PARAMETER_CHECK));
     } catch (NilsException ex) {
       errorHandler.handle(NLS_PARAMETER_CHECK, ex);
-      String keyBase = key.getSimpleName();
+      String keyBase = resolveKeyPrefix(key);
       return buildMissingKey(String.format("%s.%s", keyBase, subKey));
     }
-    String keyBase = key.getSimpleName();
+    String keyBase = resolveKeyPrefix(key);
     return get(String.format("%s.%s", keyBase, subKey), args);
   }
 
@@ -140,5 +143,9 @@ public class NLSImpl implements NLS {
       return Optional.empty();
     }
     return Optional.empty();
+  }
+
+  private String resolveKeyPrefix(Class<?> key) {
+    return classPrefixResolver.resolve(key);
   }
 }

@@ -10,9 +10,20 @@ _NILS_ can handle with different locales at a time. The `NilsFactory` provides a
 
 ## Translation format for arguments
 
-If you want to use arguments in a translated value, the value must be in the format like "Here is the first {0} replacement. Here the 2nd {1}.". Each arguments is represented by a "{..}" in the translation, starting with 0 for the first argument.
+Using the one of the methods `NLS.get(String key, Object... args)` or `NLS.get(Class<?> key, String subKey, Object... args)` the passed args will be used to format the translation value (if the value is correct).
 
-The argument replacement is done by the `MessageFormat` class of the JRE. Look there for more information about the further formatting rules.
+_NILS_ comes with two implementation using formatting: 
+
+* `TranslationFormatter.MESSAGE_FORMAT` : This implementation uses `MessageFormat.format()`
+* `TranslationFormatter.STRING_FORMAT` : This implementation uses `String.format()`
+
+The default is the MESSAGE_FORMAT varient (as offened used by resource bundles).
+
+The NilsConfig has an option to change this: `translationFormatter(TranslationFormatter)`.
+
+You can also implement your own TranslationFormatter and set it in the options.
+
+An exception could be thrown if the translation format is invalid. You can suppress this error by using the `SuppressableErrorTypes.TRANSLATION_FORMAT_ERROR` in the NilsConfig. 
 
 ## Missing Translations
 
@@ -50,6 +61,7 @@ The class `SuppressableErrorTypes` defines the error types that can be suppresse
 | `INCLUDE_LOOP_DETECTED` | Include other keys leads into a loop.
 | `MISSING_TRANSLATION`   | The translation source does not provide a translation for the requested key.
 | `NLS_PARAMETER_CHECK`   |  The parameter call at the NLS interface is invalid.
+| `TRANSLATION_FORMAT_ERROR` | The value of a translation could not be formatted with the used TranslationFormatter.
  
 The default is `NONE`.
 

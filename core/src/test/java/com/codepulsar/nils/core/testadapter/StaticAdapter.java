@@ -15,6 +15,8 @@ public class StaticAdapter implements Adapter {
           "A simple translation",
           "with_args",
           "A {0} with {1}.",
+          "with_args_string_format",
+          "A %1$s with %2$d.",
           "Dummy.attribute",
           "Attribute",
           "Dummy.with_args",
@@ -23,7 +25,7 @@ public class StaticAdapter implements Adapter {
           "Attribute (FQN)",
           "StaticClassResolver.attribute",
           "Attribute (StaticResolver)");
-
+  // TODO Remove c'tor -> not needed anymore
   public StaticAdapter(AdapterConfig config, Locale locale) {}
 
   @Override

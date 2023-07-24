@@ -12,6 +12,7 @@ import com.codepulsar.nils.core.config.SuppressableErrorTypes;
 import com.codepulsar.nils.core.error.ErrorType;
 import com.codepulsar.nils.core.error.NilsConfigException;
 import com.codepulsar.nils.core.handler.ClassPrefixResolver;
+import com.codepulsar.nils.core.handler.TranslationFormatter;
 import com.codepulsar.nils.core.util.ParameterCheck;
 /** The configuration of the Nils library. */
 public class NilsConfig {
@@ -20,6 +21,7 @@ public class NilsConfig {
   private String includeTag = "@include";
   private Set<ErrorType> suppressErrors = Set.of(SuppressableErrorTypes.NONE);
   private ClassPrefixResolver classPrefixResolver = ClassPrefixResolver.SIMPLE_CLASSNAME;
+  private TranslationFormatter translationFormatter = TranslationFormatter.MESSAGE_FORMAT;
 
   private NilsConfig(AdapterConfig adapterConfig) {
     this.adapterConfig = adapterConfig;
@@ -152,11 +154,36 @@ public class NilsConfig {
    *
    * @param classPrefixResolver The {@link ClassPrefixResolver}.
    * @return This config object.
-   * @see #classPrefixResolver(ClassPrefixResolver)
+   * @see #getClassPrefixResolver()
    */
   public NilsConfig classPrefixResolver(ClassPrefixResolver classPrefixResolver) {
     ParameterCheck.notNull(classPrefixResolver, "classPrefixResolver", NILS_CONFIG);
     this.classPrefixResolver = classPrefixResolver;
+    return this;
+  }
+
+  /**
+   * Gets the {@link TranslationFormatter} object.
+   *
+   * <p>The default is {@link TranslationFormatter#MESSAGE_FORMAT}.
+   *
+   * @return The {@link TranslationFormatter}.
+   * @see #translationFormatter(TranslationFormatter)
+   */
+  public TranslationFormatter getTranslationFormatter() {
+    return translationFormatter;
+  }
+
+  /**
+   * Sets the {@link TranslationFormatter} object.
+   *
+   * @param translationFormatter The {@link TranslationFormatter}.
+   * @return This config object.
+   * @see #getTranslationFormatter()
+   */
+  public NilsConfig translationFormatter(TranslationFormatter translationFormatter) {
+    ParameterCheck.notNull(translationFormatter, "translationFormatter", NILS_CONFIG);
+    this.translationFormatter = translationFormatter;
     return this;
   }
 

@@ -33,7 +33,6 @@ class ErrorHandler {
   }
 
   public void handle(ErrorType suppressType, Exception ex) throws NilsException {
-    LOG.error(ex.getMessage(), ex);
     if (nilsConfig.getSuppressErrors().contains(ErrorType.ALL)
         || nilsConfig.getSuppressErrors().contains(suppressType)) {
       LOG.error("Suppressed error: {}", ex, ex.getMessage());

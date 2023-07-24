@@ -20,6 +20,7 @@ import com.codepulsar.nils.core.adapter.AdapterConfig;
 import com.codepulsar.nils.core.error.ErrorType;
 import com.codepulsar.nils.core.error.NilsConfigException;
 import com.codepulsar.nils.core.handler.ClassPrefixResolver;
+import com.codepulsar.nils.core.handler.TranslationFormatter;
 import com.codepulsar.nils.core.testadapter.StaticAdapterConfig;
 
 public class NilsConfigTest {
@@ -48,6 +49,7 @@ public class NilsConfigTest {
     assertThat(underTest.getEscapePattern()).isEqualTo("[{0}]");
     assertThat(underTest.getIncludeTag()).isEqualTo("@include");
     assertThat(underTest.getClassPrefixResolver()).isEqualTo(ClassPrefixResolver.SIMPLE_CLASSNAME);
+    assertThat(underTest.getTranslationFormatter()).isEqualTo(TranslationFormatter.MESSAGE_FORMAT);
   }
 
   @Test
@@ -125,11 +127,11 @@ public class NilsConfigTest {
     var underTest = NilsConfig.init(adapterConfig);
 
     // Act
-    var returnValue = underTest.suppressErrors(NONE);
+    var result = underTest.suppressErrors(NONE);
 
     // Assert
-    assertThat(returnValue).isNotNull();
-    assertThat(returnValue).isEqualTo(underTest);
+    assertThat(result).isNotNull();
+    assertThat(result).isEqualTo(underTest);
     assertThat(underTest.getSuppressErrors()).containsExactly(NONE);
   }
 
@@ -140,11 +142,11 @@ public class NilsConfigTest {
     var underTest = NilsConfig.init(adapterConfig);
 
     // Act
-    var returnValue = underTest.suppressErrors(ALL);
+    var result = underTest.suppressErrors(ALL);
 
     // Assert
-    assertThat(returnValue).isNotNull();
-    assertThat(returnValue).isEqualTo(underTest);
+    assertThat(result).isNotNull();
+    assertThat(result).isEqualTo(underTest);
     assertThat(underTest.getSuppressErrors()).containsExactly(ALL);
   }
 
@@ -155,12 +157,12 @@ public class NilsConfigTest {
     var underTest = NilsConfig.init(adapterConfig);
 
     // Act
-    var returnValue =
+    var result =
         underTest.suppressErrors(INCLUDE_LOOP_DETECTED, MISSING_TRANSLATION, NLS_PARAMETER_CHECK);
 
     // Assert
-    assertThat(returnValue).isNotNull();
-    assertThat(returnValue).isEqualTo(underTest);
+    assertThat(result).isNotNull();
+    assertThat(result).isEqualTo(underTest);
     assertThat(underTest.getSuppressErrors())
         .containsOnly(INCLUDE_LOOP_DETECTED, MISSING_TRANSLATION, NLS_PARAMETER_CHECK);
   }
@@ -198,11 +200,11 @@ public class NilsConfigTest {
     var underTest = NilsConfig.init(adapterConfig);
 
     // Act
-    var returnValue = underTest.escapePattern(">>{0}<<");
+    var result = underTest.escapePattern(">>{0}<<");
 
     // Assert
-    assertThat(returnValue).isNotNull();
-    assertThat(returnValue).isEqualTo(underTest);
+    assertThat(result).isNotNull();
+    assertThat(result).isEqualTo(underTest);
     assertThat(underTest.getEscapePattern()).isEqualTo(">>{0}<<");
   }
 
@@ -213,11 +215,11 @@ public class NilsConfigTest {
     var underTest = NilsConfig.init(adapterConfig);
 
     // Act
-    var returnValue = underTest.includeTag("TEST");
+    var result = underTest.includeTag("TEST");
 
     // Assert
-    assertThat(returnValue).isNotNull();
-    assertThat(returnValue).isEqualTo(underTest);
+    assertThat(result).isNotNull();
+    assertThat(result).isEqualTo(underTest);
     assertThat(underTest.getIncludeTag()).isEqualTo("TEST");
   }
 
@@ -235,6 +237,35 @@ public class NilsConfigTest {
   }
 
   @Test
+  public void translationFormatter() {
+    // Arrange
+    var adapterConfig = new StaticAdapterConfig();
+    var underTest = NilsConfig.init(adapterConfig);
+
+    assertThat(underTest.getTranslationFormatter()).isEqualTo(TranslationFormatter.MESSAGE_FORMAT);
+
+    // Act
+    var result = underTest.translationFormatter(TranslationFormatter.STRING_FORMAT);
+
+    // Assert
+    assertThat(result).isNotNull();
+    assertThat(result).isEqualTo(underTest);
+    assertThat(underTest.getTranslationFormatter()).isEqualTo(TranslationFormatter.STRING_FORMAT);
+  }
+
+  @Test
+  public void translationFormatter_null() {
+    // Arrange
+    var adapterConfig = new StaticAdapterConfig();
+    var underTest = NilsConfig.init(adapterConfig);
+
+    // Act / Assert
+    assertThatThrownBy(() -> underTest.translationFormatter(null))
+        .isInstanceOf(NilsConfigException.class)
+        .hasMessage("NILS-004: Parameter 'translationFormatter' cannot be null.");
+  }
+
+  @Test
   public void classPrefixResolver() {
     // Arrange
     var adapterConfig = new StaticAdapterConfig();
@@ -243,11 +274,11 @@ public class NilsConfigTest {
     assertThat(underTest.getClassPrefixResolver()).isEqualTo(ClassPrefixResolver.SIMPLE_CLASSNAME);
 
     // Act
-    var returnValue = underTest.classPrefixResolver(ClassPrefixResolver.FQN_CLASSNAME);
+    var result = underTest.classPrefixResolver(ClassPrefixResolver.FQN_CLASSNAME);
 
     // Assert
-    assertThat(returnValue).isNotNull();
-    assertThat(returnValue).isEqualTo(underTest);
+    assertThat(result).isNotNull();
+    assertThat(result).isEqualTo(underTest);
     assertThat(underTest.getClassPrefixResolver()).isEqualTo(ClassPrefixResolver.FQN_CLASSNAME);
   }
 

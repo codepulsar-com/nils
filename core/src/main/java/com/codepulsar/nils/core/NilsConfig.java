@@ -11,6 +11,7 @@ import com.codepulsar.nils.core.adapter.AdapterConfig;
 import com.codepulsar.nils.core.config.SuppressableErrorTypes;
 import com.codepulsar.nils.core.error.ErrorType;
 import com.codepulsar.nils.core.error.NilsConfigException;
+import com.codepulsar.nils.core.handler.ClassPrefixResolver;
 import com.codepulsar.nils.core.util.ParameterCheck;
 /** The configuration of the Nils library. */
 public class NilsConfig {
@@ -18,6 +19,7 @@ public class NilsConfig {
   private String escapePattern = "[{0}]";
   private String includeTag = "@include";
   private Set<ErrorType> suppressErrors = Set.of(SuppressableErrorTypes.NONE);
+  private ClassPrefixResolver classPrefixResolver = ClassPrefixResolver.SIMPLE_CLASSNAME;
 
   private NilsConfig(AdapterConfig adapterConfig) {
     this.adapterConfig = adapterConfig;
@@ -133,6 +135,31 @@ public class NilsConfig {
     return this;
   }
 
+  /**
+   * Gets the {@link ClassPrefixResolver} object.
+   *
+   * <p>The default is {@link ClassPrefixResolver#SIMPLE_CLASSNAME}.
+   *
+   * @return The {@link ClassPrefixResolver}.
+   * @see #classPrefixResolver(ClassPrefixResolver)
+   */
+  public ClassPrefixResolver getClassPrefixResolver() {
+    return classPrefixResolver;
+  }
+
+  /**
+   * Sets the {@link ClassPrefixResolver} object.
+   *
+   * @param classPrefixResolver The {@link ClassPrefixResolver}.
+   * @return This config object.
+   * @see #classPrefixResolver(ClassPrefixResolver)
+   */
+  public NilsConfig classPrefixResolver(ClassPrefixResolver classPrefixResolver) {
+    ParameterCheck.notNull(classPrefixResolver, "classPrefixResolver", NILS_CONFIG);
+    this.classPrefixResolver = classPrefixResolver;
+    return this;
+  }
+
   private String checkEscapePattern(String pattern) {
     if (!pattern.contains("{0}")) {
       throw new NilsConfigException(
@@ -149,6 +176,7 @@ public class NilsConfig {
     }
     return pattern;
   }
+
   /**
    * Create a <strong>NilsConfig</strong> from an {@link AdapterConfig}.
    *

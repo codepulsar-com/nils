@@ -96,6 +96,24 @@ The `NilsConfig` provides a method to configure the include tag:
 
 * `includeTag(String)`: Set the tag used for including other keys. The default is `@include`.
 
+## Class name resolving
+
+The `NLS` interface provides two methods using a `Class` as prefix for a translation key:
+
+* `get(Class<?> key, String subKey)`
+* `get(Class<?> key, String subKey, Object... args)` 
+
+The default behaviour is to use the simple name of a class. Therefore xyz.dummy.DummyClass will be `DummyClass` and a call of `nls.get(DummyClass.class, "test")` would be the translation key `DummyClass.test`.
+
+How a class name is resolved is configurable in the NilsConfig using the method `nilsConfig.classPrefixResolver(ClassPrefixResolver)` by setting a ClassPrefixResolver implementation.
+
+The _NILS_ provides two implementations:
+
+* `ClassPrefixResolver.SIMPLE_CLASSNAME` : Using the simple name of a class (the default).
+* `ClassPrefixResolver.FQN_CLASSNAME` : Using the full qualified name of a class (xyz.dummy.DummyClass will be `xyz.dummy.DummyClass`).
+
+But own resolver could be implemented and used.
+
 ## Caveats / hacks
 
 ### NILS and Java's module-info.java

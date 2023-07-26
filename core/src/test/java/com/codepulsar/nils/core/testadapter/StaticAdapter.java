@@ -1,11 +1,9 @@
 package com.codepulsar.nils.core.testadapter;
 
-import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
 import com.codepulsar.nils.core.adapter.Adapter;
-import com.codepulsar.nils.core.adapter.AdapterConfig;
 
 public class StaticAdapter implements Adapter {
 
@@ -25,8 +23,6 @@ public class StaticAdapter implements Adapter {
           "Attribute (FQN)",
           "StaticClassResolver.attribute",
           "Attribute (StaticResolver)");
-  // TODO Remove c'tor -> not needed anymore
-  public StaticAdapter(AdapterConfig config, Locale locale) {}
 
   @Override
   public Optional<String> getTranslation(String key) {

@@ -8,7 +8,10 @@ import java.time.format.FormatStyle;
 import java.time.temporal.Temporal;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -19,6 +22,18 @@ import com.codepulsar.nils.core.testadapter.StaticAdapterConfig;
 public class FormatsImplTest {
   private static final String DATA_PROVIDER =
       "com.codepulsar.nils.core.impl.FormatsImplTestDataProvider";
+  private TimeZone current;
+
+  @BeforeEach
+  public void setTimezone() {
+    current = TimeZone.getDefault();
+    TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
+  }
+
+  @AfterEach
+  public void resetTimezone() {
+    TimeZone.setDefault(current);
+  }
 
   @Test
   public void constructor_nullLocale() {

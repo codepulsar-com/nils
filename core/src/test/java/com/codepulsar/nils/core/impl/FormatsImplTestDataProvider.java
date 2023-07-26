@@ -12,6 +12,7 @@ import java.time.format.FormatStyle;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.params.provider.Arguments;
@@ -78,7 +79,7 @@ public class FormatsImplTestDataProvider {
         arguments(asDate(0, 0, 0, 12, 15, 0), "12:15:00", Locale.GERMANY, null),
         arguments(
             asDate(0, 0, 0, 12, 15, 0),
-            "12:15:00 PM Central European Standard Time",
+            "12:15:00 PM Greenwich Mean Time",
             Locale.US,
             FormatStyle.FULL),
         arguments(asDate(0, 0, 0, 12, 15, 0), "12:15", Locale.GERMANY, FormatStyle.SHORT),
@@ -92,7 +93,7 @@ public class FormatsImplTestDataProvider {
         arguments(asDate(2023, 7, 25, 12, 15, 00), "25.07.2023, 12:15:00", Locale.GERMANY, null),
         arguments(
             asDate(2023, 7, 25, 12, 15, 00),
-            "July 25, 2023 at 12:15:00 PM CEST",
+            "July 25, 2023 at 12:15:00 PM GMT",
             Locale.US,
             FormatStyle.LONG),
         arguments(
@@ -176,7 +177,8 @@ public class FormatsImplTestDataProvider {
   }
 
   private static Date asDate(int year, int month, int day, int hour, int min, int sec) {
-    Calendar cal = Calendar.getInstance();
+    Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.UK);
+    cal.clear();
     cal.set(year, month - 1, day, hour, min, sec);
     return cal.getTime();
   }

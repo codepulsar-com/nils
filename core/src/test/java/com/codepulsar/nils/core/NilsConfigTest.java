@@ -9,6 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
+import java.time.format.FormatStyle;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -50,6 +51,7 @@ public class NilsConfigTest {
     assertThat(underTest.getIncludeTag()).isEqualTo("@include");
     assertThat(underTest.getClassPrefixResolver()).isEqualTo(ClassPrefixResolver.SIMPLE_CLASSNAME);
     assertThat(underTest.getTranslationFormatter()).isEqualTo(TranslationFormatter.MESSAGE_FORMAT);
+    assertThat(underTest.getDateFormatStyle()).isEqualTo(FormatStyle.MEDIUM);
   }
 
   @Test
@@ -263,6 +265,35 @@ public class NilsConfigTest {
     assertThatThrownBy(() -> underTest.translationFormatter(null))
         .isInstanceOf(NilsConfigException.class)
         .hasMessage("NILS-004: Parameter 'translationFormatter' cannot be null.");
+  }
+
+  @Test
+  public void dateFormatStyle() {
+    // Arrange
+    var adapterConfig = new StaticAdapterConfig();
+    var underTest = NilsConfig.init(adapterConfig);
+
+    assertThat(underTest.getDateFormatStyle()).isEqualTo(FormatStyle.MEDIUM);
+
+    // Act
+    var result = underTest.dateFormatStyle(FormatStyle.LONG);
+
+    // Assert
+    assertThat(result).isNotNull();
+    assertThat(result).isEqualTo(underTest);
+    assertThat(underTest.getDateFormatStyle()).isEqualTo(FormatStyle.LONG);
+  }
+
+  @Test
+  public void dateFormatStyle_null() {
+    // Arrange
+    var adapterConfig = new StaticAdapterConfig();
+    var underTest = NilsConfig.init(adapterConfig);
+
+    // Act / Assert
+    assertThatThrownBy(() -> underTest.dateFormatStyle(null))
+        .isInstanceOf(NilsConfigException.class)
+        .hasMessage("NILS-004: Parameter 'dateFormatStyle' cannot be null.");
   }
 
   @Test

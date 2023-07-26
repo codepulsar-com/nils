@@ -3,6 +3,7 @@ package com.codepulsar.nils.core;
 import static com.codepulsar.nils.core.util.ParameterCheck.NILS_CONFIG;
 
 import java.text.MessageFormat;
+import java.time.format.FormatStyle;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,6 +23,7 @@ public class NilsConfig {
   private Set<ErrorType> suppressErrors = Set.of(SuppressableErrorTypes.NONE);
   private ClassPrefixResolver classPrefixResolver = ClassPrefixResolver.SIMPLE_CLASSNAME;
   private TranslationFormatter translationFormatter = TranslationFormatter.MESSAGE_FORMAT;
+  private FormatStyle dateFormatStyle = FormatStyle.MEDIUM;
 
   private NilsConfig(AdapterConfig adapterConfig) {
     this.adapterConfig = adapterConfig;
@@ -184,6 +186,33 @@ public class NilsConfig {
   public NilsConfig translationFormatter(TranslationFormatter translationFormatter) {
     ParameterCheck.notNull(translationFormatter, "translationFormatter", NILS_CONFIG);
     this.translationFormatter = translationFormatter;
+    return this;
+  }
+  /**
+   * Gets the <code>FormatStyle</code> used in {@link Formats} objects, defining the style for date,
+   * time and date with time value.
+   *
+   * <p>The default is <code>FormatStyle.MEDIUM</code>.
+   *
+   * @return The <code>FormatStyle</code>.
+   * @see #dateFormatStyle(FormatStyle)
+   */
+  public FormatStyle getDateFormatStyle() {
+    return dateFormatStyle;
+  }
+  /**
+   * Sets the <code>FormatStyle</code> used in {@link Formats} objects, defining the style for date,
+   * time and date with time value.
+   *
+   * <p>The default is <code>FormatStyle.MEDIUM</code>.
+   *
+   * @return The <code>FormatStyle</code>.
+   * @see #getDateFormatStyle()
+   * @see #Formats
+   */
+  public NilsConfig dateFormatStyle(FormatStyle dateFormatStyle) {
+    ParameterCheck.notNull(dateFormatStyle, "dateFormatStyle", NILS_CONFIG);
+    this.dateFormatStyle = dateFormatStyle;
     return this;
   }
 

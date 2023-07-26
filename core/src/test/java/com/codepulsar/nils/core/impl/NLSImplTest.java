@@ -8,14 +8,11 @@ import static com.codepulsar.nils.core.config.SuppressableErrorTypes.NONE;
 import static com.codepulsar.nils.core.config.SuppressableErrorTypes.TRANSLATION_FORMAT_ERROR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 import java.util.Locale;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import com.codepulsar.nils.core.NilsConfig;
@@ -28,6 +25,10 @@ import com.codepulsar.nils.core.testadapter.StaticAdapterConfig;
 import com.codepulsar.nils.core.testdata.Dummy;
 
 public class NLSImplTest {
+
+  private static final String DATA_PROVIDER =
+      "com.codepulsar.nils.core.impl.NLSImplTestDataProvider";
+
   @Test
   public void constructor_nullAdapter() {
     // Arrange
@@ -68,7 +69,7 @@ public class NLSImplTest {
   }
 
   @ParameterizedTest
-  @MethodSource("source_string_getByKey_invalid")
+  @MethodSource(DATA_PROVIDER + "#source_string_getByKey_invalid")
   public void string_getByKey_invalid(String key, String errMsg) {
     // Arrange
     var locale = Locale.ENGLISH;
@@ -83,7 +84,7 @@ public class NLSImplTest {
   }
 
   @ParameterizedTest
-  @MethodSource("source_string_getByKey_invalid_suppressed")
+  @MethodSource(DATA_PROVIDER + "#source_string_getByKey_invalid_suppressed")
   public void string_getByKey_invalid_suppressed(String key, String expected) {
     // Arrange
     var locale = Locale.ENGLISH;
@@ -208,7 +209,7 @@ public class NLSImplTest {
   }
 
   @ParameterizedTest
-  @MethodSource("source_string_getByKeyAndArgs_invalid")
+  @MethodSource(DATA_PROVIDER + "#source_string_getByKeyAndArgs_invalid")
   public void string_getByKeyAndArgs_invalid(String key, Object[] args, String errMsg) {
     // Arrange
     var locale = Locale.ENGLISH;
@@ -223,7 +224,7 @@ public class NLSImplTest {
   }
 
   @ParameterizedTest
-  @MethodSource("source_string_getByKeyAndArgs_invalid_suppressed")
+  @MethodSource(DATA_PROVIDER + "#source_string_getByKeyAndArgs_invalid_suppressed")
   public void string_getByKeyAndArgs_invalid_suppressed(
       String key, Object[] args, String expected) {
     // Arrange
@@ -366,7 +367,7 @@ public class NLSImplTest {
   }
 
   @ParameterizedTest
-  @MethodSource("source_class_getByKey_invalid")
+  @MethodSource(DATA_PROVIDER + "#source_class_getByKey_invalid")
   public void class_getByKey_invalid(Class<?> key, String subKey, String errMsg) {
     // Arrange
     var locale = Locale.ENGLISH;
@@ -381,7 +382,7 @@ public class NLSImplTest {
   }
 
   @ParameterizedTest
-  @MethodSource("source_class_getByKey_invalid_suppressed")
+  @MethodSource(DATA_PROVIDER + "#source_class_getByKey_invalid_suppressed")
   public void class_getByKey_invalid_suppressed(Class<?> key, String subKey, String expected) {
     // Arrange
     var locale = Locale.ENGLISH;
@@ -495,7 +496,7 @@ public class NLSImplTest {
   }
 
   @ParameterizedTest
-  @MethodSource("source_class_getByKeyAndArgs_invalid")
+  @MethodSource(DATA_PROVIDER + "#source_class_getByKeyAndArgs_invalid")
   public void class_getByKeyAndArgs_invalid(
       Class<?> key, String subKey, Object[] args, String errMsg) {
     // Arrange
@@ -511,7 +512,7 @@ public class NLSImplTest {
   }
 
   @ParameterizedTest
-  @MethodSource("source_class_getByKeyAndArgs_invalid_suppressed")
+  @MethodSource(DATA_PROVIDER + "#source_class_getByKeyAndArgs_invalid_suppressed")
   public void class_getByKeyAndArgs_invalid_suppressed(
       Class<?> key, String subKey, Object[] args, String expected) {
     // Arrange
@@ -614,75 +615,23 @@ public class NLSImplTest {
     assertThat(underTest.getLocale()).isEqualTo(Locale.ENGLISH);
   }
 
-  private static Stream<Arguments> source_string_getByKey_invalid() {
-    return Stream.of(
-        arguments(null, "NILS-003: Parameter 'key' cannot be null."),
-        arguments("", "NILS-003: Parameter 'key' cannot be empty or blank."),
-        arguments(" ", "NILS-003: Parameter 'key' cannot be empty or blank."));
-  }
+  @Test
+  public void getFormats() {
+    // Arrange
+    var locale = Locale.US;
+    var config = NilsConfig.init(new StaticAdapterConfig());
+    var underTest =
+        new NLSImpl(new StaticAdapter(config.getAdapterConfig(), locale), config, locale);
 
-  private static Stream<Arguments> source_string_getByKey_invalid_suppressed() {
-    return Stream.of(arguments(null, "[null]"), arguments("", "[]"), arguments(" ", "[ ]"));
-  }
+    // Act
+    var result = underTest.getFormats();
+    // Assert
+    assertThat(result).isNotNull();
 
-  private static Stream<Arguments> source_string_getByKeyAndArgs_invalid() {
-    return Stream.of(
-        arguments(null, new Object[] {"Value"}, "NILS-003: Parameter 'key' cannot be null."),
-        arguments(
-            "", new Object[] {"Value"}, "NILS-003: Parameter 'key' cannot be empty or blank."),
-        arguments(
-            " ", new Object[] {"Value"}, "NILS-003: Parameter 'key' cannot be empty or blank."));
-  }
+    // Act
+    var result2 = underTest.getFormats();
 
-  private static Stream<Arguments> source_string_getByKeyAndArgs_invalid_suppressed() {
-    return Stream.of(
-        arguments(null, new Object[] {"Value"}, "[null]"),
-        arguments("", new Object[] {"Value"}, "[]"),
-        arguments(" ", new Object[] {"Value"}, "[ ]"));
-  }
-
-  private static Stream<Arguments> source_class_getByKey_invalid() {
-    return Stream.of(
-        arguments(null, "attr", "NILS-003: Parameter 'key' cannot be null."),
-        arguments(Dummy.class, null, "NILS-003: Parameter 'subKey' cannot be null."),
-        arguments(Dummy.class, "", "NILS-003: Parameter 'subKey' cannot be empty or blank."),
-        arguments(Dummy.class, " ", "NILS-003: Parameter 'subKey' cannot be empty or blank."));
-  }
-
-  private static Stream<Arguments> source_class_getByKey_invalid_suppressed() {
-    return Stream.of(
-        arguments(null, "attr", "[null.attr]"),
-        arguments(Dummy.class, null, "[Dummy.null]"),
-        arguments(Dummy.class, "", "[Dummy.]"),
-        arguments(Dummy.class, " ", "[Dummy. ]"));
-  }
-
-  private static Stream<Arguments> source_class_getByKeyAndArgs_invalid() {
-    return Stream.of(
-        arguments(
-            null, "attr", new Object[] {"Value"}, "NILS-003: Parameter 'key' cannot be null."),
-        arguments(
-            Dummy.class,
-            null,
-            new Object[] {"Value"},
-            "NILS-003: Parameter 'subKey' cannot be null."),
-        arguments(
-            Dummy.class,
-            "",
-            new Object[] {"Value"},
-            "NILS-003: Parameter 'subKey' cannot be empty or blank."),
-        arguments(
-            Dummy.class,
-            " ",
-            new Object[] {"Value"},
-            "NILS-003: Parameter 'subKey' cannot be empty or blank."));
-  }
-
-  private static Stream<Arguments> source_class_getByKeyAndArgs_invalid_suppressed() {
-    return Stream.of(
-        arguments(null, "attr", new Object[] {"Value"}, "[null.attr]"),
-        arguments(Dummy.class, null, new Object[] {"Value"}, "[Dummy.null]"),
-        arguments(Dummy.class, "", new Object[] {"Value"}, "[Dummy.]"),
-        arguments(Dummy.class, " ", new Object[] {"Value"}, "[Dummy. ]"));
+    // Assert
+    assertThat(result2).isEqualTo(result2);
   }
 }

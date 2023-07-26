@@ -8,7 +8,7 @@ _NILS_ can handle with different locales at a time. The `NilsFactory` provides a
 * `nls(Locale)` : Returns an NLS object for a specific locale.
 * `nls(String)` : Returns an NLS object, where the locale is reolved by its language code.
 
-## Translation format for arguments
+## Translations with arguments
 
 Using the one of the methods `NLS.get(String key, Object... args)` or `NLS.get(Class<?> key, String subKey, Object... args)` the passed args will be used to format the translation value (if the value is correct).
 
@@ -125,6 +125,14 @@ The _NILS_ provides two implementations:
 * `ClassPrefixResolver.FQN_CLASSNAME` : Using the full qualified name of a class (xyz.dummy.DummyClass will be `xyz.dummy.DummyClass`).
 
 But own resolver could be implemented and used.
+
+## Formats
+
+_NILS_ provides different Formatter class in the `Locale` of a NLS object, for formatting or parsing dates, times, dates with time or different number formats.
+
+You can get access to the formats be calling `NLS.getFormats()`.
+
+The default format for dates, times and dates with time will be medium (i.e. Jul 25, 2023). In the NilsConfig there is the method `dateFormatStyle(FormatStyle)` where the format style of all date related formatter can be changed globally.
 
 ## Caveats / hacks
 

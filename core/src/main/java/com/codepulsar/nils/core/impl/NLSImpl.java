@@ -10,6 +10,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
+import com.codepulsar.nils.core.Formats;
 import com.codepulsar.nils.core.NLS;
 import com.codepulsar.nils.core.NilsConfig;
 import com.codepulsar.nils.core.adapter.Adapter;
@@ -38,6 +39,7 @@ public class NLSImpl implements NLS {
   private final ErrorHandler errorHandler;
   private final ClassPrefixResolver classPrefixResolver;
   private final TranslationFormatter translationFormatter;
+  private Formats formats;
   private Map<String, Optional<String>> cache = new HashMap<>();
 
   public NLSImpl(Adapter adapter, NilsConfig config, Locale locale) {
@@ -126,13 +128,17 @@ public class NLSImpl implements NLS {
     return get(String.format("%s.%s", keyBase, subKey), args);
   }
 
-  protected String buildMissingKey(String key) {
-    return MessageFormat.format(config.getEscapePattern(), key);
-  }
-
   @Override
   public Locale getLocale() {
     return locale;
+  }
+
+  @Override
+  public Formats getFormats() {
+    if (formats == null) {
+      formats = new FormatsImpl(locale, config);
+    }
+    return formats;
   }
 
   private Optional<String> resolveTranslation(String key) {
@@ -155,6 +161,10 @@ public class NLSImpl implements NLS {
       return Optional.empty();
     }
     return Optional.empty();
+  }
+
+  private String buildMissingKey(String key) {
+    return MessageFormat.format(config.getEscapePattern(), key);
   }
 
   private String resolveKeyPrefix(Class<?> key) {

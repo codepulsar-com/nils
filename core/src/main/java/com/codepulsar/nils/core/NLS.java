@@ -55,4 +55,11 @@ public interface NLS {
    * @return A <code>Locale</code> object.
    */
   Locale getLocale();
+
+  /**
+   * Gets the {@link Formats} for the <code>Locale</code> of <strong>NLS</strong>.
+   *
+   * @return A {@link Formats} object.
+   */
+  Formats getFormats();
 }

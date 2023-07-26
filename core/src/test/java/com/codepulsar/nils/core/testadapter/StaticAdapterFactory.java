@@ -9,6 +9,6 @@ public class StaticAdapterFactory implements AdapterFactory<StaticAdapter> {
 
   @Override
   public StaticAdapter create(AdapterConfig config, Locale locale) {
-    return new StaticAdapter(config, locale);
+    return new StaticAdapter();
   }
 }

@@ -208,7 +208,7 @@ public class NilsConfig {
    *
    * @return The <code>FormatStyle</code>.
    * @see #getDateFormatStyle()
-   * @see #Formats
+   * @see com.codepulsar.nils.core.Formats
    */
   public NilsConfig dateFormatStyle(FormatStyle dateFormatStyle) {
     ParameterCheck.notNull(dateFormatStyle, "dateFormatStyle", NILS_CONFIG);

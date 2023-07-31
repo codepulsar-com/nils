@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.codepulsar.nils</groupId>
 	<artifactId>nils-parent</artifactId>
-	<version>1.2.0</version>
+	<version>1.3.0-SNAPSHOT</version>
 	<name>NILS - Parent</name>
 	<description>A Java NLS library</description>
 	<packaging>pom</packaging>

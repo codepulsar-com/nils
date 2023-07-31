@@ -32,14 +32,14 @@ Maven:
 <dependency>
   <groupId>com.codepulsar.nils</groupId>
   <artifactId>nils-core</artifactId>
-  <version>1.1.0</version>
+  <version>1.2.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```
-implementation group: 'com.codepulsar.nils', name: 'nils-core', version: '1.1.0'
+implementation group: 'com.codepulsar.nils', name: 'nils-core', version: '1.2.0'
 ```
 
 ### Using

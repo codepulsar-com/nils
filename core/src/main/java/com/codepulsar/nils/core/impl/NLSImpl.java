@@ -4,7 +4,6 @@ import static com.codepulsar.nils.core.config.SuppressableErrorTypes.NLS_PARAMET
 import static com.codepulsar.nils.core.config.SuppressableErrorTypes.TRANSLATION_FORMAT_ERROR;
 import static com.codepulsar.nils.core.util.ParameterCheck.nilsException;
 
-import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -16,7 +15,6 @@ import com.codepulsar.nils.core.NilsConfig;
 import com.codepulsar.nils.core.adapter.Adapter;
 import com.codepulsar.nils.core.config.SuppressableErrorTypes;
 import com.codepulsar.nils.core.error.NilsException;
-import com.codepulsar.nils.core.handler.ClassPrefixResolver;
 import com.codepulsar.nils.core.handler.TranslationFormatter;
 import com.codepulsar.nils.core.util.ParameterCheck;
 /**
@@ -37,8 +35,8 @@ public class NLSImpl implements NLS {
   private final NilsConfig config;
   private final IncludeHandler includeHandler;
   private final ErrorHandler errorHandler;
-  private final ClassPrefixResolver classPrefixResolver;
   private final TranslationFormatter translationFormatter;
+  private final NLSKeyUtil keyUtil;
   private Formats formats;
   private Map<String, Optional<String>> cache = new HashMap<>();
 
@@ -48,8 +46,8 @@ public class NLSImpl implements NLS {
     this.locale = ParameterCheck.notNull(locale, "locale");
     this.includeHandler = new IncludeHandler(config, adapter::getTranslation);
     this.errorHandler = new ErrorHandler(config);
-    this.classPrefixResolver = config.getClassPrefixResolver();
     this.translationFormatter = config.getTranslationFormatter();
+    this.keyUtil = new NLSKeyUtil(config);
   }
 
   @Override
@@ -58,7 +56,7 @@ public class NLSImpl implements NLS {
       ParameterCheck.notNullEmptyOrBlank(key, "key", nilsException(NLS_PARAMETER_CHECK));
     } catch (NilsException ex) {
       errorHandler.handle(NLS_PARAMETER_CHECK, ex);
-      return buildMissingKey(key);
+      return keyUtil.buildMissingKey(key);
     }
 
     Optional<String> translation = resolveTranslation(key);
@@ -66,7 +64,7 @@ public class NLSImpl implements NLS {
       errorHandler.handle(
           SuppressableErrorTypes.MISSING_TRANSLATION,
           "Could not find a translation for key '" + key + "' and locale '" + locale + "'.");
-      return buildMissingKey(key);
+      return keyUtil.buildMissingKey(key);
     }
     return translation.get();
   }
@@ -74,7 +72,7 @@ public class NLSImpl implements NLS {
   @Override
   public String get(String key, Object... args) {
     String unformattedValue = get(key);
-    if (unformattedValue.equals(buildMissingKey(key))) {
+    if (unformattedValue.equals(keyUtil.buildMissingKey(key))) {
       return unformattedValue;
     }
 
@@ -85,7 +83,7 @@ public class NLSImpl implements NLS {
           TRANSLATION_FORMAT_ERROR,
           new NilsException(
               TRANSLATION_FORMAT_ERROR, "Error in key '" + key + "': " + ex.getMessage(), ex));
-      return buildMissingKey(key);
+      return keyUtil.buildMissingKey(key);
     }
   }
 
@@ -95,17 +93,17 @@ public class NLSImpl implements NLS {
       ParameterCheck.notNull(key, "key", nilsException(NLS_PARAMETER_CHECK));
     } catch (NilsException ex) {
       errorHandler.handle(NLS_PARAMETER_CHECK, ex);
-      return buildMissingKey(String.format("%s.%s", key, subKey));
+      return keyUtil.buildMissingKey(String.format("%s.%s", key, subKey));
     }
     try {
       ParameterCheck.notNullEmptyOrBlank(subKey, "subKey", nilsException(NLS_PARAMETER_CHECK));
     } catch (NilsException ex) {
       errorHandler.handle(NLS_PARAMETER_CHECK, ex);
-      String keyBase = resolveKeyPrefix(key);
-      return buildMissingKey(String.format("%s.%s", keyBase, subKey));
+      String keyBase = keyUtil.resolveKeyPrefix(key);
+      return keyUtil.buildMissingKey(String.format("%s.%s", keyBase, subKey));
     }
 
-    String keyBase = resolveKeyPrefix(key);
+    String keyBase = keyUtil.resolveKeyPrefix(key);
     return get(String.format("%s.%s", keyBase, subKey));
   }
 
@@ -115,16 +113,16 @@ public class NLSImpl implements NLS {
       ParameterCheck.notNull(key, "key", nilsException(NLS_PARAMETER_CHECK));
     } catch (NilsException ex) {
       errorHandler.handle(NLS_PARAMETER_CHECK, ex);
-      return buildMissingKey(String.format("%s.%s", key, subKey));
+      return keyUtil.buildMissingKey(String.format("%s.%s", key, subKey));
     }
     try {
       ParameterCheck.notNullEmptyOrBlank(subKey, "subKey", nilsException(NLS_PARAMETER_CHECK));
     } catch (NilsException ex) {
       errorHandler.handle(NLS_PARAMETER_CHECK, ex);
-      String keyBase = resolveKeyPrefix(key);
-      return buildMissingKey(String.format("%s.%s", keyBase, subKey));
+      String keyBase = keyUtil.resolveKeyPrefix(key);
+      return keyUtil.buildMissingKey(String.format("%s.%s", keyBase, subKey));
     }
-    String keyBase = resolveKeyPrefix(key);
+    String keyBase = keyUtil.resolveKeyPrefix(key);
     return get(String.format("%s.%s", keyBase, subKey), args);
   }
 
@@ -139,6 +137,28 @@ public class NLSImpl implements NLS {
       formats = new FormatsImpl(locale, config);
     }
     return formats;
+  }
+
+  @Override
+  public NLS context(String context) {
+    try {
+      ParameterCheck.notNullEmptyOrBlank(context, "context", nilsException(NLS_PARAMETER_CHECK));
+    } catch (NilsException ex) {
+      errorHandler.handle(NLS_PARAMETER_CHECK, ex);
+      return this;
+    }
+    return new ContextNLSImpl(this, config, context);
+  }
+
+  @Override
+  public NLS context(Class<?> context) {
+    try {
+      ParameterCheck.notNull(context, "context", nilsException(NLS_PARAMETER_CHECK));
+    } catch (NilsException ex) {
+      errorHandler.handle(NLS_PARAMETER_CHECK, ex);
+      return this;
+    }
+    return new ContextNLSImpl(this, config, keyUtil.resolveKeyPrefix(context));
   }
 
   private Optional<String> resolveTranslation(String key) {
@@ -161,13 +181,5 @@ public class NLSImpl implements NLS {
       return Optional.empty();
     }
     return Optional.empty();
-  }
-
-  private String buildMissingKey(String key) {
-    return MessageFormat.format(config.getEscapePattern(), key);
-  }
-
-  private String resolveKeyPrefix(Class<?> key) {
-    return classPrefixResolver.resolve(key);
   }
 }

@@ -13,6 +13,7 @@ import com.codepulsar.nils.core.adapter.AdapterConfig;
 import com.codepulsar.nils.core.adapter.AdapterFactory;
 import com.codepulsar.nils.core.error.ErrorType;
 import com.codepulsar.nils.core.error.NilsException;
+import com.codepulsar.nils.core.handler.ClassPrefixResolver;
 import com.codepulsar.nils.core.impl.NLSImpl;
 import com.codepulsar.nils.core.util.ParameterCheck;
 /** Factory for getting access to the provided NLS. A requested NLS object is cached. */
@@ -27,7 +28,7 @@ public class NilsFactory {
     this.config = ParameterCheck.notNull(config, "config", NILS_CONFIG);
   }
   /**
-   * Gets the NLS object for the default <code>Locale</code>.
+   * Get the NLS object for the default <code>Locale</code>.
    *
    * @return The NLS object for the default <code>Locale</code>.
    */
@@ -35,7 +36,7 @@ public class NilsFactory {
     return nls(Locale.getDefault());
   }
   /**
-   * Gets the NLS object for a language tag.
+   * Get the NLS object for a language tag.
    *
    * @param lang The language tag.
    * @return The NLS object for the language tag.
@@ -47,7 +48,7 @@ public class NilsFactory {
     return nls(Locale.forLanguageTag(lang));
   }
   /**
-   * Gets the NLS object for a specific <code>Locale</code>.
+   * Get the NLS object for a specific <code>Locale</code>.
    *
    * @param locale The <code>Locale</code>.
    * @return The NLS object for the <code>Locale</code>.
@@ -61,6 +62,105 @@ public class NilsFactory {
               return createImpl(locale, config);
             });
     return result;
+  }
+
+  /**
+   * Get the NLS object for the default <code>Locale</code> and a specific context.
+   *
+   * <p>Only the keys beneath the context will be examined.
+   *
+   * @param context The context key.
+   * @return The NLS object for the default <code>Locale</code>.
+   */
+  public NLS nlsWithContext(String context) {
+    ParameterCheck.notNullEmptyOrBlank(context, "context");
+    return nls().context(context);
+  }
+
+  /**
+   * Get the NLS object for a language tag and a specific context.
+   *
+   * <p>Only the keys beneath the context will be examined.
+   *
+   * @param lang The language tag.
+   * @param context The context key.
+   * @return The NLS object for the language tag.
+   * @see Locale#forLanguageTag(String)
+   */
+  public NLS nlsWithContext(String lang, String context) {
+    ParameterCheck.notNullEmptyOrBlank(context, "context");
+    return nls(lang).context(context);
+  }
+
+  /**
+   * Get the NLS object for a specific <code>Locale</code> and a specific context.
+   *
+   * <p>Only the keys beneath the context will be examined.
+   *
+   * @param locale The <code>Locale</code>.
+   * @param context The context key.
+   * @return The NLS object for the <code>Locale</code>.
+   */
+  public NLS nlsWithContext(Locale locale, String context) {
+    ParameterCheck.notNullEmptyOrBlank(context, "context");
+    return nls(locale).context(context);
+  }
+
+  /**
+   * Get the NLS object for the default <code>Locale</code> and a specific context based on a <code>
+   * Class</code>.
+   *
+   * <p>Only the keys beneath the context will be examined.
+   *
+   * <p>The determination of the Class as key will be done with the configured {@link
+   * ClassPrefixResolver}.
+   *
+   * @param context The <code>Class</code> for the context key.
+   * @return The NLS object for the default <code>Locale</code>.
+   */
+  public NLS nlsWithContext(Class<?> context) {
+    ParameterCheck.notNull(context, "context");
+    return nls().context(context);
+  }
+
+  /**
+   * Get the NLS object for a language tag and a specific context based on a <code>
+   * Class</code>.
+   *
+   * <p>Only the keys beneath the context will be examined.
+   *
+   * <p>The determination of the Class as key will be done with the configured {@link
+   * ClassPrefixResolver}.
+   *
+   * <p>Only the keys beneath the context will be examined.
+   *
+   * @param lang The language tag.
+   * @param context The <code>Class</code> for the context key.
+   * @return The NLS object for the language tag.
+   * @see Locale#forLanguageTag(String)
+   */
+  public NLS nlsWithContext(String lang, Class<?> context) {
+    ParameterCheck.notNull(context, "context");
+    return nls(lang).context(context);
+  }
+
+  /**
+   * Get the NLS object for a language tag and a specific context based on a <code>
+   * Class</code>.
+   *
+   * <p>Only the keys beneath the context will be examined.
+   *
+   * <p>The determination of the Class as key will be done with the configured {@link
+   * ClassPrefixResolver}.
+   *
+   * @param locale The <code>Locale</code>.
+   * @param context The <code>Class</code> for the context key.
+   * @return The NLS object for the language tag.
+   * @see Locale#forLanguageTag(String)
+   */
+  public NLS nlsWithContext(Locale locale, Class<?> context) {
+    ParameterCheck.notNull(context, "context");
+    return nls(locale).context(context);
   }
 
   private NLSImpl createImpl(Locale locale, NilsConfig config) {

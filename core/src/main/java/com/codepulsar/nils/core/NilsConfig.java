@@ -206,7 +206,7 @@ public class NilsConfig {
    *
    * <p>The default is <code>FormatStyle.MEDIUM</code>.
    *
-   * @return The <code>FormatStyle</code>.
+   * @param dateFormatStyle The <code>FormatStyle</code>.
    * @see #getDateFormatStyle()
    * @see com.codepulsar.nils.core.Formats
    */

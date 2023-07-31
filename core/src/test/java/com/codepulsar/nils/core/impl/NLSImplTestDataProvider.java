@@ -81,4 +81,11 @@ public class NLSImplTestDataProvider {
         arguments(Dummy.class, "", new Object[] {"Value"}, "[Dummy.]"),
         arguments(Dummy.class, " ", new Object[] {"Value"}, "[Dummy. ]"));
   }
+
+  public static Stream<Arguments> source_context_string_invalid() {
+    return Stream.of(
+        arguments(null, "NILS-003: Parameter 'context' cannot be null."),
+        arguments("", "NILS-003: Parameter 'context' cannot be empty or blank."),
+        arguments(" ", "NILS-003: Parameter 'context' cannot be empty or blank."));
+  }
 }

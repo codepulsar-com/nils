@@ -134,6 +134,29 @@ You can get access to the formats be calling `NLS.getFormats()`.
 
 The default format for dates, times and dates with time will be medium (i.e. Jul 25, 2023). In the NilsConfig there is the method `dateFormatStyle(FormatStyle)` where the format style of all date related formatter can be changed globally.
 
+## Context based NLS
+
+Sometimes translation are needed in a specific context.
+
+Often these leads (i.e. using resource bundles or so) in code that duplicated parts of the translation key like:
+
+```
+nls.get("page.options.darkmode");
+nls.get("page.options.showInbox");
+```
+
+We could say we are in the context 'page.options'.
+
+_NILS_ provides a way to get only translations in a context. From an existing NLS object or from the NilsFactory. This could shorten the code as followed:
+
+```
+var contextNls = nls.context("page.options");
+contextNls.get("darkmode");
+contextNls.get("showInbox");
+```
+
+See: the `NLS.context`-methods and the `NilsFactory.context`-methods for more information.
+
 ## Caveats / hacks
 
 ### NILS and Java's module-info.java

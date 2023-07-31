@@ -11,14 +11,14 @@ Maven:
 <dependency>
   <groupId>com.codepulsar.nils</groupId>
   <artifactId>nils-gson-adapter</artifactId>
-  <version>1.1.0</version>
+  <version>1.2.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```
-implementation group: 'com.codepulsar.nils', name: 'nils-gson-adapter', version: '1.1.0'
+implementation group: 'com.codepulsar.nils', name: 'nils-gson-adapter', version: '1.2.0'
 ```
 
 ### Using

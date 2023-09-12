@@ -9,8 +9,7 @@
 	</parent>
 	<artifactId>nils-core</artifactId>
 	<name>NILS - Core</name>
-	<description>A Java NLS library</description>
-	<url>https://github.com/codepulsar-com/nils</url>
+	<description>The core NILS library - A Java NLS library (aka national language support, localisation, internationalisation, i18n, l10n).</description>
 
 	<dependencies>
 

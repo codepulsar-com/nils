@@ -9,8 +9,7 @@
 	</parent>
 	<artifactId>nils-gson-adapter</artifactId>
 	<name>NILS - Gson Adapter</name>
-	<description>Gson Adapter for NILS</description>
-	<url>https://github.com/codepulsar-com/nils</url>
+	<description>The Gson Adapter for NILS - A Java NLS library (aka national language support, localisation, internationalisation, i18n, l10n) using JSON files as resources.</description>
 
 	<dependencies>
 

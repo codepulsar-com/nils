@@ -19,7 +19,9 @@
 	<modules>
 		<module>core</module>
 		<module>gson</module>
+		<module>snakeyaml</module>
 	</modules>
+	
 	<dependencyManagement>
 		<dependencies>
 

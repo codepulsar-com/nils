@@ -1,0 +1,7 @@
+key1: Key 1
+key2: Key 2 {0}.
+deep: 
+- deepkey3: Key 3
+- deeper: 
+  - deeperkey4: Key 4
+numberValue: 42

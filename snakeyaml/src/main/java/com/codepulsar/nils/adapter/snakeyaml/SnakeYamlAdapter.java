@@ -1,10 +1,12 @@
-package com.codepulsar.nils.adapter.gson;
+package com.codepulsar.nils.adapter.snakeyaml;
 
-import static com.codepulsar.nils.adapter.gson.utils.GsonErrorTypes.CORRUPT_FILE_ERROR;
+import static com.codepulsar.nils.adapter.snakeyaml.utils.SnakeYamlErrorTypes.CORRUPT_FILE_ERROR;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -12,51 +14,52 @@ import java.util.StringTokenizer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yaml.snakeyaml.LoaderOptions;
+import org.yaml.snakeyaml.Yaml;
 
-import com.codepulsar.nils.adapter.gson.utils.JsonStreamResolver;
+import com.codepulsar.nils.adapter.snakeyaml.utils.YamlStreamResolver;
 import com.codepulsar.nils.core.adapter.Adapter;
 import com.codepulsar.nils.core.adapter.AdapterConfig;
 import com.codepulsar.nils.core.error.NilsConfigException;
 import com.codepulsar.nils.core.error.NilsException;
 import com.codepulsar.nils.core.util.ParameterCheck;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.stream.JsonReader;
-/** An {@link Adapter} implementation using JSON files for the translations. */
-public class GsonAdapter implements Adapter {
-  private static final Logger LOG = LoggerFactory.getLogger(GsonAdapter.class);
+/** An {@link Adapter} implementation using YAML files for the translations. */
+public class SnakeYamlAdapter implements Adapter {
+  private static final Logger LOG = LoggerFactory.getLogger(SnakeYamlAdapter.class);
 
-  private final GsonAdapterConfig adapterConfig;
+  private final SnakeYamlAdapterConfig adapterConfig;
   private final Locale locale;
   private final String resourceName;
   private boolean fallbackAvailable = true;
-  private GsonAdapter fallbackAdapter;
+  private SnakeYamlAdapter fallbackAdapter;
 
   private Map<String, Object> translations = Map.of();
 
-  public GsonAdapter(AdapterConfig config, Locale locale) {
+  public SnakeYamlAdapter(AdapterConfig config, Locale locale) {
     ParameterCheck.notNull(config, "config");
     ParameterCheck.notNull(locale, "locale");
-    if (!(config instanceof GsonAdapterConfig)) {
+    if (!(config instanceof SnakeYamlAdapterConfig)) {
       throw new NilsConfigException(
           String.format(
               "The provided AdapterConfig (%s) is not of type %s",
-              config, GsonAdapterConfig.class.getName()));
+              config, SnakeYamlAdapterConfig.class.getName()));
     }
-    this.adapterConfig = (GsonAdapterConfig) config;
+    this.adapterConfig = (SnakeYamlAdapterConfig) config;
     this.locale = locale;
-    Gson gson = new GsonBuilder().create();
-    var resolver = new JsonStreamResolver();
+    var loaderOptions = new LoaderOptions();
+    loaderOptions.setAllowDuplicateKeys(false);
+    Yaml yaml = new Yaml(loaderOptions);
+    var resolver = new YamlStreamResolver();
     try (var fileReader =
-            new InputStreamReader(resolver.resolve(adapterConfig, locale), StandardCharsets.UTF_8);
-        var jsonReader = new JsonReader(fileReader); ) {
-      translations = gson.fromJson(jsonReader, Map.class);
+        new InputStreamReader(resolver.resolve(adapterConfig, locale), StandardCharsets.UTF_8); ) {
+      translations = yaml.load(fileReader);
       LOG.debug("Translation for locale {} read.", locale);
-    } catch (JsonIOException | JsonSyntaxException | IOException e) {
+    } catch (NilsException e) {
+      // Just re-throw NilsExceptions
+      throw e;
+    } catch (Exception e) {
       throw new NilsException(
-          CORRUPT_FILE_ERROR, "Error reading JSON file '" + resolver.getUsedResource() + "'.", e);
+          CORRUPT_FILE_ERROR, "Error reading YAML file '" + resolver.getUsedResource() + "'.", e);
     } finally {
       try {
         resolver.close();
@@ -67,7 +70,7 @@ public class GsonAdapter implements Adapter {
     this.resourceName = resolver.getUsedResource();
     this.fallbackAvailable =
         !locale.equals(new Locale(""))
-            || !resourceName.endsWith(adapterConfig.getBaseFileName() + ".json");
+            || !resourceName.endsWith(adapterConfig.getBaseFileName() + ".yaml");
   }
 
   @Override
@@ -102,9 +105,12 @@ public class GsonAdapter implements Adapter {
           return Optional.empty();
         }
       } else {
-        if (value instanceof Map) {
+        if (value instanceof List) {
           if (keyParts.hasMoreTokens()) {
-            latest = (Map<String, Object>) value;
+            List<Map<String, Object>> innerList = (List<Map<String, Object>>) value;
+            Map<String, Object> next = new HashMap<>();
+            innerList.forEach(c -> next.putAll(c));
+            latest = next;
           } else {
             return Optional.empty();
           }
@@ -116,7 +122,7 @@ public class GsonAdapter implements Adapter {
     return Optional.empty();
   }
 
-  private GsonAdapter getFallbackAdapter() {
+  private SnakeYamlAdapter getFallbackAdapter() {
     if (fallbackAdapter == null) {
       var variant = locale.getVariant();
       var country = locale.getCountry();
@@ -127,7 +133,7 @@ public class GsonAdapter implements Adapter {
         language = "";
       }
       Locale parent = new Locale(language, country);
-      fallbackAdapter = new GsonAdapterFactory().create(adapterConfig, parent);
+      fallbackAdapter = new SnakeYamlAdapterFactory().create(adapterConfig, parent);
     }
 
     return fallbackAdapter;

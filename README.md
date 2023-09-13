@@ -8,6 +8,7 @@ Currently there are adapters for using with
 
 * Java Resource Bundles (as part of `nils-core`. See below for usage).
 * Using JSON files (see [Gson Adapter](docs/gson-adapter.md) for usage).
+* Using YAML files (see [SnakeYaml Adapter](docs/snakeyaml-adapter.md) for usage).
 
 ## Getting started 
 

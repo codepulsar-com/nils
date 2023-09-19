@@ -80,7 +80,7 @@ public class SnakeYamlAdapterTest {
   }
 
   @Test
-  public void invalidBaseFilenName() {
+  public void invalidBaseFileName() {
     // Arrange
     var locale = Locale.ENGLISH;
     var config = SnakeYamlAdapterConfig.init(this).baseFileName("test/non_existing");
@@ -88,7 +88,8 @@ public class SnakeYamlAdapterTest {
     // Act / Assert
     assertThatThrownBy(() -> new SnakeYamlAdapter(config, locale))
         .isInstanceOf(NilsException.class)
-        .hasMessage("NILS-102: Could not find a resource for baseFilename 'test/non_existing'.");
+        .hasMessage(
+            "NILS-008: Could not find a resource for baseFilename 'test/non_existing.yaml'.");
   }
 
   @Test
@@ -230,6 +231,6 @@ public class SnakeYamlAdapterTest {
     // Act / Assert
     assertThatThrownBy(() -> new SnakeYamlAdapter(config, locale))
         .isInstanceOf(NilsException.class)
-        .hasMessage("NILS-100: Error reading YAML file '/test/non_yaml.yaml'.");
+        .hasMessage("NILS-150: Error reading YAML file '/test/non_yaml.yaml'.");
   }
 }

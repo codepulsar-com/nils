@@ -1,8 +1,10 @@
 package com.codepulsar.nils.adapter.snakeyaml;
 
 import static com.codepulsar.nils.adapter.snakeyaml.utils.SnakeYamlErrorTypes.CORRUPT_FILE_ERROR;
+import static com.codepulsar.nils.core.error.ErrorType.IO_ERROR;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -17,9 +19,9 @@ import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 
-import com.codepulsar.nils.adapter.snakeyaml.utils.YamlStreamResolver;
 import com.codepulsar.nils.core.adapter.Adapter;
 import com.codepulsar.nils.core.adapter.AdapterConfig;
+import com.codepulsar.nils.core.adapter.util.LocalizedResourceResolver;
 import com.codepulsar.nils.core.error.NilsConfigException;
 import com.codepulsar.nils.core.error.NilsException;
 import com.codepulsar.nils.core.util.ParameterCheck;
@@ -29,7 +31,7 @@ public class SnakeYamlAdapter implements Adapter {
 
   private final SnakeYamlAdapterConfig adapterConfig;
   private final Locale locale;
-  private final String resourceName;
+  private String resourceName;
   private boolean fallbackAvailable = true;
   private SnakeYamlAdapter fallbackAdapter;
 
@@ -46,31 +48,7 @@ public class SnakeYamlAdapter implements Adapter {
     }
     this.adapterConfig = (SnakeYamlAdapterConfig) config;
     this.locale = locale;
-    var loaderOptions = new LoaderOptions();
-    loaderOptions.setAllowDuplicateKeys(false);
-    Yaml yaml = new Yaml(loaderOptions);
-    var resolver = new YamlStreamResolver();
-    try (var fileReader =
-        new InputStreamReader(resolver.resolve(adapterConfig, locale), StandardCharsets.UTF_8); ) {
-      translations = yaml.load(fileReader);
-      LOG.debug("Translation for locale {} read.", locale);
-    } catch (NilsException e) {
-      // Just re-throw NilsExceptions
-      throw e;
-    } catch (Exception e) {
-      throw new NilsException(
-          CORRUPT_FILE_ERROR, "Error reading YAML file '" + resolver.getUsedResource() + "'.", e);
-    } finally {
-      try {
-        resolver.close();
-      } catch (IOException e) {
-        LOG.debug("Error closing resource {}.", resolver.getUsedResource(), e);
-      }
-    }
-    this.resourceName = resolver.getUsedResource();
-    this.fallbackAvailable =
-        !locale.equals(new Locale(""))
-            || !resourceName.endsWith(adapterConfig.getBaseFileName() + ".yaml");
+    initTranslations();
   }
 
   @Override
@@ -91,11 +69,11 @@ public class SnakeYamlAdapter implements Adapter {
 
   @SuppressWarnings("unchecked")
   private Optional<String> retrieveTranslationFromCurrentData(String key) {
-    StringTokenizer keyParts = new StringTokenizer(key, ".");
-    Map<String, Object> latest = translations;
+    var keyParts = new StringTokenizer(key, ".");
+    var latest = translations;
     while (keyParts.hasMoreTokens()) {
-      String part = keyParts.nextToken();
-      Object value = latest.get(part);
+      var part = keyParts.nextToken();
+      var value = latest.get(part);
       if (value == null) {
         return Optional.empty();
       } else if (value instanceof String) {
@@ -122,6 +100,31 @@ public class SnakeYamlAdapter implements Adapter {
     return Optional.empty();
   }
 
+  private void initTranslations() {
+    var loaderOptions = new LoaderOptions();
+    loaderOptions.setAllowDuplicateKeys(false);
+
+    var yaml = new Yaml(loaderOptions);
+    var resolver = new LocalizedResourceResolver(adapterConfig, locale, this::resolveInputStream);
+    try (var fileReader = new InputStreamReader(resolver.resolve(), StandardCharsets.UTF_8); ) {
+      translations = yaml.load(fileReader);
+      LOG.debug("Translation for locale {} read.", locale);
+    } catch (NilsException e) {
+      // Just re-throw NilsExceptions
+      throw e;
+    } catch (Exception e) {
+      throw new NilsException(
+          CORRUPT_FILE_ERROR,
+          "Error reading YAML file '" + resolver.getUsedResourceName() + "'.",
+          e);
+    } finally {
+      resolver.close();
+    }
+    this.resourceName = resolver.getUsedResourceName();
+    this.fallbackAvailable =
+        !locale.equals(new Locale("")) || !resourceName.endsWith(adapterConfig.getBaseFileName());
+  }
+
   private SnakeYamlAdapter getFallbackAdapter() {
     if (fallbackAdapter == null) {
       var variant = locale.getVariant();
@@ -137,5 +140,15 @@ public class SnakeYamlAdapter implements Adapter {
     }
 
     return fallbackAdapter;
+  }
+
+  private InputStream resolveInputStream(String resource) {
+    try {
+      var owner = adapterConfig.getOwner();
+      return owner.getResourceAsStream(resource);
+    } catch (IOException e) {
+      LOG.error("Error getting resource {}.", e, resource);
+      throw new NilsException(IO_ERROR, "Error getting resource " + resource + ".", e);
+    }
   }
 }

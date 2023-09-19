@@ -4,14 +4,15 @@ import static com.codepulsar.nils.core.util.ParameterCheck.NILS_CONFIG;
 
 import com.codepulsar.nils.core.adapter.AdapterConfig;
 import com.codepulsar.nils.core.adapter.AdapterFactory;
+import com.codepulsar.nils.core.adapter.config.LocalizedResourceResolverConfig;
 import com.codepulsar.nils.core.util.ParameterCheck;
 
 /** Configuration for the {@link GsonAdapter} implementation. */
-public class GsonAdapterConfig implements AdapterConfig {
+public class GsonAdapterConfig implements AdapterConfig, LocalizedResourceResolverConfig {
 
   private Module owner;
 
-  private String baseFileName = "nls/translation";
+  private String baseFileName = "nls/translation.json";
 
   private GsonAdapterConfig(Module owner) {
     this.owner = owner;
@@ -37,6 +38,7 @@ public class GsonAdapterConfig implements AdapterConfig {
    * @return The base name of the json files.
    * @see #baseFileName(String)
    */
+  @Override
   public String getBaseFileName() {
     return baseFileName;
   }
@@ -54,6 +56,9 @@ public class GsonAdapterConfig implements AdapterConfig {
   public GsonAdapterConfig baseFileName(String baseFileName) {
     this.baseFileName =
         ParameterCheck.notNullEmptyOrBlank(baseFileName, "baseFileName", NILS_CONFIG);
+    if (baseFileName.lastIndexOf(".") < 0) {
+      this.baseFileName += ".json";
+    }
     return this;
   }
 

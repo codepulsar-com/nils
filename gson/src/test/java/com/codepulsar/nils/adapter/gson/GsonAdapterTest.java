@@ -88,7 +88,8 @@ public class GsonAdapterTest {
     // Act / Assert
     assertThatThrownBy(() -> new GsonAdapter(config, locale))
         .isInstanceOf(NilsException.class)
-        .hasMessage("NILS-102: Could not find a resource for baseFilename 'test/non_existing'.");
+        .hasMessage(
+            "NILS-008: Could not find a resource for baseFilename 'test/non_existing.json'.");
   }
 
   @Test

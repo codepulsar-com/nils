@@ -4,14 +4,15 @@ import static com.codepulsar.nils.core.util.ParameterCheck.NILS_CONFIG;
 
 import com.codepulsar.nils.core.adapter.AdapterConfig;
 import com.codepulsar.nils.core.adapter.AdapterFactory;
+import com.codepulsar.nils.core.adapter.config.LocalizedResourceResolverConfig;
 import com.codepulsar.nils.core.util.ParameterCheck;
 
 /** Configuration for the {@link SnakeYamlAdapter} implementation. */
-public class SnakeYamlAdapterConfig implements AdapterConfig {
+public class SnakeYamlAdapterConfig implements AdapterConfig, LocalizedResourceResolverConfig {
 
   private Module owner;
 
-  private String baseFileName = "nls/translation";
+  private String baseFileName = "nls/translation.yaml";
 
   private SnakeYamlAdapterConfig(Module owner) {
     this.owner = owner;
@@ -30,22 +31,23 @@ public class SnakeYamlAdapterConfig implements AdapterConfig {
   /**
    * Gets the base name of the yaml files.
    *
-   * <p>The name can include the paths, but must not contains the file suffix <code>.yaml</code>.
+   * <p>The name can include the paths with the file suffix <code>.yaml</code>.
    *
-   * <p>The default value is <code>nls/translation</code>.
+   * <p>The default value is <code>nls/translation.yaml</code>.
    *
    * @return The base name of the yaml files.
    * @see #baseFileName(String)
    */
+  @Override
   public String getBaseFileName() {
     return baseFileName;
   }
   /**
    * Sets the base name of the yaml files.
    *
-   * <p>The name can include the paths, but must not contains the file suffix <code>.yaml</code>.
+   * <p>The name can include the paths. It can contain the file suffix <code>.yaml</code>.
    *
-   * <p>The default value is <code>nls/translation</code>.
+   * <p>The default value is <code>nls/translation.yaml</code>.
    *
    * @param baseFileName The base name of the yaml files.
    * @return This config object.
@@ -54,6 +56,10 @@ public class SnakeYamlAdapterConfig implements AdapterConfig {
   public SnakeYamlAdapterConfig baseFileName(String baseFileName) {
     this.baseFileName =
         ParameterCheck.notNullEmptyOrBlank(baseFileName, "baseFileName", NILS_CONFIG);
+    if (baseFileName.lastIndexOf(".") < 0) {
+      this.baseFileName += ".yaml";
+    }
+
     return this;
   }
 

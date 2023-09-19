@@ -1,8 +1,10 @@
 package com.codepulsar.nils.adapter.gson;
 
 import static com.codepulsar.nils.adapter.gson.utils.GsonErrorTypes.CORRUPT_FILE_ERROR;
+import static com.codepulsar.nils.core.error.ErrorType.IO_ERROR;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
@@ -13,13 +15,12 @@ import java.util.StringTokenizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.codepulsar.nils.adapter.gson.utils.JsonStreamResolver;
 import com.codepulsar.nils.core.adapter.Adapter;
 import com.codepulsar.nils.core.adapter.AdapterConfig;
+import com.codepulsar.nils.core.adapter.util.LocalizedResourceResolver;
 import com.codepulsar.nils.core.error.NilsConfigException;
 import com.codepulsar.nils.core.error.NilsException;
 import com.codepulsar.nils.core.util.ParameterCheck;
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
@@ -30,7 +31,7 @@ public class GsonAdapter implements Adapter {
 
   private final GsonAdapterConfig adapterConfig;
   private final Locale locale;
-  private final String resourceName;
+  private String resourceName;
   private boolean fallbackAvailable = true;
   private GsonAdapter fallbackAdapter;
 
@@ -47,27 +48,7 @@ public class GsonAdapter implements Adapter {
     }
     this.adapterConfig = (GsonAdapterConfig) config;
     this.locale = locale;
-    Gson gson = new GsonBuilder().create();
-    var resolver = new JsonStreamResolver();
-    try (var fileReader =
-            new InputStreamReader(resolver.resolve(adapterConfig, locale), StandardCharsets.UTF_8);
-        var jsonReader = new JsonReader(fileReader); ) {
-      translations = gson.fromJson(jsonReader, Map.class);
-      LOG.debug("Translation for locale {} read.", locale);
-    } catch (JsonIOException | JsonSyntaxException | IOException e) {
-      throw new NilsException(
-          CORRUPT_FILE_ERROR, "Error reading JSON file '" + resolver.getUsedResource() + "'.", e);
-    } finally {
-      try {
-        resolver.close();
-      } catch (IOException e) {
-        LOG.debug("Error closing resource {}.", resolver.getUsedResource(), e);
-      }
-    }
-    this.resourceName = resolver.getUsedResource();
-    this.fallbackAvailable =
-        !locale.equals(new Locale(""))
-            || !resourceName.endsWith(adapterConfig.getBaseFileName() + ".json");
+    initTranslations();
   }
 
   @Override
@@ -116,6 +97,26 @@ public class GsonAdapter implements Adapter {
     return Optional.empty();
   }
 
+  private void initTranslations() {
+    var gson = new GsonBuilder().create();
+    var resolver = new LocalizedResourceResolver(adapterConfig, locale, this::resolveInputStream);
+    try (var fileReader = new InputStreamReader(resolver.resolve(), StandardCharsets.UTF_8);
+        var jsonReader = new JsonReader(fileReader); ) {
+      translations = gson.fromJson(jsonReader, Map.class);
+      LOG.debug("Translation for locale {} read.", locale);
+    } catch (JsonIOException | JsonSyntaxException | IOException e) {
+      throw new NilsException(
+          CORRUPT_FILE_ERROR,
+          "Error reading JSON file '" + resolver.getUsedResourceName() + "'.",
+          e);
+    } finally {
+      resolver.close();
+    }
+    this.resourceName = resolver.getUsedResourceName();
+    this.fallbackAvailable =
+        !locale.equals(new Locale("")) || !resourceName.endsWith(adapterConfig.getBaseFileName());
+  }
+
   private GsonAdapter getFallbackAdapter() {
     if (fallbackAdapter == null) {
       var variant = locale.getVariant();
@@ -131,5 +132,15 @@ public class GsonAdapter implements Adapter {
     }
 
     return fallbackAdapter;
+  }
+
+  private InputStream resolveInputStream(String resource) {
+    try {
+      var owner = adapterConfig.getOwner();
+      return owner.getResourceAsStream(resource);
+    } catch (IOException e) {
+      LOG.error("Error getting resource {}.", e, resource);
+      throw new NilsException(IO_ERROR, "Error getting resource " + resource + ".", e);
+    }
   }
 }

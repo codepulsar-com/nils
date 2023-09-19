@@ -25,6 +25,12 @@ public class ErrorType {
   public static final ErrorType ADAPTER_ERROR = new ErrorType("NILS-005");
   /** The value of a translation could not be formatted with the used TranslationFormatter. */
   public static final ErrorType TRANSLATION_FORMAT_ERROR = new ErrorType("NILS-006", SUPPRESSABLE);
+  /** An error on IO level occurred (Maybe file access, network access etc.) */
+  public static final ErrorType IO_ERROR = new ErrorType("NILS-007");
+  /** An requested resource file is missing. */
+  public static final ErrorType MISSING_RESOURCE_FILE_ERROR = new ErrorType("NILS-008");
+  /** A mandatory file extension is not found on a file name. */
+  public static final ErrorType MISSING_FILE_EXTENSION_ERROR = new ErrorType("NILS-009");
 
   private final String errCode;
 

@@ -36,7 +36,7 @@ public class GsonAdapterConfigTest {
     // Assert
     assertThat(underTest).isNotNull();
     assertThat(underTest.getOwner()).isEqualTo(getClass().getModule());
-    assertThat(underTest.getBaseFileName()).isEqualTo("nls/translation");
+    assertThat(underTest.getBaseFileName()).isEqualTo("nls/translation.json");
     assertThat(underTest.getFactoryClass()).isEqualTo(GsonAdapterFactory.class);
   }
 
@@ -48,11 +48,11 @@ public class GsonAdapterConfigTest {
     // Assert
     assertThat(underTest).isNotNull();
     assertThat(underTest.getOwner()).isEqualTo(this.getClass().getModule());
-    assertThat(underTest.getBaseFileName()).isEqualTo("nls/translation");
+    assertThat(underTest.getBaseFileName()).isEqualTo("nls/translation.json");
   }
 
   @Test
-  public void baseFileName() {
+  public void baseFileName_withoutFileExtension() {
     // Assert
     var underTest = GsonAdapterConfig.init(this);
 
@@ -60,6 +60,18 @@ public class GsonAdapterConfigTest {
     var returnValue = underTest.baseFileName("TestBundleName");
     assertThat(returnValue).isNotNull();
     assertThat(returnValue).isEqualTo(underTest);
-    assertThat(underTest.getBaseFileName()).isEqualTo("TestBundleName");
+    assertThat(underTest.getBaseFileName()).isEqualTo("TestBundleName.json");
+  }
+
+  @Test
+  public void baseFileName_withFileExtension() {
+    // Assert
+    var underTest = GsonAdapterConfig.init(this);
+
+    // Act
+    var returnValue = underTest.baseFileName("TestBundleName.jsn");
+    assertThat(returnValue).isNotNull();
+    assertThat(returnValue).isEqualTo(underTest);
+    assertThat(underTest.getBaseFileName()).isEqualTo("TestBundleName.jsn");
   }
 }

@@ -1,4 +1,4 @@
-package com.codepulsar.nils.adapter.gson;
+package com.codepulsar.nils.adapter.jackson;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -14,7 +14,7 @@ import com.codepulsar.nils.core.adapter.rb.ResourceBundleAdapterConfig;
 import com.codepulsar.nils.core.error.NilsConfigException;
 import com.codepulsar.nils.core.error.NilsException;
 
-public class GsonAdapterTest {
+public class JacksonAdapterYamlTest {
 
   private Locale current;
 
@@ -33,10 +33,10 @@ public class GsonAdapterTest {
   public void nullLocale() {
     // Arrange
     Locale locale = null;
-    AdapterConfig config = GsonAdapterConfig.init(this);
+    AdapterConfig config = JacksonAdapterConfig.init(this);
 
     // Act / Assert
-    assertThatThrownBy(() -> new GsonAdapter(config, locale))
+    assertThatThrownBy(() -> new JacksonAdapter(config, locale))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Parameter 'locale' cannot be null.");
   }
@@ -48,7 +48,7 @@ public class GsonAdapterTest {
     AdapterConfig config = null;
 
     // Act / Assert
-    assertThatThrownBy(() -> new GsonAdapter(config, locale))
+    assertThatThrownBy(() -> new JacksonAdapter(config, locale))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Parameter 'config' cannot be null.");
   }
@@ -60,7 +60,7 @@ public class GsonAdapterTest {
     AdapterConfig config = ResourceBundleAdapterConfig.init(this);
 
     // Act / Assert
-    assertThatThrownBy(() -> new GsonAdapter(config, locale))
+    assertThatThrownBy(() -> new JacksonAdapter(config, locale))
         .isInstanceOf(NilsConfigException.class)
         .hasMessageContaining("The provided AdapterConfig")
         .hasMessageContaining("is not of type");
@@ -70,23 +70,38 @@ public class GsonAdapterTest {
   public void resourceBundleAdapter_defautltConfig() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = GsonAdapterConfig.init(this);
+    var config = JacksonAdapterConfig.init(this);
 
     // Act
-    var underTest = new GsonAdapter(config, locale);
+    var underTest = new JacksonAdapter(config, locale);
 
     // Assert
     assertThat(underTest).isNotNull();
   }
 
   @Test
+  public void baseFileNameForYaml() {
+    // Arrange
+    var locale = Locale.ENGLISH;
+    var config = JacksonAdapterConfig.init(this).baseFileName("test/existing.yaml");
+    var underTest = new JacksonAdapter(config, locale);
+
+    // Act
+    var value = underTest.getTranslation("translate.me");
+
+    // Assert
+    assertThat(value).isNotEmpty();
+    assertThat(value.get()).isEqualTo("I'm translated!");
+  }
+
+  @Test
   public void invalidBaseFileName() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = GsonAdapterConfig.init(this).baseFileName("test/non_existing");
+    var config = JacksonAdapterConfig.init(this).baseFileName("test/non_existing");
 
     // Act / Assert
-    assertThatThrownBy(() -> new GsonAdapter(config, locale))
+    assertThatThrownBy(() -> new JacksonAdapter(config, locale))
         .isInstanceOf(NilsException.class)
         .hasMessage(
             "NILS-008: Could not find a resource for baseFilename 'test/non_existing.json'.");
@@ -96,8 +111,8 @@ public class GsonAdapterTest {
   public void fallbackFile() {
     // Arrange
     var locale = Locale.ITALIAN;
-    var config = GsonAdapterConfig.init(this).baseFileName("test/existing");
-    var underTest = new GsonAdapter(config, locale);
+    var config = JacksonAdapterConfig.init(this).baseFileName("test/existing.yaml");
+    var underTest = new JacksonAdapter(config, locale);
 
     // Act
     var value = underTest.getTranslation("translate.me");
@@ -111,8 +126,8 @@ public class GsonAdapterTest {
   public void translateKeyFound_nestedKeys() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = GsonAdapterConfig.init(this);
-    var underTest = new GsonAdapter(config, locale);
+    var config = JacksonAdapterConfig.init(this).baseFileName("nls/translation.yaml");
+    var underTest = new JacksonAdapter(config, locale);
 
     // Act
     var value = underTest.getTranslation("deep");
@@ -141,8 +156,8 @@ public class GsonAdapterTest {
   public void translateKeyFound1() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = GsonAdapterConfig.init(this).baseFileName("test/existing");
-    var underTest = new GsonAdapter(config, locale);
+    var config = JacksonAdapterConfig.init(this).baseFileName("test/existing.yaml");
+    var underTest = new JacksonAdapter(config, locale);
 
     // Act
     var value = underTest.getTranslation("translate.me");
@@ -156,8 +171,8 @@ public class GsonAdapterTest {
   public void translateKeyFound2() {
     // Arrange
     var locale = Locale.GERMAN;
-    var config = GsonAdapterConfig.init(this).baseFileName("test/existing");
-    var underTest = new GsonAdapter(config, locale);
+    var config = JacksonAdapterConfig.init(this).baseFileName("test/existing.yaml");
+    var underTest = new JacksonAdapter(config, locale);
 
     // Act
     var value = underTest.getTranslation("translate.me");
@@ -171,8 +186,8 @@ public class GsonAdapterTest {
   public void translateKeyFallback() {
     // Arrange
     var locale = Locale.GERMAN;
-    var config = GsonAdapterConfig.init(this).baseFileName("test/existing");
-    var underTest = new GsonAdapter(config, locale);
+    var config = JacksonAdapterConfig.init(this).baseFileName("test/existing.yaml");
+    var underTest = new JacksonAdapter(config, locale);
 
     // Act
     var value = underTest.getTranslation("translate.fallback");
@@ -186,8 +201,8 @@ public class GsonAdapterTest {
   public void translateKeyFallbackNotFound() {
     // Arrange
     var locale = Locale.GERMAN;
-    var config = GsonAdapterConfig.init(this).baseFileName("test/existing");
-    var underTest = new GsonAdapter(config, locale);
+    var config = JacksonAdapterConfig.init(this).baseFileName("test/existing.yaml");
+    var underTest = new JacksonAdapter(config, locale);
 
     // Act
     var value = underTest.getTranslation("translate.fallback_notfound");
@@ -200,8 +215,8 @@ public class GsonAdapterTest {
   public void translateKeyNotFound() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = GsonAdapterConfig.init(this).baseFileName("test/existing");
-    var underTest = new GsonAdapter(config, locale);
+    var config = JacksonAdapterConfig.init(this).baseFileName("test/existing.yaml");
+    var underTest = new JacksonAdapter(config, locale);
 
     // Act
     var value = underTest.getTranslation("translate.me.butImNotThere");
@@ -213,23 +228,24 @@ public class GsonAdapterTest {
   public void corruptJsonFile() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = GsonAdapterConfig.init(this).baseFileName("test/corrupt");
+    var config = JacksonAdapterConfig.init(this).baseFileName("test/corrupt.yaml");
+    var underTest = new JacksonAdapter(config, locale);
 
-    // Act / Assert
-    assertThatThrownBy(() -> new GsonAdapter(config, locale))
-        .isInstanceOf(NilsException.class)
-        .hasMessage("NILS-100: Error reading JSON file '/test/corrupt.json'.");
+    // Act
+    var value = underTest.getTranslation("me");
+    // Assert
+    assertThat(value).isEmpty();
   }
 
   @Test
   public void nonJsonFile() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = GsonAdapterConfig.init(this).baseFileName("test/non_json");
+    var config = JacksonAdapterConfig.init(this).baseFileName("test/non_yaml.yaml");
 
     // Act / Assert
-    assertThatThrownBy(() -> new GsonAdapter(config, locale))
+    assertThatThrownBy(() -> new JacksonAdapter(config, locale))
         .isInstanceOf(NilsException.class)
-        .hasMessage("NILS-100: Error reading JSON file '/test/non_json.json'.");
+        .hasMessage("NILS-201: Error reading JSON file '/test/non_yaml.yaml'.");
   }
 }

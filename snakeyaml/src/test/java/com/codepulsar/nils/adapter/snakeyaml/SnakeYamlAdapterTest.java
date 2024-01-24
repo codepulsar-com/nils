@@ -214,12 +214,11 @@ public class SnakeYamlAdapterTest {
     // Arrange
     var locale = Locale.ENGLISH;
     var config = SnakeYamlAdapterConfig.init(this).baseFileName("test/corrupt");
-    var underTest = new SnakeYamlAdapter(config, locale);
 
-    // Act
-    var value = underTest.getTranslation("me");
-    // Assert
-    assertThat(value).isEmpty();
+    // Act / Assert
+    assertThatThrownBy(() -> new SnakeYamlAdapter(config, locale))
+        .isInstanceOf(NilsException.class)
+        .hasMessage("NILS-150: Error reading YAML file '/test/corrupt.yaml'.");
   }
 
   @Test

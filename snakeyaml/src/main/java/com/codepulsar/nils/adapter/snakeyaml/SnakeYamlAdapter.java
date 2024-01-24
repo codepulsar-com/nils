@@ -69,11 +69,11 @@ public class SnakeYamlAdapter implements Adapter {
 
   @SuppressWarnings("unchecked")
   private Optional<String> retrieveTranslationFromCurrentData(String key) {
-    var keyParts = new StringTokenizer(key, ".");
-    var latest = translations;
+    StringTokenizer keyParts = new StringTokenizer(key, ".");
+    Map<String, Object> latest = translations;
     while (keyParts.hasMoreTokens()) {
-      var part = keyParts.nextToken();
-      var value = latest.get(part);
+      String part = keyParts.nextToken();
+      Object value = latest.get(part);
       if (value == null) {
         return Optional.empty();
       } else if (value instanceof String) {
@@ -83,7 +83,13 @@ public class SnakeYamlAdapter implements Adapter {
           return Optional.empty();
         }
       } else {
-        if (value instanceof List) {
+        if (value instanceof Map) {
+          if (keyParts.hasMoreTokens()) {
+            latest = (Map<String, Object>) value;
+          } else {
+            return Optional.empty();
+          }
+        } else if (value instanceof List) {
           if (keyParts.hasMoreTokens()) {
             List<Map<String, Object>> innerList = (List<Map<String, Object>>) value;
             Map<String, Object> next = new HashMap<>();

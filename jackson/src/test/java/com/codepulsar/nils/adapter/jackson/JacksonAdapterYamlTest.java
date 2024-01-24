@@ -229,12 +229,11 @@ public class JacksonAdapterYamlTest {
     // Arrange
     var locale = Locale.ENGLISH;
     var config = JacksonAdapterConfig.init(this).baseFileName("test/corrupt.yaml");
-    var underTest = new JacksonAdapter(config, locale);
 
-    // Act
-    var value = underTest.getTranslation("me");
-    // Assert
-    assertThat(value).isEmpty();
+    // Act / Assert
+    assertThatThrownBy(() -> new JacksonAdapter(config, locale))
+        .isInstanceOf(NilsException.class)
+        .hasMessage("NILS-201: Error reading file '/test/corrupt.yaml'.");
   }
 
   @Test
@@ -246,6 +245,6 @@ public class JacksonAdapterYamlTest {
     // Act / Assert
     assertThatThrownBy(() -> new JacksonAdapter(config, locale))
         .isInstanceOf(NilsException.class)
-        .hasMessage("NILS-201: Error reading JSON file '/test/non_yaml.yaml'.");
+        .hasMessage("NILS-201: Error reading file '/test/non_yaml.yaml'.");
   }
 }

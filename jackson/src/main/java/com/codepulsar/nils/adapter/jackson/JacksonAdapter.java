@@ -114,11 +114,11 @@ public class JacksonAdapter implements Adapter {
     try (var fileReader = new InputStreamReader(resolver.resolve(), StandardCharsets.UTF_8); ) {
       translations = objectMapper.readValue(fileReader, Map.class);
       LOG.debug("Translation for locale {} read.", locale);
-    } catch (IOException e) {
+    } catch (NilsException e) {
+      throw e;
+    } catch (Exception e) {
       throw new NilsException(
-          CORRUPT_FILE_ERROR,
-          "Error reading JSON file '" + resolver.getUsedResourceName() + "'.",
-          e);
+          CORRUPT_FILE_ERROR, "Error reading file '" + resolver.getUsedResourceName() + "'.", e);
     } finally {
       resolver.close();
     }

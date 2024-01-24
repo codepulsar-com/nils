@@ -218,7 +218,7 @@ public class JacksonAdapterJsonTest {
     // Act / Assert
     assertThatThrownBy(() -> new JacksonAdapter(config, locale))
         .isInstanceOf(NilsException.class)
-        .hasMessage("NILS-201: Error reading JSON file '/test/corrupt.json'.");
+        .hasMessage("NILS-201: Error reading file '/test/corrupt.json'.");
   }
 
   @Test
@@ -230,6 +230,6 @@ public class JacksonAdapterJsonTest {
     // Act / Assert
     assertThatThrownBy(() -> new JacksonAdapter(config, locale))
         .isInstanceOf(NilsException.class)
-        .hasMessage("NILS-201: Error reading JSON file '/test/non_json.json'.");
+        .hasMessage("NILS-201: Error reading file '/test/non_json.json'.");
   }
 }

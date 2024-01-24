@@ -1,4 +1,4 @@
 translate: 
-- me: "I'm translated!"
-- get: "Get from {0} to {1} from file."
-- fallback: "I'm a fallback!"
+  me: "I'm translated!"
+  get: "Get from {0} to {1} from file."
+  fallback: "I'm a fallback!"

@@ -2,27 +2,27 @@ simple: "A simple translation"
 fallback: "A fallback translation"
 with_args: "A {0} with {1}."
 Dummy: 
-- attribute: "Attribute"
+  attribute: "Attribute"
 data:
-- BaseMessage: 
-  - buttons:
-    - ok: OK (BaseMessage)
-    - cancel: Cancel (BaseMessage)
-- Message: 
-  - _include: data.BaseMessage
-  - INCLUDE: data.AlternativeMessage
-  - buttons: 
-    - cancel: "Cancel (Message)"
-- AlternativeMessage:
-  - buttons:
-    - ok: "Ok (AlternativeMessage)"
+  BaseMessage: 
+    buttons:
+      ok: OK (BaseMessage)
+      cancel: Cancel (BaseMessage)
+  Message: 
+    _include: data.BaseMessage
+    INCLUDE: data.AlternativeMessage
+    buttons: 
+      cancel: "Cancel (Message)"
+  AlternativeMessage:
+    buttons:
+      ok: "Ok (AlternativeMessage)"
 Level0: 
-- value: "Value (Level0)"
+  value: "Value (Level0)"
 Level1:
-- _include: "Level0"
+  _include: "Level0"
 Level2: 
-- _include: "Level1"
+  _include: "Level1"
 Cycle1: 
-- _include: "Cycle2"
+  _include: "Cycle2"
 Cycle2:
-- _include: "Cycle1"
+  _include: "Cycle1"

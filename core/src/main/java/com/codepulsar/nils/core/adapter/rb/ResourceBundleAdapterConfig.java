@@ -25,7 +25,7 @@ public class ResourceBundleAdapterConfig implements AdapterConfig {
   /**
    * Gets the name of the resource bundle.
    *
-   * <p>The name can include the paths, but must not contains the file suffix <code>.properties.
+   * <p>The name can include the paths, but must not contains the file extension <code>.properties
    * </code>.
    *
    * <p>The default value is <code>nls/translation</code>.
@@ -45,7 +45,7 @@ public class ResourceBundleAdapterConfig implements AdapterConfig {
   /**
    * Sets the name of the resource bundle.
    *
-   * <p>The name can include the paths, but must not contains the file suffix <code>.properties.
+   * <p>The name can include the paths, but must not contains the file extension <code>.properties
    * </code>.
    *
    * <p>The default value is <code>nls/translation</code>.

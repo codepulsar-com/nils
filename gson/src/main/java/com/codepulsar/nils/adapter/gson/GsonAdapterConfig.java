@@ -31,7 +31,7 @@ public class GsonAdapterConfig implements AdapterConfig, LocalizedResourceResolv
   /**
    * Gets the base name of the json files.
    *
-   * <p>The name can include the paths, but must not contains the file suffix <code>.json</code>.
+   * <p>The name can include the paths, but must not contains the file extension <code>.json</code>.
    *
    * <p>The default value is <code>nls/translation</code>.
    *
@@ -45,7 +45,7 @@ public class GsonAdapterConfig implements AdapterConfig, LocalizedResourceResolv
   /**
    * Sets the base name of the json files.
    *
-   * <p>The name can include the paths, but must not contains the file suffix <code>.json</code>.
+   * <p>The name can include the paths, but must not contains the file extension <code>.json</code>.
    *
    * <p>The default value is <code>nls/translation</code>.
    *

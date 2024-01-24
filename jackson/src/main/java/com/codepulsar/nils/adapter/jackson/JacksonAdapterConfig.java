@@ -30,7 +30,8 @@ public class JacksonAdapterConfig implements AdapterConfig, LocalizedResourceRes
   /**
    * Gets the base name of the json files.
    *
-   * <p>The name can include the paths, but must not contains the file suffix <code>.json</code>.
+   * <p>The name can include the paths, but must not contains the file extension <code>.json</code>,
+   * <code>.yaml</code>.
    *
    * <p>The default value is <code>nls/translation</code>.
    *
@@ -42,7 +43,6 @@ public class JacksonAdapterConfig implements AdapterConfig, LocalizedResourceRes
     return baseFileName;
   }
 
-  // TODO update all docu from file suffix to file extension
   /**
    * Sets the base name of the nls files.
    *

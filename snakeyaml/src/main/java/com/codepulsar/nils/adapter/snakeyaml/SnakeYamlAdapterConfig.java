@@ -31,7 +31,7 @@ public class SnakeYamlAdapterConfig implements AdapterConfig, LocalizedResourceR
   /**
    * Gets the base name of the yaml files.
    *
-   * <p>The name can include the paths with the file suffix <code>.yaml</code>.
+   * <p>The name can include the paths with the file extension <code>.yaml</code>.
    *
    * <p>The default value is <code>nls/translation.yaml</code>.
    *
@@ -45,7 +45,7 @@ public class SnakeYamlAdapterConfig implements AdapterConfig, LocalizedResourceR
   /**
    * Sets the base name of the yaml files.
    *
-   * <p>The name can include the paths. It can contain the file suffix <code>.yaml</code>.
+   * <p>The name can include the paths. It can contain the file extension <code>.yaml</code>.
    *
    * <p>The default value is <code>nls/translation.yaml</code>.
    *

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import com.codepulsar.nils.core.adapter.Adapter;
+import com.codepulsar.nils.api.adapter.Adapter;
 
 public class StaticAdapter implements Adapter {
 

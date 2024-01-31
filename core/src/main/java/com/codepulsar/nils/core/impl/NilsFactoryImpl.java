@@ -9,10 +9,10 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.codepulsar.nils.core.NLS;
-import com.codepulsar.nils.core.NilsConfig;
-import com.codepulsar.nils.core.NilsFactory;
-import com.codepulsar.nils.core.adapter.AdapterFactory;
+import com.codepulsar.nils.api.NLS;
+import com.codepulsar.nils.api.NilsConfig;
+import com.codepulsar.nils.api.NilsFactory;
+import com.codepulsar.nils.api.adapter.AdapterFactory;
 import com.codepulsar.nils.core.error.ErrorType;
 import com.codepulsar.nils.core.error.NilsException;
 import com.codepulsar.nils.core.util.ParameterCheck;

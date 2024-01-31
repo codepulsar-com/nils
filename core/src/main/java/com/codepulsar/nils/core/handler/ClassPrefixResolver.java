@@ -1,6 +1,6 @@
 package com.codepulsar.nils.core.handler;
 
-import com.codepulsar.nils.core.NLS;
+import com.codepulsar.nils.api.NLS;
 
 /**
  * Interface for resolving the prefix of a key for a translation from a <code>Class

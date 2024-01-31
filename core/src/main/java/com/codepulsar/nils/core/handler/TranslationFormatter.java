@@ -3,7 +3,7 @@ package com.codepulsar.nils.core.handler;
 import java.text.MessageFormat;
 import java.util.Locale;
 
-import com.codepulsar.nils.core.NLS;
+import com.codepulsar.nils.api.NLS;
 /**
  * Interface for format a value for a translation based on the implementation.
  *

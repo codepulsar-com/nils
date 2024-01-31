@@ -1,7 +1,7 @@
 package com.codepulsar.nils.core.testadapter;
 
-import com.codepulsar.nils.core.adapter.AdapterConfig;
-import com.codepulsar.nils.core.adapter.AdapterFactory;
+import com.codepulsar.nils.api.adapter.AdapterConfig;
+import com.codepulsar.nils.api.adapter.AdapterFactory;
 
 public class StaticAdapterConfig implements AdapterConfig {
 

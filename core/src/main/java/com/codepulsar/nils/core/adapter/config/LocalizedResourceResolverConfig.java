@@ -1,6 +1,6 @@
 package com.codepulsar.nils.core.adapter.config;
 
-import com.codepulsar.nils.core.adapter.Adapter;
+import com.codepulsar.nils.api.adapter.Adapter;
 import com.codepulsar.nils.core.adapter.util.LocalizedResourceResolver;
 
 /**

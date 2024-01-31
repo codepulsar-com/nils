@@ -10,9 +10,9 @@ import java.util.Locale;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.codepulsar.nils.core.NLS;
-import com.codepulsar.nils.core.NilsConfig;
-import com.codepulsar.nils.core.NilsFactory;
+import com.codepulsar.nils.api.NLS;
+import com.codepulsar.nils.api.NilsConfig;
+import com.codepulsar.nils.api.NilsFactory;
 import com.codepulsar.nils.core.error.NilsException;
 
 public class SnakeYamlAdapterIntegrationTest {

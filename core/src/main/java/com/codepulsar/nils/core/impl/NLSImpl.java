@@ -40,7 +40,7 @@ public class NLSImpl implements NLS {
   private Formats formats;
   private Map<String, Optional<String>> cache = new HashMap<>();
 
-  public NLSImpl(Adapter adapter, NilsConfig config, Locale locale) {
+  NLSImpl(Adapter adapter, NilsConfig config, Locale locale) {
     this.adapter = ParameterCheck.notNull(adapter, "adapter");
     this.config = ParameterCheck.notNull(config, "config");
     this.locale = ParameterCheck.notNull(locale, "locale");

@@ -12,8 +12,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<versions.slf4j>2.0.7</versions.slf4j>
-		<versions.junit>5.9.3</versions.junit>
+		<versions.slf4j>2.0.11</versions.slf4j>
+		<versions.junit>5.10.1</versions.junit>
 	</properties>
 
 	<modules>
@@ -22,7 +22,7 @@
 		<module>snakeyaml-adapter</module>
 		<module>jackson-adapter</module>
 	</modules>
-	
+
 	<dependencyManagement>
 		<dependencies>
 
@@ -55,7 +55,7 @@
 			<dependency>
 				<groupId>org.assertj</groupId>
 				<artifactId>assertj-core</artifactId>
-				<version>3.22.0</version>
+				<version>3.25.2</version>
 				<scope>test</scope>
 			</dependency>
 
@@ -79,6 +79,11 @@
 					<configuration>
 						<release>11</release>
 					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.3.1</version>
 				</plugin>
 				<plugin>
 					<artifactId>maven-jar-plugin</artifactId>

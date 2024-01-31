@@ -9,10 +9,10 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.codepulsar.nils.adapter.rb.ResourceBundleAdapter;
+import com.codepulsar.nils.adapter.rb.ResourceBundleAdapterConfig;
 import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.api.adapter.AdapterConfig;
-import com.codepulsar.nils.core.adapter.rb.ResourceBundleAdapter;
-import com.codepulsar.nils.core.adapter.rb.ResourceBundleAdapterConfig;
 import com.codepulsar.nils.core.config.SuppressableErrorTypes;
 import com.codepulsar.nils.core.error.NilsException;
 

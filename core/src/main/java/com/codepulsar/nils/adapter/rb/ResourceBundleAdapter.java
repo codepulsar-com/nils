@@ -1,4 +1,4 @@
-package com.codepulsar.nils.core.adapter.rb;
+package com.codepulsar.nils.adapter.rb;
 
 import java.util.Locale;
 import java.util.MissingResourceException;

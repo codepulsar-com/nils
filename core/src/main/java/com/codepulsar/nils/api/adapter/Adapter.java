@@ -2,7 +2,7 @@ package com.codepulsar.nils.api.adapter;
 
 import java.util.Optional;
 
-import com.codepulsar.nils.core.adapter.rb.ResourceBundleAdapter;
+import com.codepulsar.nils.adapter.rb.ResourceBundleAdapter;
 /**
  * An <strong>Adapter</strong> provides an implementation for a specific kind to access localization
  * information (i. e. from ResourceBundles).

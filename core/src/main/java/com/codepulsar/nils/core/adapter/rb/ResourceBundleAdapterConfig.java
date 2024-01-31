@@ -2,8 +2,8 @@ package com.codepulsar.nils.core.adapter.rb;
 
 import static com.codepulsar.nils.core.util.ParameterCheck.NILS_CONFIG;
 
-import com.codepulsar.nils.core.adapter.AdapterConfig;
-import com.codepulsar.nils.core.adapter.AdapterFactory;
+import com.codepulsar.nils.api.adapter.AdapterConfig;
+import com.codepulsar.nils.api.adapter.AdapterFactory;
 import com.codepulsar.nils.core.util.ParameterCheck;
 /** Configuration for the {@link ResourceBundleAdapter} implementation. */
 public class ResourceBundleAdapterConfig implements AdapterConfig {

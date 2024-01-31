@@ -1,4 +1,4 @@
-package com.codepulsar.nils.core.adapter;
+package com.codepulsar.nils.api.adapter;
 
 import java.util.Locale;
 /**

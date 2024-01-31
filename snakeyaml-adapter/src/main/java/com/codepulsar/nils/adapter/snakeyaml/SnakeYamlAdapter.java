@@ -19,8 +19,8 @@ import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 
-import com.codepulsar.nils.core.adapter.Adapter;
-import com.codepulsar.nils.core.adapter.AdapterConfig;
+import com.codepulsar.nils.api.adapter.Adapter;
+import com.codepulsar.nils.api.adapter.AdapterConfig;
 import com.codepulsar.nils.core.adapter.util.LocalizedResourceResolver;
 import com.codepulsar.nils.core.error.NilsConfigException;
 import com.codepulsar.nils.core.error.NilsException;

@@ -9,10 +9,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
-import com.codepulsar.nils.core.Formats;
-import com.codepulsar.nils.core.NLS;
-import com.codepulsar.nils.core.NilsConfig;
-import com.codepulsar.nils.core.adapter.Adapter;
+import com.codepulsar.nils.api.Formats;
+import com.codepulsar.nils.api.NLS;
+import com.codepulsar.nils.api.NilsConfig;
+import com.codepulsar.nils.api.adapter.Adapter;
 import com.codepulsar.nils.core.config.SuppressableErrorTypes;
 import com.codepulsar.nils.core.error.NilsException;
 import com.codepulsar.nils.core.handler.TranslationFormatter;

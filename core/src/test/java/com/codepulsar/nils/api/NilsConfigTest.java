@@ -1,4 +1,4 @@
-package com.codepulsar.nils.core;
+package com.codepulsar.nils.api;
 
 import static com.codepulsar.nils.core.config.SuppressableErrorTypes.ALL;
 import static com.codepulsar.nils.core.config.SuppressableErrorTypes.INCLUDE_LOOP_DETECTED;
@@ -17,7 +17,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import com.codepulsar.nils.core.adapter.AdapterConfig;
+import com.codepulsar.nils.api.NilsConfig;
+import com.codepulsar.nils.api.adapter.AdapterConfig;
 import com.codepulsar.nils.core.error.ErrorType;
 import com.codepulsar.nils.core.error.NilsConfigException;
 import com.codepulsar.nils.core.handler.ClassPrefixResolver;

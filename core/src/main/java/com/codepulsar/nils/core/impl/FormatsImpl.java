@@ -11,8 +11,8 @@ import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.codepulsar.nils.core.Formats;
-import com.codepulsar.nils.core.NilsConfig;
+import com.codepulsar.nils.api.Formats;
+import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.core.util.ParameterCheck;
 
 public class FormatsImpl implements Formats {

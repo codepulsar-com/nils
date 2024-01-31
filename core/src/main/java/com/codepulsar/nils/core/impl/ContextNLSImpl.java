@@ -5,9 +5,9 @@ import static com.codepulsar.nils.core.util.ParameterCheck.nilsException;
 
 import java.util.Locale;
 
-import com.codepulsar.nils.core.Formats;
-import com.codepulsar.nils.core.NLS;
-import com.codepulsar.nils.core.NilsConfig;
+import com.codepulsar.nils.api.Formats;
+import com.codepulsar.nils.api.NLS;
+import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.core.error.NilsException;
 import com.codepulsar.nils.core.util.ParameterCheck;
 /** Implementation of {@link NLS} for context base {@link NLS}. */

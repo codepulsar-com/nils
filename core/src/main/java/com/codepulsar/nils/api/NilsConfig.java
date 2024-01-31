@@ -1,4 +1,4 @@
-package com.codepulsar.nils.core;
+package com.codepulsar.nils.api;
 
 import static com.codepulsar.nils.core.util.ParameterCheck.NILS_CONFIG;
 
@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.codepulsar.nils.core.adapter.AdapterConfig;
+import com.codepulsar.nils.api.adapter.AdapterConfig;
 import com.codepulsar.nils.core.config.SuppressableErrorTypes;
 import com.codepulsar.nils.core.error.ErrorType;
 import com.codepulsar.nils.core.error.NilsConfigException;
@@ -208,7 +208,7 @@ public class NilsConfig {
    *
    * @param dateFormatStyle The <code>FormatStyle</code>.
    * @see #getDateFormatStyle()
-   * @see com.codepulsar.nils.core.Formats
+   * @see com.codepulsar.nils.api.Formats
    */
   public NilsConfig dateFormatStyle(FormatStyle dateFormatStyle) {
     ParameterCheck.notNull(dateFormatStyle, "dateFormatStyle", NILS_CONFIG);

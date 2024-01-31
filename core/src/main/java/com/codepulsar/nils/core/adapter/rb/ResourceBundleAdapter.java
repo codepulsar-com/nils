@@ -8,8 +8,8 @@ import java.util.ResourceBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.codepulsar.nils.core.adapter.Adapter;
-import com.codepulsar.nils.core.adapter.AdapterConfig;
+import com.codepulsar.nils.api.adapter.Adapter;
+import com.codepulsar.nils.api.adapter.AdapterConfig;
 import com.codepulsar.nils.core.error.NilsConfigException;
 import com.codepulsar.nils.core.util.ParameterCheck;
 /** An {@link Adapter} implementation using Java ResourceBundles for the translations. */

@@ -7,7 +7,7 @@ import java.util.Locale;
 
 import org.junit.jupiter.api.Test;
 
-import com.codepulsar.nils.core.adapter.AdapterConfig;
+import com.codepulsar.nils.api.adapter.AdapterConfig;
 
 public class JacksonAdapterFactoryTest {
 

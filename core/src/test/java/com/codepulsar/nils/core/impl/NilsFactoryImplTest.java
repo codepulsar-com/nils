@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import com.codepulsar.nils.core.NilsConfig;
-import com.codepulsar.nils.core.NilsFactory;
+import com.codepulsar.nils.api.NilsConfig;
+import com.codepulsar.nils.api.NilsFactory;
 import com.codepulsar.nils.core.error.NilsConfigException;
 import com.codepulsar.nils.core.testadapter.StaticAdapterConfig;
 import com.codepulsar.nils.core.testdata.Dummy;

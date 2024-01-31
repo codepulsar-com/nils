@@ -2,9 +2,9 @@ package com.codepulsar.nils.core.examples;
 
 import java.util.Locale;
 
-import com.codepulsar.nils.core.NLS;
-import com.codepulsar.nils.core.NilsConfig;
-import com.codepulsar.nils.core.NilsFactory;
+import com.codepulsar.nils.api.NLS;
+import com.codepulsar.nils.api.NilsConfig;
+import com.codepulsar.nils.api.NilsFactory;
 import com.codepulsar.nils.core.adapter.rb.ResourceBundleAdapterConfig;
 import com.codepulsar.nils.core.config.SuppressableErrorTypes;
 

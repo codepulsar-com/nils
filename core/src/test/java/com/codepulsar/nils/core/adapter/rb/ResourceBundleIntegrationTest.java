@@ -11,8 +11,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.codepulsar.nils.core.NilsConfig;
-import com.codepulsar.nils.core.NilsFactory;
+import com.codepulsar.nils.api.NilsConfig;
+import com.codepulsar.nils.api.NilsFactory;
 import com.codepulsar.nils.core.error.NilsException;
 import com.codepulsar.nils.core.testdata.Dummy;
 

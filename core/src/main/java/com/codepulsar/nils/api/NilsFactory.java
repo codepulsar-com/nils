@@ -1,8 +1,8 @@
-package com.codepulsar.nils.core;
+package com.codepulsar.nils.api;
 
 import java.util.Locale;
 
-import com.codepulsar.nils.core.adapter.AdapterConfig;
+import com.codepulsar.nils.api.adapter.AdapterConfig;
 import com.codepulsar.nils.core.handler.ClassPrefixResolver;
 import com.codepulsar.nils.core.impl.NilsFactoryImpl;
 /** Factory for getting access to the provided NLS. A requested NLS object is cached. */

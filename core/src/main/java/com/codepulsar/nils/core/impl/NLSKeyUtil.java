@@ -2,7 +2,7 @@ package com.codepulsar.nils.core.impl;
 
 import java.text.MessageFormat;
 
-import com.codepulsar.nils.core.NilsConfig;
+import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.core.handler.ClassPrefixResolver;
 import com.codepulsar.nils.core.util.ParameterCheck;
 

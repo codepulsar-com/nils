@@ -1,4 +1,4 @@
-package com.codepulsar.nils.core.adapter;
+package com.codepulsar.nils.api.adapter;
 
 /**
  * An <strong>AdapterConfig</strong> provides further configuration values for an {@link Adapter}

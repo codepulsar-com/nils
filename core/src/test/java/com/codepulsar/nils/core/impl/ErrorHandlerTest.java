@@ -9,8 +9,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.codepulsar.nils.adapter.rb.ResourceBundleAdapterConfig;
 import com.codepulsar.nils.api.NilsConfig;
-import com.codepulsar.nils.core.adapter.rb.ResourceBundleAdapterConfig;
 import com.codepulsar.nils.core.error.ErrorType;
 import com.codepulsar.nils.core.error.NilsException;
 

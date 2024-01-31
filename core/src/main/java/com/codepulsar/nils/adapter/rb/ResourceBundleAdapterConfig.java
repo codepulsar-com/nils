@@ -1,4 +1,4 @@
-package com.codepulsar.nils.core.adapter.rb;
+package com.codepulsar.nils.adapter.rb;
 
 import static com.codepulsar.nils.core.util.ParameterCheck.NILS_CONFIG;
 

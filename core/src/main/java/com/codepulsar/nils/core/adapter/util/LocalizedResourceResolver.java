@@ -1,8 +1,8 @@
 package com.codepulsar.nils.core.adapter.util;
 
-import static com.codepulsar.nils.core.error.ErrorType.IO_ERROR;
-import static com.codepulsar.nils.core.error.ErrorType.MISSING_FILE_EXTENSION_ERROR;
-import static com.codepulsar.nils.core.error.ErrorType.MISSING_RESOURCE_FILE_ERROR;
+import static com.codepulsar.nils.core.error.ErrorTypes.IO_ERROR;
+import static com.codepulsar.nils.core.error.ErrorTypes.MISSING_FILE_EXTENSION_ERROR;
+import static com.codepulsar.nils.core.error.ErrorTypes.MISSING_RESOURCE_FILE_ERROR;
 
 import java.io.IOException;
 import java.io.InputStream;

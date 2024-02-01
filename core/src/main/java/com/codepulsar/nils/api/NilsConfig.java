@@ -4,13 +4,8 @@ import static com.codepulsar.nils.core.util.ParameterCheck.NILS_CONFIG;
 
 import java.text.MessageFormat;
 import java.time.format.FormatStyle;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import com.codepulsar.nils.api.adapter.AdapterConfig;
-import com.codepulsar.nils.core.config.SuppressableErrorTypes;
-import com.codepulsar.nils.core.error.ErrorType;
 import com.codepulsar.nils.core.error.NilsConfigException;
 import com.codepulsar.nils.core.handler.ClassPrefixResolver;
 import com.codepulsar.nils.core.handler.TranslationFormatter;
@@ -20,7 +15,7 @@ public class NilsConfig {
   private AdapterConfig adapterConfig;
   private String escapePattern = "[{0}]";
   private String includeTag = "@include";
-  private Set<ErrorType> suppressErrors = Set.of(SuppressableErrorTypes.NONE);
+  private boolean suppressErrors = false;
   private ClassPrefixResolver classPrefixResolver = ClassPrefixResolver.SIMPLE_CLASSNAME;
   private TranslationFormatter translationFormatter = TranslationFormatter.MESSAGE_FORMAT;
   private FormatStyle dateFormatStyle = FormatStyle.MEDIUM;
@@ -90,52 +85,26 @@ public class NilsConfig {
     return this;
   }
   /**
-   * Gets the ErrorTypes that should be suppressed during the runtime.
+   * Gets the flag, if errors and exceptions should be suppressed during runtime.
    *
-   * @return A Set of ErrorTypes.
-   * @see #suppressErrors(ErrorType, ErrorType...)
+   * <p>The default value is <code>false</code>.
+   *
+   * @return The value of the flag
+   * @see #suppressErrors(boolean)
    */
-  public Set<ErrorType> getSuppressErrors() {
+  public boolean isSuppressErrors() {
     return suppressErrors;
   }
   /**
-   * Sets the ErrorTypes that should be suppressed during the runtime.
+   * Sets the flag, if errors and exceptions should be suppressed during runtime.
    *
-   * <p><em>Note:</em> The {@link ErrorType#ALL} and the {@link ErrorType#NONE} cannot be combined
-   * with other ErrorTypes and must be set exclusively.
+   * <p>The default value is <code>false</code>.
    *
-   * @param type A ErrorType.
-   * @param types Further ErrorTypes.
-   * @return This config object.
-   * @see #getSuppressErrors()
+   * @param suppressErrors The value of the flag
+   * @see #isSuppressErrors()
    */
-  public NilsConfig suppressErrors(ErrorType type, ErrorType... types) {
-    ParameterCheck.notNull(type, "type", NILS_CONFIG);
-    Set<ErrorType> set = new HashSet<>();
-    set.add(type);
-    if (types != null && types.length > 0) {
-      set.addAll(Arrays.asList(types));
-    }
-    if (set.contains(ErrorType.NONE) && set.size() > 1) {
-      throw new NilsConfigException(
-          "Parameter 'type' is invalid: ErrorType.NONE cannot combined with other ErrorTypes.");
-    }
-
-    if (set.contains(ErrorType.ALL) && set.size() > 1) {
-      throw new NilsConfigException(
-          "Parameter 'type' is invalid: ErrorType.ALL cannot combined with other ErrorTypes.");
-    }
-    set.forEach(
-        c -> {
-          if (!c.isSuppressable()) {
-            throw new NilsConfigException(
-                "Parameter 'type' is invalid: ErrorType '"
-                    + c.getErrCode()
-                    + "' is not suppressable.");
-          }
-        });
-
-    suppressErrors = set;
+  public NilsConfig suppressErrors(boolean suppressErrors) {
+    this.suppressErrors = suppressErrors;
     return this;
   }
 

@@ -4,7 +4,7 @@ package com.codepulsar.nils.core.error;
  */
 public class NilsConfigException extends NilsException {
   /** */
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 2L;
 
   /**
    * Create a new {@link NilsConfigException}
@@ -12,7 +12,7 @@ public class NilsConfigException extends NilsException {
    * @param message The message text
    */
   public NilsConfigException(String message) {
-    super(ErrorType.CONFIG_ERROR, message);
+    super(ErrorTypes.CONFIG_ERROR, message);
   }
 
   /**
@@ -22,6 +22,6 @@ public class NilsConfigException extends NilsException {
    * @param cause The root cause
    */
   public NilsConfigException(String message, Throwable cause) {
-    super(ErrorType.CONFIG_ERROR, message, cause);
+    super(ErrorTypes.CONFIG_ERROR, message, cause);
   }
 }

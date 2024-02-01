@@ -13,7 +13,7 @@ import com.codepulsar.nils.api.NLS;
 import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.api.NilsFactory;
 import com.codepulsar.nils.api.adapter.AdapterFactory;
-import com.codepulsar.nils.core.error.ErrorType;
+import com.codepulsar.nils.core.error.ErrorTypes;
 import com.codepulsar.nils.core.error.NilsException;
 import com.codepulsar.nils.core.util.ParameterCheck;
 /** Factory for getting access to the provided NLS. A requested NLS object is cached. */
@@ -100,7 +100,7 @@ public class NilsFactoryImpl implements NilsFactory {
             config.getAdapterConfig().getFactoryClass().getConstructor().newInstance();
       } catch (ReflectiveOperationException | IllegalArgumentException | SecurityException e) {
         LOG.error("Could not create AdapterFactory. Reason {}", e.getMessage(), e);
-        throw new NilsException(ErrorType.ADAPTER_ERROR, "Could not create AdapterFactory.", e);
+        throw new NilsException(ErrorTypes.ADAPTER_ERROR, "Could not create AdapterFactory.", e);
       }
     }
     return adapterFactory;

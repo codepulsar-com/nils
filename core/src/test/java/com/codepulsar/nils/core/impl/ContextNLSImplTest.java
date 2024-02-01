@@ -1,9 +1,5 @@
 package com.codepulsar.nils.core.impl;
 
-import static com.codepulsar.nils.core.config.SuppressableErrorTypes.ALL;
-import static com.codepulsar.nils.core.config.SuppressableErrorTypes.MISSING_TRANSLATION;
-import static com.codepulsar.nils.core.config.SuppressableErrorTypes.NLS_PARAMETER_CHECK;
-import static com.codepulsar.nils.core.config.SuppressableErrorTypes.NONE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -81,7 +77,7 @@ public class ContextNLSImplTest {
   @MethodSource(DATA_PROVIDER + "#source_string_getByKey_invalid_suppressed")
   public void string_getByKey_invalid_suppressed(String key, String expected) {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NLS_PARAMETER_CHECK);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -108,9 +104,9 @@ public class ContextNLSImplTest {
   }
 
   @Test
-  public void string_getByKey_notFound_escaping_errorType_MISSING_TRANSLATION() {
+  public void string_getByKey_notFound_escaping() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(MISSING_TRANSLATION);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
     var parent = createParent(config);
 
     var underTest = new ContextNLSImpl(parent, config, "context");
@@ -123,9 +119,9 @@ public class ContextNLSImplTest {
   }
 
   @Test
-  public void string_getByKey_notFound_exception_errorType_none() {
+  public void string_getByKey_notFound_exception() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NONE);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(false);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -161,7 +157,7 @@ public class ContextNLSImplTest {
   public void string_getByKeyAndArgs_invalid_suppressed(
       String key, Object[] args, String expected) {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NLS_PARAMETER_CHECK);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -220,7 +216,7 @@ public class ContextNLSImplTest {
   @Test
   public void string_getByKeyAndArgs_notFound_escaping() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(ALL);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -235,7 +231,7 @@ public class ContextNLSImplTest {
   @Test
   public void string_getByKeyAndArgs_notFound_exception() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NONE);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(false);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -287,7 +283,7 @@ public class ContextNLSImplTest {
   @MethodSource(DATA_PROVIDER + "#source_class_getByKey_invalid_suppressed")
   public void class_getByKey_invalid_suppressed(Class<?> key, String subKey, String expected) {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NLS_PARAMETER_CHECK);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -333,7 +329,7 @@ public class ContextNLSImplTest {
   @Test
   public void class_getByKey_notFound_escaping() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(MISSING_TRANSLATION);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -365,7 +361,7 @@ public class ContextNLSImplTest {
   public void class_getByKeyAndArgs_invalid_suppressed(
       Class<?> key, String subKey, Object[] args, String expected) {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NLS_PARAMETER_CHECK);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -422,7 +418,7 @@ public class ContextNLSImplTest {
   @Test
   public void class_getByKeyAndArgs_notFound_escaping() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(MISSING_TRANSLATION);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -437,7 +433,7 @@ public class ContextNLSImplTest {
   @Test
   public void class_getByKeyAndArgs_notFound_exception() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NONE);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(false);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -457,7 +453,7 @@ public class ContextNLSImplTest {
   @Test
   public void context_string() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NONE);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(false);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -479,7 +475,7 @@ public class ContextNLSImplTest {
   @Test
   public void context_class() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NONE);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(false);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -515,7 +511,7 @@ public class ContextNLSImplTest {
   @MethodSource(DATA_PROVIDER + "#source_context_string_invalid")
   public void context_string_invalid_exception(String context, String errorMsg) {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NONE);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(false);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -529,7 +525,7 @@ public class ContextNLSImplTest {
   @MethodSource(DATA_PROVIDER + "#source_context_string_invalid")
   public void context_string_invalid_suppressed(String context, String errorMsg) {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NLS_PARAMETER_CHECK);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -544,7 +540,7 @@ public class ContextNLSImplTest {
   public void context_class_invalid_exception() {
     // Arrange
     Class<?> context = null;
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NONE);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(false);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -559,7 +555,7 @@ public class ContextNLSImplTest {
     // Arrange
     Class<?> context = null;
 
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NLS_PARAMETER_CHECK);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 

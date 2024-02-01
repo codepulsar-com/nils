@@ -1,10 +1,5 @@
 package com.codepulsar.nils.api;
 
-import static com.codepulsar.nils.core.config.SuppressableErrorTypes.ALL;
-import static com.codepulsar.nils.core.config.SuppressableErrorTypes.INCLUDE_LOOP_DETECTED;
-import static com.codepulsar.nils.core.config.SuppressableErrorTypes.MISSING_TRANSLATION;
-import static com.codepulsar.nils.core.config.SuppressableErrorTypes.NLS_PARAMETER_CHECK;
-import static com.codepulsar.nils.core.config.SuppressableErrorTypes.NONE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
@@ -17,9 +12,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.api.adapter.AdapterConfig;
-import com.codepulsar.nils.core.error.ErrorType;
 import com.codepulsar.nils.core.error.NilsConfigException;
 import com.codepulsar.nils.core.handler.ClassPrefixResolver;
 import com.codepulsar.nils.core.handler.TranslationFormatter;
@@ -47,7 +40,7 @@ public class NilsConfigTest {
     // Assert
     assertThat(underTest).isNotNull();
     assertThat(underTest.getAdapterConfig()).isEqualTo(adapterConfig);
-    assertThat(underTest.getSuppressErrors()).containsExactly(NONE);
+    assertThat(underTest.isSuppressErrors()).isEqualTo(false);
     assertThat(underTest.getEscapePattern()).isEqualTo("[{0}]");
     assertThat(underTest.getIncludeTag()).isEqualTo("@include");
     assertThat(underTest.getClassPrefixResolver()).isEqualTo(ClassPrefixResolver.SIMPLE_CLASSNAME);
@@ -56,132 +49,33 @@ public class NilsConfigTest {
   }
 
   @Test
-  public void suppressErrors_nullParam() {
-    // Arrange
-    var adapterConfig = new StaticAdapterConfig();
-    var underTest = NilsConfig.init(adapterConfig);
-
-    // Act / Assert
-    assertThatThrownBy(() -> underTest.suppressErrors(null))
-        .isInstanceOf(NilsConfigException.class)
-        .hasMessage("NILS-004: Parameter 'type' cannot be null.");
-  }
-
-  @Test
-  public void suppressErrors_noneAndOthers() {
-    // Arrange
-    var adapterConfig = new StaticAdapterConfig();
-    var underTest = NilsConfig.init(adapterConfig);
-
-    // Act / Assert
-    assertThatThrownBy(
-            () -> underTest.suppressErrors(NONE, INCLUDE_LOOP_DETECTED, MISSING_TRANSLATION))
-        .isInstanceOf(NilsConfigException.class)
-        .hasMessage(
-            "NILS-004: Parameter 'type' is invalid: ErrorType.NONE cannot combined with other ErrorTypes.");
-  }
-
-  @Test
-  public void suppressErrors_noneAndOthers2() {
-    // Arrange
-    var adapterConfig = new StaticAdapterConfig();
-    var underTest = NilsConfig.init(adapterConfig);
-
-    // Act / Assert
-    assertThatThrownBy(
-            () -> underTest.suppressErrors(INCLUDE_LOOP_DETECTED, MISSING_TRANSLATION, NONE))
-        .isInstanceOf(NilsConfigException.class)
-        .hasMessage(
-            "NILS-004: Parameter 'type' is invalid: ErrorType.NONE cannot combined with other ErrorTypes.");
-  }
-
-  @Test
-  public void suppressErrors_allAndOthers() {
-    // Arrange
-    var adapterConfig = new StaticAdapterConfig();
-    var underTest = NilsConfig.init(adapterConfig);
-
-    // Act / Assert
-    assertThatThrownBy(
-            () -> underTest.suppressErrors(ALL, INCLUDE_LOOP_DETECTED, MISSING_TRANSLATION))
-        .isInstanceOf(NilsConfigException.class)
-        .hasMessage(
-            "NILS-004: Parameter 'type' is invalid: ErrorType.ALL cannot combined with other ErrorTypes.");
-  }
-
-  @Test
-  public void suppressErrors_allAndOthers2() {
-    // Arrange
-    var adapterConfig = new StaticAdapterConfig();
-    var underTest = NilsConfig.init(adapterConfig);
-
-    // Act / Assert
-    assertThatThrownBy(
-            () -> underTest.suppressErrors(INCLUDE_LOOP_DETECTED, MISSING_TRANSLATION, ALL))
-        .isInstanceOf(NilsConfigException.class)
-        .hasMessage(
-            "NILS-004: Parameter 'type' is invalid: ErrorType.ALL cannot combined with other ErrorTypes.");
-  }
-
-  @Test
-  public void suppressErrors_noneAlone() {
+  public void suppressErrors_true() {
     // Arrange
     var adapterConfig = new StaticAdapterConfig();
     var underTest = NilsConfig.init(adapterConfig);
 
     // Act
-    var result = underTest.suppressErrors(NONE);
+    var result = underTest.suppressErrors(true);
 
     // Assert
     assertThat(result).isNotNull();
     assertThat(result).isEqualTo(underTest);
-    assertThat(underTest.getSuppressErrors()).containsExactly(NONE);
+    assertThat(underTest.isSuppressErrors()).isEqualTo(true);
   }
 
   @Test
-  public void suppressErrors_allAlone() {
+  public void suppressErrors_false() {
     // Arrange
     var adapterConfig = new StaticAdapterConfig();
     var underTest = NilsConfig.init(adapterConfig);
 
     // Act
-    var result = underTest.suppressErrors(ALL);
+    var result = underTest.suppressErrors(false);
 
     // Assert
     assertThat(result).isNotNull();
     assertThat(result).isEqualTo(underTest);
-    assertThat(underTest.getSuppressErrors()).containsExactly(ALL);
-  }
-
-  @Test
-  public void suppressErrors_some() {
-    // Arrange
-    var adapterConfig = new StaticAdapterConfig();
-    var underTest = NilsConfig.init(adapterConfig);
-
-    // Act
-    var result =
-        underTest.suppressErrors(INCLUDE_LOOP_DETECTED, MISSING_TRANSLATION, NLS_PARAMETER_CHECK);
-
-    // Assert
-    assertThat(result).isNotNull();
-    assertThat(result).isEqualTo(underTest);
-    assertThat(underTest.getSuppressErrors())
-        .containsOnly(INCLUDE_LOOP_DETECTED, MISSING_TRANSLATION, NLS_PARAMETER_CHECK);
-  }
-
-  @Test
-  public void suppressErrors_invalidErrorType() {
-    // Arrange
-    var adapterConfig = new StaticAdapterConfig();
-    var underTest = NilsConfig.init(adapterConfig);
-    var invalid = new ErrorType("X-999", false);
-
-    // Act / Assert
-    assertThatThrownBy(() -> underTest.suppressErrors(INCLUDE_LOOP_DETECTED, invalid))
-        .isInstanceOf(NilsConfigException.class)
-        .hasMessage(
-            "NILS-004: Parameter 'type' is invalid: ErrorType 'X-999' is not suppressable.");
+    assertThat(underTest.isSuppressErrors()).isEqualTo(false);
   }
 
   @ParameterizedTest

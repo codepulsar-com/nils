@@ -1,7 +1,5 @@
 package com.codepulsar.nils.adapter.jackson;
 
-import static com.codepulsar.nils.core.config.SuppressableErrorTypes.MISSING_TRANSLATION;
-import static com.codepulsar.nils.core.config.SuppressableErrorTypes.NONE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -67,10 +65,10 @@ public class JacksonAdapterJsonIntegrationTest {
   }
 
   @Test
-  public void string_getByKey_notFound_escaping_errorType_MISSING_TRANSLATION() {
+  public void string_getByKey_notFound_escaping() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(adapterConfig).suppressErrors(MISSING_TRANSLATION);
+    var config = NilsConfig.init(adapterConfig).suppressErrors(true);
     var underTest = NilsFactory.init(config).nls(locale);
 
     // Act
@@ -81,10 +79,10 @@ public class JacksonAdapterJsonIntegrationTest {
   }
 
   @Test
-  public void string_getByKey_notFound_exception_errorType_none() {
+  public void string_getByKey_notFound_exception() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(adapterConfig).suppressErrors(NONE);
+    var config = NilsConfig.init(adapterConfig).suppressErrors(false);
     var underTest = NilsFactory.init(config).nls(locale);
 
     // Act / Assert
@@ -125,8 +123,7 @@ public class JacksonAdapterJsonIntegrationTest {
   public void class_getByKey_notFound_escaping_changed() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config =
-        NilsConfig.init(adapterConfig).escapePattern(">>{0}<<").suppressErrors(MISSING_TRANSLATION);
+    var config = NilsConfig.init(adapterConfig).escapePattern(">>{0}<<").suppressErrors(true);
     var underTest = NilsFactory.init(config).nls(locale);
 
     // Act

@@ -1,6 +1,6 @@
 package com.codepulsar.nils.core.impl;
 
-import static com.codepulsar.nils.core.config.SuppressableErrorTypes.NLS_PARAMETER_CHECK;
+import static com.codepulsar.nils.core.error.ErrorTypes.NLS_PARAMETER_CHECK;
 import static com.codepulsar.nils.core.util.ParameterCheck.nilsException;
 
 import java.util.Locale;
@@ -31,7 +31,7 @@ public class ContextNLSImpl implements NLS {
     try {
       ParameterCheck.notNullEmptyOrBlank(key, "key", nilsException(NLS_PARAMETER_CHECK));
     } catch (NilsException ex) {
-      errorHandler.handle(NLS_PARAMETER_CHECK, ex);
+      errorHandler.handle(ex);
       return keyUtil.buildMissingKey(buildFullRequestKey(key));
     }
 
@@ -43,7 +43,7 @@ public class ContextNLSImpl implements NLS {
     try {
       ParameterCheck.notNullEmptyOrBlank(key, "key", nilsException(NLS_PARAMETER_CHECK));
     } catch (NilsException ex) {
-      errorHandler.handle(NLS_PARAMETER_CHECK, ex);
+      errorHandler.handle(ex);
       return keyUtil.buildMissingKey(buildFullRequestKey(key));
     }
 
@@ -55,13 +55,13 @@ public class ContextNLSImpl implements NLS {
     try {
       ParameterCheck.notNull(key, "key", nilsException(NLS_PARAMETER_CHECK));
     } catch (NilsException ex) {
-      errorHandler.handle(NLS_PARAMETER_CHECK, ex);
+      errorHandler.handle(ex);
       return keyUtil.buildMissingKey(buildFullRequestKey(key, subKey));
     }
     try {
       ParameterCheck.notNullEmptyOrBlank(subKey, "subKey", nilsException(NLS_PARAMETER_CHECK));
     } catch (NilsException ex) {
-      errorHandler.handle(NLS_PARAMETER_CHECK, ex);
+      errorHandler.handle(ex);
       return keyUtil.buildMissingKey(buildFullRequestKey(key, subKey));
     }
     return parent.get(buildFullRequestKey(key, subKey));
@@ -72,13 +72,13 @@ public class ContextNLSImpl implements NLS {
     try {
       ParameterCheck.notNull(key, "key", nilsException(NLS_PARAMETER_CHECK));
     } catch (NilsException ex) {
-      errorHandler.handle(NLS_PARAMETER_CHECK, ex);
+      errorHandler.handle(ex);
       return keyUtil.buildMissingKey(buildFullRequestKey(key, subKey));
     }
     try {
       ParameterCheck.notNullEmptyOrBlank(subKey, "subKey", nilsException(NLS_PARAMETER_CHECK));
     } catch (NilsException ex) {
-      errorHandler.handle(NLS_PARAMETER_CHECK, ex);
+      errorHandler.handle(ex);
       return keyUtil.buildMissingKey(buildFullRequestKey(key, subKey));
     }
     return parent.get(buildFullRequestKey(key, subKey), args);
@@ -99,7 +99,7 @@ public class ContextNLSImpl implements NLS {
     try {
       ParameterCheck.notNullEmptyOrBlank(context, "context", nilsException(NLS_PARAMETER_CHECK));
     } catch (NilsException ex) {
-      errorHandler.handle(NLS_PARAMETER_CHECK, ex);
+      errorHandler.handle(ex);
       return this;
     }
     return parent.context(buildFullRequestKey(context));
@@ -110,7 +110,7 @@ public class ContextNLSImpl implements NLS {
     try {
       ParameterCheck.notNull(context, "context", nilsException(NLS_PARAMETER_CHECK));
     } catch (NilsException ex) {
-      errorHandler.handle(NLS_PARAMETER_CHECK, ex);
+      errorHandler.handle(ex);
       return this;
     }
     return parent.context(buildFullRequestKey(keyUtil.resolveKeyPrefix(context)));

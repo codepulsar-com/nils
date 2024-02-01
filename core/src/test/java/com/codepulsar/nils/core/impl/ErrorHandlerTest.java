@@ -1,9 +1,6 @@
 package com.codepulsar.nils.core.impl;
 
-import static com.codepulsar.nils.core.config.SuppressableErrorTypes.ALL;
-import static com.codepulsar.nils.core.config.SuppressableErrorTypes.MISSING_TRANSLATION;
-import static com.codepulsar.nils.core.config.SuppressableErrorTypes.NLS_PARAMETER_CHECK;
-import static com.codepulsar.nils.core.config.SuppressableErrorTypes.NONE;
+import static com.codepulsar.nils.core.error.ErrorTypes.MISSING_TRANSLATION;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import com.codepulsar.nils.adapter.rb.ResourceBundleAdapterConfig;
 import com.codepulsar.nils.api.NilsConfig;
-import com.codepulsar.nils.core.error.ErrorType;
 import com.codepulsar.nils.core.error.NilsException;
 
 public class ErrorHandlerTest {
@@ -28,27 +24,18 @@ public class ErrorHandlerTest {
   }
 
   @Test
-  public void handle_with_errorMessage_all() {
+  public void handle_with_errorMessage_suppressErrors_true() {
     // Arrange
-    nilsConfig.suppressErrors(ALL);
+    nilsConfig.suppressErrors(true);
 
     // Act / Assert
     underTest.handle(MISSING_TRANSLATION, "MissingTranslation");
   }
 
   @Test
-  public void handle_with_errorMessage_some() {
+  public void handle_with_errorMessage_suppressErrors_false() {
     // Arrange
-    nilsConfig.suppressErrors(MISSING_TRANSLATION);
-
-    // Act / Assert
-    underTest.handle(MISSING_TRANSLATION, "MissingTranslation");
-  }
-
-  @Test
-  public void handle_with_errorMessage_none() {
-    // Arrange
-    nilsConfig.suppressErrors(NONE);
+    nilsConfig.suppressErrors(false);
 
     // Act / Assert
     assertThatThrownBy(() -> underTest.handle(MISSING_TRANSLATION, "MissingTranslation"))
@@ -57,76 +44,31 @@ public class ErrorHandlerTest {
   }
 
   @Test
-  public void handle_with_errorMessage_someNotIncluded() {
+  public void handle_with_nilsException_suppressErrors_true() {
     // Arrange
-    nilsConfig.suppressErrors(NLS_PARAMETER_CHECK);
+    nilsConfig.suppressErrors(true);
+    var exception = new NilsException(MISSING_TRANSLATION, "MissingTranslation");
 
     // Act / Assert
-    assertThatThrownBy(() -> underTest.handle(MISSING_TRANSLATION, "MissingTranslation"))
+    underTest.handle(exception);
+  }
+
+  @Test
+  public void handle_with_nilsException_suppressErrors_false() {
+    // Arrange
+    nilsConfig.suppressErrors(false);
+    var exception = new NilsException(MISSING_TRANSLATION, "MissingTranslation");
+
+    // Act / Assert
+    assertThatThrownBy(() -> underTest.handle(exception))
         .isInstanceOf(NilsException.class)
         .hasMessage("NILS-001: MissingTranslation");
   }
 
   @Test
-  public void handle_with_nilsException_all() {
+  public void handle_with_exception_suppressError_true() {
     // Arrange
-    nilsConfig.suppressErrors(ALL);
-    var exception = new NilsException(MISSING_TRANSLATION, "MissingTranslation");
-
-    // Act / Assert
-    underTest.handle(MISSING_TRANSLATION, exception);
-  }
-
-  @Test
-  public void handle_with_nilsException_some() {
-    // Arrange
-    nilsConfig.suppressErrors(MISSING_TRANSLATION);
-    var exception = new NilsException(MISSING_TRANSLATION, "MissingTranslation");
-
-    // Act / Assert
-    underTest.handle(MISSING_TRANSLATION, exception);
-  }
-
-  @Test
-  public void handle_with_nilsException_someOther() {
-    // Arrange
-    nilsConfig.suppressErrors(MISSING_TRANSLATION);
-    var exception = new NilsException(NLS_PARAMETER_CHECK, "MissingTranslation");
-
-    // Act / Assert
-    assertThatThrownBy(() -> underTest.handle(ErrorType.MISSING_TRANSLATION, exception))
-        .isInstanceOf(NilsException.class)
-        .hasMessage("NILS-003: MissingTranslation");
-  }
-
-  @Test
-  public void handle_with_nilsException_none() {
-    // Arrange
-    nilsConfig.suppressErrors(NONE);
-    var exception = new NilsException(MISSING_TRANSLATION, "MissingTranslation");
-
-    // Act / Assert
-    assertThatThrownBy(() -> underTest.handle(MISSING_TRANSLATION, exception))
-        .isInstanceOf(NilsException.class)
-        .hasMessage("NILS-001: MissingTranslation");
-  }
-
-  @Test
-  public void handle_with_nilsException_someNotIncluded() {
-    // Arrange
-    nilsConfig.suppressErrors(NLS_PARAMETER_CHECK);
-    var exception = new NilsException(MISSING_TRANSLATION, "MissingTranslation");
-
-    // Act / Assert
-    assertThatThrownBy(() -> underTest.handle(MISSING_TRANSLATION, exception))
-        .isInstanceOf(NilsException.class)
-        .hasMessage("NILS-001: MissingTranslation");
-  }
-
-  @Test
-  public void handle_with_exception_all() {
-    // Arrange
-    nilsConfig.suppressErrors(ALL);
+    nilsConfig.suppressErrors(true);
     var exception = new Exception("An error occured.");
 
     // Act / Assert
@@ -134,30 +76,9 @@ public class ErrorHandlerTest {
   }
 
   @Test
-  public void handle_with_exception_some() {
+  public void handle_with_exception_none_suppressError_false() {
     // Arrange
-    nilsConfig.suppressErrors(MISSING_TRANSLATION);
-    var exception = new Exception("An error occured.");
-
-    // Act / Assert
-    underTest.handle(MISSING_TRANSLATION, exception);
-  }
-
-  @Test
-  public void handle_with_exception_none() {
-    // Arrange
-    nilsConfig.suppressErrors(NONE);
-    var exception = new Exception("An error occured.");
-
-    // Act / Assert
-    assertThatThrownBy(() -> underTest.handle(ErrorType.MISSING_TRANSLATION, exception))
-        .isInstanceOf(NilsException.class)
-        .hasMessage("NILS-001: An error occured.");
-  }
-
-  @Test
-  public void handle_with_exception_someNotIncluded() {
-    // Arrange
+    nilsConfig.suppressErrors(false);
     var exception = new Exception("An error occured.");
 
     // Act / Assert

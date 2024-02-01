@@ -1,7 +1,7 @@
 package com.codepulsar.nils.adapter.snakeyaml;
 
 import static com.codepulsar.nils.adapter.snakeyaml.utils.SnakeYamlErrorTypes.CORRUPT_FILE_ERROR;
-import static com.codepulsar.nils.core.error.ErrorType.IO_ERROR;
+import static com.codepulsar.nils.core.error.ErrorTypes.IO_ERROR;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -6,7 +6,7 @@ import java.util.Objects;
 public class NilsException extends RuntimeException {
 
   /** */
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 2L;
 
   private final ErrorType errType;
 
@@ -21,6 +21,10 @@ public class NilsException extends RuntimeException {
     this.errType = errType;
   }
 
+  public NilsException(ErrorType errType, String message, Object... args) {
+    this(errType, String.format(message, args));
+  }
+
   /**
    * Create a new {@link NilsException}
    *
@@ -30,6 +34,12 @@ public class NilsException extends RuntimeException {
    */
   public NilsException(ErrorType errType, String message, Throwable cause) {
     super(Objects.requireNonNull(errType).getErrCode() + ": " + message, cause);
+    this.errType = errType;
+  }
+
+  public NilsException(ErrorType errType, String message, Throwable cause, Object... args) {
+    super(
+        Objects.requireNonNull(errType).getErrCode() + ": " + String.format(message, args), cause);
     this.errType = errType;
   }
 

@@ -16,15 +16,13 @@ class ErrorHandler {
     this.nilsConfig = nilsConfig;
   }
 
-  public void handle(ErrorType suppressType, String errorMessage) throws NilsException {
+  void handle(ErrorType suppressType, String errorMessage) throws NilsException {
     NilsException ex = new NilsException(suppressType, errorMessage);
-    handle(suppressType, ex);
+    handle(ex);
   }
 
-  public void handle(ErrorType suppressType, NilsException ex) throws NilsException {
-    if ((nilsConfig.getSuppressErrors().contains(ErrorType.ALL)
-            || nilsConfig.getSuppressErrors().contains(suppressType))
-        && suppressType.equals(ex.getErrorType())) {
+  void handle(NilsException ex) throws NilsException {
+    if (nilsConfig.isSuppressErrors()) {
       LOG.error("Suppressed error: {}", ex, ex.getMessage());
       return;
     }
@@ -32,9 +30,8 @@ class ErrorHandler {
     throw ex;
   }
 
-  public void handle(ErrorType suppressType, Exception ex) throws NilsException {
-    if (nilsConfig.getSuppressErrors().contains(ErrorType.ALL)
-        || nilsConfig.getSuppressErrors().contains(suppressType)) {
+  void handle(ErrorType suppressType, Exception ex) throws NilsException {
+    if (nilsConfig.isSuppressErrors()) {
       LOG.error("Suppressed error: {}", ex, ex.getMessage());
       return;
     }

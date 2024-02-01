@@ -1,7 +1,7 @@
 package com.codepulsar.nils.adapter.jackson;
 
 import static com.codepulsar.nils.adapter.jackson.utils.JacksonErrorTypes.CORRUPT_FILE_ERROR;
-import static com.codepulsar.nils.core.error.ErrorType.IO_ERROR;
+import static com.codepulsar.nils.core.error.ErrorTypes.IO_ERROR;
 
 import java.io.IOException;
 import java.io.InputStream;

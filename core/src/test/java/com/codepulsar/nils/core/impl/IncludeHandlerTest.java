@@ -13,7 +13,6 @@ import com.codepulsar.nils.adapter.rb.ResourceBundleAdapter;
 import com.codepulsar.nils.adapter.rb.ResourceBundleAdapterConfig;
 import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.api.adapter.AdapterConfig;
-import com.codepulsar.nils.core.config.SuppressableErrorTypes;
 import com.codepulsar.nils.core.error.NilsException;
 
 public class IncludeHandlerTest {
@@ -28,8 +27,7 @@ public class IncludeHandlerTest {
     // Arrange
     adapterConfig = ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/includes");
     adapter = new ResourceBundleAdapter(adapterConfig, Locale.ENGLISH);
-    NilsConfig nilsConfig =
-        NilsConfig.init(adapterConfig).suppressErrors(SuppressableErrorTypes.NONE);
+    NilsConfig nilsConfig = NilsConfig.init(adapterConfig).suppressErrors(false);
     nls = new NLSImpl(adapter, nilsConfig, Locale.ENGLISH);
     underTest = new IncludeHandler(nilsConfig, adapter::getTranslation);
   }
@@ -193,10 +191,9 @@ public class IncludeHandlerTest {
   }
 
   @Test
-  public void circularInclude_suppressException() {
+  public void circularInclude_exception() {
     // Arrange
-    var nilsConfig =
-        NilsConfig.init(adapterConfig).suppressErrors(SuppressableErrorTypes.INCLUDE_LOOP_DETECTED);
+    var nilsConfig = NilsConfig.init(adapterConfig).suppressErrors(false);
     var nls_ = new NLSImpl(adapter, nilsConfig, Locale.ENGLISH);
     var underTest_ = new IncludeHandler(nilsConfig, adapter::getTranslation);
 
@@ -214,14 +211,13 @@ public class IncludeHandlerTest {
     // Act / Assert
     assertThatThrownBy(() -> nls_.get("Cycle1.value"))
         .isInstanceOf(NilsException.class)
-        .hasMessage(
-            "NILS-001: Could not find a translation for key 'Cycle1.value' and locale 'en'.");
+        .hasMessage("NILS-002: Found circular include on 'Cycle2'.");
   }
 
   @Test
-  public void circularInclude_suppressAll() {
+  public void circularInclude_suppress() {
     // Arrange
-    var nilsConfig = NilsConfig.init(adapterConfig).suppressErrors(SuppressableErrorTypes.ALL);
+    var nilsConfig = NilsConfig.init(adapterConfig).suppressErrors(true);
     var nls_ = new NLSImpl(adapter, nilsConfig, Locale.ENGLISH);
     var underTest_ = new IncludeHandler(nilsConfig, adapter::getTranslation);
 

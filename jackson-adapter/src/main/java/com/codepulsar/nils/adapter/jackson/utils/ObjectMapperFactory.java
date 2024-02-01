@@ -2,7 +2,7 @@ package com.codepulsar.nils.adapter.jackson.utils;
 
 import static com.codepulsar.nils.adapter.jackson.utils.JacksonErrorTypes.MISSING_DEPENDENCY;
 
-import com.codepulsar.nils.core.error.ErrorType;
+import com.codepulsar.nils.core.error.ErrorTypes;
 import com.codepulsar.nils.core.error.NilsException;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,7 +32,7 @@ public class ObjectMapperFactory {
       return (JsonFactory) clazz.getConstructor().newInstance();
     } catch (ReflectiveOperationException | IllegalArgumentException | SecurityException e) {
       throw new NilsException(
-          ErrorType.ADAPTER_ERROR,
+          ErrorTypes.ADAPTER_ERROR,
           String.format("Could not create instance of class '%s'.", className),
           e);
     }

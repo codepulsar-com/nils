@@ -1,11 +1,5 @@
 package com.codepulsar.nils.core.impl;
 
-import static com.codepulsar.nils.core.config.SuppressableErrorTypes.ALL;
-import static com.codepulsar.nils.core.config.SuppressableErrorTypes.INCLUDE_LOOP_DETECTED;
-import static com.codepulsar.nils.core.config.SuppressableErrorTypes.MISSING_TRANSLATION;
-import static com.codepulsar.nils.core.config.SuppressableErrorTypes.NLS_PARAMETER_CHECK;
-import static com.codepulsar.nils.core.config.SuppressableErrorTypes.NONE;
-import static com.codepulsar.nils.core.config.SuppressableErrorTypes.TRANSLATION_FORMAT_ERROR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -87,7 +81,7 @@ public class NLSImplTest {
   public void string_getByKey_invalid_suppressed(String key, String expected) {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NLS_PARAMETER_CHECK);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
     var underTest = new NLSImpl(new StaticAdapter(), config, locale);
 
     // Act
@@ -112,25 +106,12 @@ public class NLSImplTest {
   }
 
   @Test
-  public void string_getByKey_notFound_escaping_errorType_all() {
+  public void string_getByKey_notFound_escaping_suppressed() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(ALL);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
     var underTest = new NLSImpl(new StaticAdapter(), config, locale);
 
-    // Act
-    var result = underTest.get("not.found");
-
-    // Assert
-    assertThat(result).isEqualTo("[not.found]");
-  }
-
-  @Test
-  public void string_getByKey_notFound_escaping_errorType_MISSING_TRANSLATION() {
-    // Arrange
-    var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(MISSING_TRANSLATION);
-    var underTest = new NLSImpl(new StaticAdapter(), config, locale);
     // Act
     var result = underTest.get("not.found");
 
@@ -143,9 +124,7 @@ public class NLSImplTest {
     // Arrange
     var locale = Locale.ENGLISH;
     var config =
-        NilsConfig.init(new StaticAdapterConfig())
-            .escapePattern(">>{0}<<")
-            .suppressErrors(MISSING_TRANSLATION);
+        NilsConfig.init(new StaticAdapterConfig()).escapePattern(">>{0}<<").suppressErrors(true);
     var underTest = new NLSImpl(new StaticAdapter(), config, locale);
     // Act
     var result = underTest.get("not.found");
@@ -161,7 +140,7 @@ public class NLSImplTest {
     var config =
         NilsConfig.init(new StaticAdapterConfig())
             .escapePattern("Missing: {0}")
-            .suppressErrors(MISSING_TRANSLATION);
+            .suppressErrors(true);
     var underTest = new NLSImpl(new StaticAdapter(), config, locale);
 
     // Act
@@ -172,23 +151,10 @@ public class NLSImplTest {
   }
 
   @Test
-  public void string_getByKey_notFound_exception_errorType_none() {
+  public void string_getByKey_notFound_exception() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NONE);
-    var underTest = new NLSImpl(new StaticAdapter(), config, locale);
-
-    // Act / Assert
-    assertThatThrownBy(() -> underTest.get("not.found"))
-        .isInstanceOf(NilsException.class)
-        .hasMessage("NILS-001: Could not find a translation for key 'not.found' and locale 'en'.");
-  }
-
-  @Test
-  public void string_getByKey_notFound_exception_errorType_Notset() {
-    // Arrange
-    var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(INCLUDE_LOOP_DETECTED);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(false);
     var underTest = new NLSImpl(new StaticAdapter(), config, locale);
 
     // Act / Assert
@@ -217,7 +183,7 @@ public class NLSImplTest {
       String key, Object[] args, String expected) {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NLS_PARAMETER_CHECK);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
     var underTest = new NLSImpl(new StaticAdapter(), config, locale);
 
     // Act
@@ -270,10 +236,10 @@ public class NLSImplTest {
   }
 
   @Test
-  public void string_getByKeyAndArgs_notFound_escaping() {
+  public void string_getByKeyAndArgs_notFound_escaping_suppressed() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(ALL);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
     var underTest = new NLSImpl(new StaticAdapter(), config, locale);
 
     // Act
@@ -287,7 +253,7 @@ public class NLSImplTest {
   public void string_getByKeyAndArgs_notFound_exception() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NONE);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(false);
     var underTest = new NLSImpl(new StaticAdapter(), config, locale);
 
     // Act / Assert
@@ -303,7 +269,7 @@ public class NLSImplTest {
     var config =
         NilsConfig.init(new StaticAdapterConfig())
             .translationFormatter(TranslationFormatter.STRING_FORMAT)
-            .suppressErrors(NONE);
+            .suppressErrors(false);
     var underTest = new NLSImpl(new StaticAdapter(), config, locale);
 
     // Act / Assert
@@ -319,7 +285,7 @@ public class NLSImplTest {
     var config =
         NilsConfig.init(new StaticAdapterConfig())
             .translationFormatter(TranslationFormatter.STRING_FORMAT)
-            .suppressErrors(TRANSLATION_FORMAT_ERROR);
+            .suppressErrors(true);
     var underTest = new NLSImpl(new StaticAdapter(), config, locale);
 
     // Act
@@ -364,7 +330,7 @@ public class NLSImplTest {
   public void class_getByKey_invalid_suppressed(Class<?> key, String subKey, String expected) {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NLS_PARAMETER_CHECK);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
     var underTest = new NLSImpl(new StaticAdapter(), config, locale);
 
     // Act
@@ -422,10 +388,10 @@ public class NLSImplTest {
   }
 
   @Test
-  public void class_getByKey_notFound_escaping() {
+  public void class_getByKey_notFound_escaping_suppressed() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(MISSING_TRANSLATION);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
     var underTest = new NLSImpl(new StaticAdapter(), config, locale);
 
     // Act
@@ -440,9 +406,7 @@ public class NLSImplTest {
     // Arrange
     var locale = Locale.ENGLISH;
     var config =
-        NilsConfig.init(new StaticAdapterConfig())
-            .escapePattern(">>{0}<<")
-            .suppressErrors(MISSING_TRANSLATION);
+        NilsConfig.init(new StaticAdapterConfig()).escapePattern(">>{0}<<").suppressErrors(true);
     var underTest = new NLSImpl(new StaticAdapter(), config, locale);
 
     // Act
@@ -456,7 +420,7 @@ public class NLSImplTest {
   public void class_getByKey_notFound_exception() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(INCLUDE_LOOP_DETECTED);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(false);
     var underTest = new NLSImpl(new StaticAdapter(), config, locale);
 
     // Act / Assert
@@ -487,7 +451,7 @@ public class NLSImplTest {
       Class<?> key, String subKey, Object[] args, String expected) {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NLS_PARAMETER_CHECK);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
     var underTest = new NLSImpl(new StaticAdapter(), config, locale);
 
     // Act
@@ -540,10 +504,10 @@ public class NLSImplTest {
   }
 
   @Test
-  public void class_getByKeyAndArgs_notFound_escaping() {
+  public void class_getByKeyAndArgs_notFound_suppressed() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(MISSING_TRANSLATION);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
     var underTest = new NLSImpl(new StaticAdapter(), config, locale);
 
     // Act
@@ -557,7 +521,7 @@ public class NLSImplTest {
   public void class_getByKeyAndArgs_notFound_exception() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NONE);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(false);
     var underTest = new NLSImpl(new StaticAdapter(), config, locale);
 
     // Act / Assert
@@ -571,7 +535,7 @@ public class NLSImplTest {
   public void context_string() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NONE);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(false);
     var underTest = new NLSImpl(new StaticAdapter(), config, locale);
 
     // Act
@@ -591,7 +555,7 @@ public class NLSImplTest {
   public void context_class() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NONE);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(false);
     var underTest = new NLSImpl(new StaticAdapter(), config, locale);
 
     // Act
@@ -642,7 +606,7 @@ public class NLSImplTest {
   public void context_string_invalid_exception(String context, String errorMsg) {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NONE);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(false);
     var underTest = new NLSImpl(new StaticAdapter(), config, locale);
 
     // Act / Assert
@@ -656,7 +620,7 @@ public class NLSImplTest {
   public void context_string_invalid_suppressed(String context, String errorMsg) {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NLS_PARAMETER_CHECK);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
     var underTest = new NLSImpl(new StaticAdapter(), config, locale);
 
     // Act
@@ -671,7 +635,7 @@ public class NLSImplTest {
     // Arrange
     var locale = Locale.ENGLISH;
     Class<?> context = null;
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NONE);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(false);
     var underTest = new NLSImpl(new StaticAdapter(), config, locale);
 
     // Act / Assert
@@ -686,7 +650,7 @@ public class NLSImplTest {
     var locale = Locale.ENGLISH;
     Class<?> context = null;
 
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(NLS_PARAMETER_CHECK);
+    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
     var underTest = new NLSImpl(new StaticAdapter(), config, locale);
 
     // Act

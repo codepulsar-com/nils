@@ -1,7 +1,8 @@
 package com.codepulsar.nils.core.impl;
 
-import static com.codepulsar.nils.core.config.SuppressableErrorTypes.NLS_PARAMETER_CHECK;
-import static com.codepulsar.nils.core.config.SuppressableErrorTypes.TRANSLATION_FORMAT_ERROR;
+import static com.codepulsar.nils.core.error.ErrorTypes.MISSING_TRANSLATION;
+import static com.codepulsar.nils.core.error.ErrorTypes.NLS_PARAMETER_CHECK;
+import static com.codepulsar.nils.core.error.ErrorTypes.TRANSLATION_FORMAT_ERROR;
 import static com.codepulsar.nils.core.util.ParameterCheck.nilsException;
 
 import java.util.HashMap;
@@ -13,7 +14,6 @@ import com.codepulsar.nils.api.Formats;
 import com.codepulsar.nils.api.NLS;
 import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.api.adapter.Adapter;
-import com.codepulsar.nils.core.config.SuppressableErrorTypes;
 import com.codepulsar.nils.core.error.NilsException;
 import com.codepulsar.nils.core.handler.TranslationFormatter;
 import com.codepulsar.nils.core.util.ParameterCheck;
@@ -55,15 +55,13 @@ public class NLSImpl implements NLS {
     try {
       ParameterCheck.notNullEmptyOrBlank(key, "key", nilsException(NLS_PARAMETER_CHECK));
     } catch (NilsException ex) {
-      errorHandler.handle(NLS_PARAMETER_CHECK, ex);
+      errorHandler.handle(ex);
       return keyUtil.buildMissingKey(key);
     }
 
     Optional<String> translation = resolveTranslation(key);
     if (translation.isEmpty()) {
-      errorHandler.handle(
-          SuppressableErrorTypes.MISSING_TRANSLATION,
-          "Could not find a translation for key '" + key + "' and locale '" + locale + "'.");
+      errorHandler.handle(MISSING_TRANSLATION.asException().args(key, locale).go());
       return keyUtil.buildMissingKey(key);
     }
     return translation.get();
@@ -80,9 +78,7 @@ public class NLSImpl implements NLS {
       return translationFormatter.format(getLocale(), unformattedValue, args);
     } catch (Exception ex) {
       errorHandler.handle(
-          TRANSLATION_FORMAT_ERROR,
-          new NilsException(
-              TRANSLATION_FORMAT_ERROR, "Error in key '" + key + "': " + ex.getMessage(), ex));
+          TRANSLATION_FORMAT_ERROR.asException().args(key, ex.getMessage()).cause(ex).go());
       return keyUtil.buildMissingKey(key);
     }
   }
@@ -92,13 +88,13 @@ public class NLSImpl implements NLS {
     try {
       ParameterCheck.notNull(key, "key", nilsException(NLS_PARAMETER_CHECK));
     } catch (NilsException ex) {
-      errorHandler.handle(NLS_PARAMETER_CHECK, ex);
+      errorHandler.handle(ex);
       return keyUtil.buildMissingKey(String.format("%s.%s", key, subKey));
     }
     try {
       ParameterCheck.notNullEmptyOrBlank(subKey, "subKey", nilsException(NLS_PARAMETER_CHECK));
     } catch (NilsException ex) {
-      errorHandler.handle(NLS_PARAMETER_CHECK, ex);
+      errorHandler.handle(ex);
       String keyBase = keyUtil.resolveKeyPrefix(key);
       return keyUtil.buildMissingKey(String.format("%s.%s", keyBase, subKey));
     }
@@ -112,13 +108,13 @@ public class NLSImpl implements NLS {
     try {
       ParameterCheck.notNull(key, "key", nilsException(NLS_PARAMETER_CHECK));
     } catch (NilsException ex) {
-      errorHandler.handle(NLS_PARAMETER_CHECK, ex);
+      errorHandler.handle(ex);
       return keyUtil.buildMissingKey(String.format("%s.%s", key, subKey));
     }
     try {
       ParameterCheck.notNullEmptyOrBlank(subKey, "subKey", nilsException(NLS_PARAMETER_CHECK));
     } catch (NilsException ex) {
-      errorHandler.handle(NLS_PARAMETER_CHECK, ex);
+      errorHandler.handle(ex);
       String keyBase = keyUtil.resolveKeyPrefix(key);
       return keyUtil.buildMissingKey(String.format("%s.%s", keyBase, subKey));
     }
@@ -144,7 +140,7 @@ public class NLSImpl implements NLS {
     try {
       ParameterCheck.notNullEmptyOrBlank(context, "context", nilsException(NLS_PARAMETER_CHECK));
     } catch (NilsException ex) {
-      errorHandler.handle(NLS_PARAMETER_CHECK, ex);
+      errorHandler.handle(ex);
       return this;
     }
     return new ContextNLSImpl(this, config, context);
@@ -155,7 +151,7 @@ public class NLSImpl implements NLS {
     try {
       ParameterCheck.notNull(context, "context", nilsException(NLS_PARAMETER_CHECK));
     } catch (NilsException ex) {
-      errorHandler.handle(NLS_PARAMETER_CHECK, ex);
+      errorHandler.handle(ex);
       return this;
     }
     return new ContextNLSImpl(this, config, keyUtil.resolveKeyPrefix(context));
@@ -177,7 +173,7 @@ public class NLSImpl implements NLS {
         return includeRequest;
       }
     } catch (NilsException ex) {
-      errorHandler.handle(SuppressableErrorTypes.INCLUDE_LOOP_DETECTED, ex);
+      errorHandler.handle(ex);
       return Optional.empty();
     }
     return Optional.empty();

@@ -10,9 +10,9 @@ import com.codepulsar.nils.api.error.NilsException;
 class ErrorHandler {
 
   private Logger LOG = LoggerFactory.getLogger(ErrorHandler.class);
-  private final NilsConfig nilsConfig;
+  private final NilsConfig<?> nilsConfig;
 
-  ErrorHandler(NilsConfig nilsConfig) {
+  ErrorHandler(NilsConfig<?> nilsConfig) {
     this.nilsConfig = nilsConfig;
   }
 

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.codepulsar.nils.adapter.rb.ResourceBundleAdapterConfig;
-import com.codepulsar.nils.api.adapter.AdapterConfig;
+import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.api.error.NilsConfigException;
 import com.codepulsar.nils.api.error.NilsException;
 
@@ -33,7 +33,7 @@ public class GsonAdapterTest {
   public void nullLocale() {
     // Arrange
     Locale locale = null;
-    AdapterConfig config = GsonAdapterConfig.init(this);
+    var config = GsonAdapterConfig.init(this);
 
     // Act / Assert
     assertThatThrownBy(() -> new GsonAdapter(config, locale))
@@ -45,7 +45,7 @@ public class GsonAdapterTest {
   public void nullConfig() {
     // Arrange
     Locale locale = Locale.ENGLISH;
-    AdapterConfig config = null;
+    NilsConfig<?> config = null;
 
     // Act / Assert
     assertThatThrownBy(() -> new GsonAdapter(config, locale))
@@ -56,8 +56,8 @@ public class GsonAdapterTest {
   @Test
   public void invalidAdapterConfig() {
     // Arrange
-    Locale locale = Locale.ENGLISH;
-    AdapterConfig config = ResourceBundleAdapterConfig.init(this);
+    var locale = Locale.ENGLISH;
+    var config = ResourceBundleAdapterConfig.init(this);
 
     // Act / Assert
     assertThatThrownBy(() -> new GsonAdapter(config, locale))

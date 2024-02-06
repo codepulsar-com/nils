@@ -15,8 +15,8 @@ import java.util.StringTokenizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.api.adapter.Adapter;
-import com.codepulsar.nils.api.adapter.AdapterConfig;
 import com.codepulsar.nils.api.error.NilsConfigException;
 import com.codepulsar.nils.api.error.NilsException;
 import com.codepulsar.nils.core.adapter.util.LocalizedResourceResolver;
@@ -37,7 +37,7 @@ public class GsonAdapter implements Adapter {
 
   private Map<String, Object> translations = Map.of();
 
-  public GsonAdapter(AdapterConfig config, Locale locale) {
+  public GsonAdapter(NilsConfig<?> config, Locale locale) {
     ParameterCheck.notNull(config, "config");
     ParameterCheck.notNull(locale, "locale");
     if (!(config instanceof GsonAdapterConfig)) {

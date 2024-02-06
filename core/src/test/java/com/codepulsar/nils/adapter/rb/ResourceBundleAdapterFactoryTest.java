@@ -7,7 +7,7 @@ import java.util.Locale;
 
 import org.junit.jupiter.api.Test;
 
-import com.codepulsar.nils.api.adapter.AdapterConfig;
+import com.codepulsar.nils.api.NilsConfig;
 
 public class ResourceBundleAdapterFactoryTest {
 
@@ -15,7 +15,7 @@ public class ResourceBundleAdapterFactoryTest {
   public void create_configIsNull() {
     // Arrange
     Locale locale = Locale.ENGLISH;
-    AdapterConfig config = null;
+    NilsConfig<?> config = null;
     ResourceBundleAdapterFactory underTest = new ResourceBundleAdapterFactory();
 
     // Act / Assert
@@ -28,7 +28,7 @@ public class ResourceBundleAdapterFactoryTest {
   public void create_localeIsNull() {
     // Arrange
     Locale locale = null;
-    AdapterConfig config = ResourceBundleAdapterConfig.init(this);
+    var config = ResourceBundleAdapterConfig.init(this);
     ResourceBundleAdapterFactory underTest = new ResourceBundleAdapterFactory();
 
     // Act / Assert
@@ -41,8 +41,7 @@ public class ResourceBundleAdapterFactoryTest {
   public void create() {
     // Arrange
     Locale locale = Locale.ENGLISH;
-    AdapterConfig config =
-        ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing");
+    var config = ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing");
     ResourceBundleAdapterFactory underTest = new ResourceBundleAdapterFactory();
     // Act
     ResourceBundleAdapter result = underTest.create(config, locale);

@@ -36,7 +36,7 @@ public class FormatsImpl implements Formats {
   private DecimalFormat forDecimal;
   private DecimalFormatSymbols decimalFormatSymbols;
 
-  public FormatsImpl(Locale locale, NilsConfig config) {
+  public FormatsImpl(Locale locale, NilsConfig<?> config) {
     this.locale = ParameterCheck.notNull(locale, "locale");
     ParameterCheck.notNull(config, "config");
     this.formatStyle = config.getDateFormatStyle();

@@ -1,6 +1,8 @@
 package com.codepulsar.nils.api.adapter;
 
 import java.util.Locale;
+
+import com.codepulsar.nils.api.NilsConfig;
 /**
  * An <strong>AdapterFactory</strong> creates an new object of an {@link Adapter} using the {@link
  * AdapterConfig} and <code>Locale</code>, if necessary.
@@ -16,5 +18,5 @@ public interface AdapterFactory<A extends Adapter> {
    * @param locale A <code>Locale</code> object.
    * @return The created {@link Adapter} instance.
    */
-  A create(AdapterConfig config, Locale locale);
+  A create(NilsConfig<?> config, Locale locale);
 }

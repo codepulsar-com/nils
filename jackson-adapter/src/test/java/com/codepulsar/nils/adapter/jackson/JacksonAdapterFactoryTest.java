@@ -7,7 +7,7 @@ import java.util.Locale;
 
 import org.junit.jupiter.api.Test;
 
-import com.codepulsar.nils.api.adapter.AdapterConfig;
+import com.codepulsar.nils.api.NilsConfig;
 
 public class JacksonAdapterFactoryTest {
 
@@ -15,7 +15,7 @@ public class JacksonAdapterFactoryTest {
   public void create_configIsNull() {
     // Arrange
     var locale = Locale.ENGLISH;
-    AdapterConfig config = null;
+    NilsConfig<?> config = null;
     var underTest = new JacksonAdapterFactory();
 
     // Act / Assert
@@ -28,7 +28,7 @@ public class JacksonAdapterFactoryTest {
   public void create_localeIsNull() {
     // Arrange
     Locale locale = null;
-    AdapterConfig config = JacksonAdapterConfig.init(this);
+    var config = JacksonAdapterConfig.init(this);
     var underTest = new JacksonAdapterFactory();
 
     // Act / Assert

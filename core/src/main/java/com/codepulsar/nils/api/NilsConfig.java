@@ -1,36 +1,12 @@
 package com.codepulsar.nils.api;
 
-import static com.codepulsar.nils.core.util.ParameterCheck.NILS_CONFIG;
-
-import java.text.MessageFormat;
 import java.time.format.FormatStyle;
 
-import com.codepulsar.nils.api.adapter.AdapterConfig;
-import com.codepulsar.nils.api.error.NilsConfigException;
+import com.codepulsar.nils.api.adapter.AdapterFactory;
 import com.codepulsar.nils.core.handler.ClassPrefixResolver;
 import com.codepulsar.nils.core.handler.TranslationFormatter;
-import com.codepulsar.nils.core.util.ParameterCheck;
 /** The configuration of the Nils library. */
-public class NilsConfig {
-  private AdapterConfig adapterConfig;
-  private String escapePattern = "[{0}]";
-  private String includeTag = "_include";
-  private boolean suppressErrors = false;
-  private ClassPrefixResolver classPrefixResolver = ClassPrefixResolver.SIMPLE_CLASSNAME;
-  private TranslationFormatter translationFormatter = TranslationFormatter.MESSAGE_FORMAT;
-  private FormatStyle dateFormatStyle = FormatStyle.MEDIUM;
-
-  private NilsConfig(AdapterConfig adapterConfig) {
-    this.adapterConfig = adapterConfig;
-  }
-  /**
-   * Gets the {@link AdapterConfig} object.
-   *
-   * @return The {@link AdapterConfig} object.
-   */
-  public AdapterConfig getAdapterConfig() {
-    return adapterConfig;
-  }
+public interface NilsConfig<CFG extends NilsConfig<?>> {
 
   /**
    * Gets the escape pattern if a translation is missing, but no exception should be thrown.
@@ -41,9 +17,7 @@ public class NilsConfig {
    * @see #getSuppressErrors()
    * @see #escapePattern(String)
    */
-  public String getEscapePattern() {
-    return escapePattern;
-  }
+  String getEscapePattern();
 
   /**
    * Sets the escape pattern if a translation is missing, but no exception should be thrown.
@@ -55,12 +29,7 @@ public class NilsConfig {
    * @see #getSuppressErrors()
    * @see #getEscapePattern()
    */
-  public NilsConfig escapePattern(String escapePattern) {
-    ParameterCheck.notNullEmptyOrBlank(escapePattern, "escapePattern", NILS_CONFIG);
-
-    this.escapePattern = checkEscapePattern(escapePattern);
-    return this;
-  }
+  CFG escapePattern(String escapePattern);
   /**
    * Gets the tag for include translations from other key.
    *
@@ -69,9 +38,7 @@ public class NilsConfig {
    * @return The tag used including translations.
    * @see #includeTag(String)
    */
-  public String getIncludeTag() {
-    return includeTag;
-  }
+  String getIncludeTag();
   /**
    * Sets the tag for include translations from other key.
    *
@@ -79,11 +46,7 @@ public class NilsConfig {
    * @return This config object.
    * @see #getIncludeTag()
    */
-  public NilsConfig includeTag(String includeTag) {
-    ParameterCheck.notNullEmptyOrBlank(includeTag, "includeTag", NILS_CONFIG);
-    this.includeTag = includeTag;
-    return this;
-  }
+  CFG includeTag(String includeTag);
   /**
    * Gets the flag, if errors and exceptions should be suppressed during runtime.
    *
@@ -92,9 +55,7 @@ public class NilsConfig {
    * @return The value of the flag
    * @see #suppressErrors(boolean)
    */
-  public boolean isSuppressErrors() {
-    return suppressErrors;
-  }
+  boolean isSuppressErrors();
   /**
    * Sets the flag, if errors and exceptions should be suppressed during runtime.
    *
@@ -103,10 +64,7 @@ public class NilsConfig {
    * @param suppressErrors The value of the flag
    * @see #isSuppressErrors()
    */
-  public NilsConfig suppressErrors(boolean suppressErrors) {
-    this.suppressErrors = suppressErrors;
-    return this;
-  }
+  CFG suppressErrors(boolean suppressErrors);
 
   /**
    * Gets the {@link ClassPrefixResolver} object.
@@ -116,10 +74,7 @@ public class NilsConfig {
    * @return The {@link ClassPrefixResolver}.
    * @see #classPrefixResolver(ClassPrefixResolver)
    */
-  public ClassPrefixResolver getClassPrefixResolver() {
-    return classPrefixResolver;
-  }
-
+  ClassPrefixResolver getClassPrefixResolver();
   /**
    * Sets the {@link ClassPrefixResolver} object.
    *
@@ -127,12 +82,7 @@ public class NilsConfig {
    * @return This config object.
    * @see #getClassPrefixResolver()
    */
-  public NilsConfig classPrefixResolver(ClassPrefixResolver classPrefixResolver) {
-    ParameterCheck.notNull(classPrefixResolver, "classPrefixResolver", NILS_CONFIG);
-    this.classPrefixResolver = classPrefixResolver;
-    return this;
-  }
-
+  CFG classPrefixResolver(ClassPrefixResolver classPrefixResolver);
   /**
    * Gets the {@link TranslationFormatter} object.
    *
@@ -141,9 +91,7 @@ public class NilsConfig {
    * @return The {@link TranslationFormatter}.
    * @see #translationFormatter(TranslationFormatter)
    */
-  public TranslationFormatter getTranslationFormatter() {
-    return translationFormatter;
-  }
+  TranslationFormatter getTranslationFormatter();
 
   /**
    * Sets the {@link TranslationFormatter} object.
@@ -152,11 +100,7 @@ public class NilsConfig {
    * @return This config object.
    * @see #getTranslationFormatter()
    */
-  public NilsConfig translationFormatter(TranslationFormatter translationFormatter) {
-    ParameterCheck.notNull(translationFormatter, "translationFormatter", NILS_CONFIG);
-    this.translationFormatter = translationFormatter;
-    return this;
-  }
+  CFG translationFormatter(TranslationFormatter translationFormatter);
   /**
    * Gets the <code>FormatStyle</code> used in {@link Formats} objects, defining the style for date,
    * time and date with time value.
@@ -166,9 +110,7 @@ public class NilsConfig {
    * @return The <code>FormatStyle</code>.
    * @see #dateFormatStyle(FormatStyle)
    */
-  public FormatStyle getDateFormatStyle() {
-    return dateFormatStyle;
-  }
+  FormatStyle getDateFormatStyle();
   /**
    * Sets the <code>FormatStyle</code> used in {@link Formats} objects, defining the style for date,
    * time and date with time value.
@@ -179,37 +121,14 @@ public class NilsConfig {
    * @see #getDateFormatStyle()
    * @see com.codepulsar.nils.api.Formats
    */
-  public NilsConfig dateFormatStyle(FormatStyle dateFormatStyle) {
-    ParameterCheck.notNull(dateFormatStyle, "dateFormatStyle", NILS_CONFIG);
-    this.dateFormatStyle = dateFormatStyle;
-    return this;
-  }
-
-  private String checkEscapePattern(String pattern) {
-    if (!pattern.contains("{0}")) {
-      throw new NilsConfigException(
-          "Parameter 'escapePattern' is invalid: It must contain the string \"{0}\".");
-    }
-    if (pattern.contains("'{0}'")) {
-      throw new NilsConfigException(
-          "Parameter 'escapePattern' is invalid: It must contain the string \"{0}\".");
-    }
-    try {
-      MessageFormat.format(pattern, "TEST");
-    } catch (IllegalArgumentException ex) {
-      throw new NilsConfigException("Parameter 'escapePattern' is invalid: " + ex.getMessage());
-    }
-    return pattern;
-  }
+  CFG dateFormatStyle(FormatStyle dateFormatStyle);
 
   /**
-   * Create a <strong>NilsConfig</strong> from an {@link AdapterConfig}.
+   * Class of the {@link AdapterFactory}.
    *
-   * @param adapterConfig An {@link AdapterConfig} object.
-   * @return The created NilsConfig.
+   * <p>the class must have an parameter less constructor.
+   *
+   * @return The Class of the AdapterFactory.
    */
-  public static NilsConfig init(AdapterConfig adapterConfig) {
-    ParameterCheck.notNull(adapterConfig, "adapterConfig", NILS_CONFIG);
-    return new NilsConfig(adapterConfig);
-  }
+  Class<? extends AdapterFactory<?>> getFactoryClass();
 }

@@ -12,14 +12,13 @@ import com.codepulsar.nils.api.error.NilsException;
 
 public class ErrorHandlerTest {
 
-  private NilsConfig nilsConfig;
+  private NilsConfig<?> nilsConfig;
   private ErrorHandler underTest;
 
   @BeforeEach
   public void arrange() {
     // Arrange
-    var adapterConfig = ResourceBundleAdapterConfig.init(this);
-    nilsConfig = NilsConfig.init(adapterConfig);
+    nilsConfig = ResourceBundleAdapterConfig.init(this);
     underTest = new ErrorHandler(nilsConfig);
   }
 

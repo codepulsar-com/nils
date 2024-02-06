@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.codepulsar.nils.api.NLS;
-import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.api.NilsFactory;
 import com.codepulsar.nils.api.error.NilsException;
 
@@ -26,8 +25,7 @@ public class JacksonAdapterYamlIntegrationTest {
   public void string_getByKey_found() {
     // Arrange
     Locale locale = Locale.ENGLISH;
-    NilsConfig config = NilsConfig.init(adapterConfig);
-    NLS underTest = NilsFactory.init(config).nls(locale);
+    NLS underTest = NilsFactory.init(adapterConfig).nls(locale);
 
     // Act
     String value = underTest.get("simple");
@@ -40,8 +38,7 @@ public class JacksonAdapterYamlIntegrationTest {
   public void string_getByKey() {
     // Arrange
     var locale = Locale.GERMAN;
-    var config = NilsConfig.init(adapterConfig);
-    var underTest = NilsFactory.init(config).nls(locale);
+    var underTest = NilsFactory.init(adapterConfig).nls(locale);
 
     // Act
     var value = underTest.get("simple");
@@ -54,8 +51,7 @@ public class JacksonAdapterYamlIntegrationTest {
   public void string_getByKey_fallback() {
     // Arrange
     var locale = Locale.GERMAN;
-    var config = NilsConfig.init(adapterConfig);
-    var underTest = NilsFactory.init(config).nls(locale);
+    var underTest = NilsFactory.init(adapterConfig).nls(locale);
 
     // Act
     var value = underTest.get("fallback");
@@ -68,7 +64,7 @@ public class JacksonAdapterYamlIntegrationTest {
   public void string_getByKey_notFound_escaping() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(adapterConfig).suppressErrors(true);
+    var config = adapterConfig.suppressErrors(true);
     var underTest = NilsFactory.init(config).nls(locale);
 
     // Act
@@ -82,7 +78,7 @@ public class JacksonAdapterYamlIntegrationTest {
   public void string_getByKey_notFound_exception() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(adapterConfig).suppressErrors(false);
+    var config = adapterConfig.suppressErrors(false);
     var underTest = NilsFactory.init(config).nls(locale);
 
     // Act / Assert
@@ -95,8 +91,7 @@ public class JacksonAdapterYamlIntegrationTest {
   public void string_getByKeyAndArgs_found() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(adapterConfig);
-    var underTest = NilsFactory.init(config).nls(locale);
+    var underTest = NilsFactory.init(adapterConfig).nls(locale);
 
     // Act
     var value = underTest.get("with_args", "First", 200L);
@@ -109,8 +104,7 @@ public class JacksonAdapterYamlIntegrationTest {
   public void class_getByKey_found() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(adapterConfig);
-    var underTest = NilsFactory.init(config).nls(locale);
+    var underTest = NilsFactory.init(adapterConfig).nls(locale);
 
     // Act
     var value = underTest.get(Dummy.class, "attribute");
@@ -123,7 +117,7 @@ public class JacksonAdapterYamlIntegrationTest {
   public void class_getByKey_notFound_escaping_changed() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(adapterConfig).escapePattern(">>{0}<<").suppressErrors(true);
+    var config = adapterConfig.escapePattern(">>{0}<<").suppressErrors(true);
     var underTest = NilsFactory.init(config).nls(locale);
 
     // Act
@@ -137,7 +131,7 @@ public class JacksonAdapterYamlIntegrationTest {
   public void resolveKeyForOtherIncludeTag() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(adapterConfig).includeTag("INCLUDE");
+    var config = adapterConfig.includeTag("INCLUDE");
     var adapter = new JacksonAdapter(adapterConfig, locale);
     var underTest = NilsFactory.init(config).nls(locale);
 
@@ -157,9 +151,8 @@ public class JacksonAdapterYamlIntegrationTest {
   public void resolveValueWithMoreLevels() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(adapterConfig);
     var adapter = new JacksonAdapter(adapterConfig, locale);
-    var underTest = NilsFactory.init(config).nls(locale);
+    var underTest = NilsFactory.init(adapterConfig).nls(locale);
 
     // Actual
     assertThat(adapter.getTranslation("Level2._include").isPresent()).isTrue();
@@ -178,9 +171,8 @@ public class JacksonAdapterYamlIntegrationTest {
   public void circularInclude() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(adapterConfig);
     var adapter = new JacksonAdapter(adapterConfig, locale);
-    var underTest = NilsFactory.init(config).nls(locale);
+    var underTest = NilsFactory.init(adapterConfig).nls(locale);
 
     // Actual
     assertThat(adapter.getTranslation("Cycle1._include").isPresent()).isTrue();

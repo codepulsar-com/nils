@@ -11,7 +11,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.codepulsar.nils.api.adapter.AdapterConfig;
+import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.api.error.NilsConfigException;
 import com.codepulsar.nils.core.testadapter.StaticAdapterConfig;
 
@@ -34,7 +34,7 @@ public class ResourceBundleAdapterTest {
   public void resourceBundleAdapter_nullLocale() {
     // Arrange
     Locale locale = null;
-    AdapterConfig config = ResourceBundleAdapterConfig.init(this);
+    var config = ResourceBundleAdapterConfig.init(this);
     // Act / Assert
     assertThatThrownBy(() -> new ResourceBundleAdapter(config, locale))
         .isInstanceOf(IllegalArgumentException.class)
@@ -45,7 +45,7 @@ public class ResourceBundleAdapterTest {
   public void resourceBundleAdapter_nullConfig() {
     // Arrange
     Locale locale = Locale.ENGLISH;
-    AdapterConfig config = null;
+    NilsConfig<?> config = null;
     // Act / Assert
     assertThatThrownBy(() -> new ResourceBundleAdapter(config, locale))
         .isInstanceOf(IllegalArgumentException.class)
@@ -55,8 +55,8 @@ public class ResourceBundleAdapterTest {
   @Test
   public void resourceBundleAdapter_invalidAdapterConfig() {
     // Arrange
-    Locale locale = Locale.ENGLISH;
-    AdapterConfig config = new StaticAdapterConfig();
+    var locale = Locale.ENGLISH;
+    var config = new StaticAdapterConfig();
     // Act / Assert
     assertThatThrownBy(() -> new ResourceBundleAdapter(config, locale))
         .isInstanceOf(NilsConfigException.class)
@@ -67,8 +67,8 @@ public class ResourceBundleAdapterTest {
   @Test
   public void resourceBundleAdapter_defautltConfig() {
     // Arrange
-    Locale locale = Locale.ENGLISH;
-    AdapterConfig config = ResourceBundleAdapterConfig.init(this);
+    var locale = Locale.ENGLISH;
+    var config = ResourceBundleAdapterConfig.init(this);
     // Act
     ResourceBundleAdapter underTest = new ResourceBundleAdapter(config, locale);
     // Assert
@@ -78,9 +78,8 @@ public class ResourceBundleAdapterTest {
   @Test
   public void invalidResourceBundle() {
     // Arrange
-    Locale locale = Locale.ENGLISH;
-    AdapterConfig config =
-        ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/non_existing");
+    var locale = Locale.ENGLISH;
+    var config = ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/non_existing");
     // Act / Assert
     assertThatThrownBy(() -> new ResourceBundleAdapter(config, locale))
         .isInstanceOf(MissingResourceException.class);
@@ -89,9 +88,8 @@ public class ResourceBundleAdapterTest {
   @Test
   public void missingResourceBundle() {
     // Arrange
-    Locale locale = Locale.ITALIAN;
-    AdapterConfig config =
-        ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing");
+    var locale = Locale.ITALIAN;
+    var config = ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing");
     // Act
     ResourceBundleAdapter underTest = new ResourceBundleAdapter(config, locale);
     Optional<String> value = underTest.getTranslation("translate.me");
@@ -103,9 +101,8 @@ public class ResourceBundleAdapterTest {
   @Test
   public void translateKeyFound1() {
     // Arrange
-    Locale locale = Locale.ENGLISH;
-    AdapterConfig config =
-        ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing");
+    var locale = Locale.ENGLISH;
+    var config = ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing");
     // Act
     ResourceBundleAdapter underTest = new ResourceBundleAdapter(config, locale);
     Optional<String> value = underTest.getTranslation("translate.me");
@@ -117,9 +114,8 @@ public class ResourceBundleAdapterTest {
   @Test
   public void translateKeyFound2() {
     // Arrange
-    Locale locale = Locale.GERMAN;
-    AdapterConfig config =
-        ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing");
+    var locale = Locale.GERMAN;
+    var config = ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing");
     // Act
     ResourceBundleAdapter underTest = new ResourceBundleAdapter(config, locale);
     Optional<String> value = underTest.getTranslation("translate.me");
@@ -131,9 +127,8 @@ public class ResourceBundleAdapterTest {
   @Test
   public void translateKeyFallback() {
     // Arrange
-    Locale locale = Locale.GERMAN;
-    AdapterConfig config =
-        ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing");
+    var locale = Locale.GERMAN;
+    var config = ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing");
     // Act
     ResourceBundleAdapter underTest = new ResourceBundleAdapter(config, locale);
     Optional<String> value = underTest.getTranslation("translate.fallback");
@@ -145,9 +140,8 @@ public class ResourceBundleAdapterTest {
   @Test
   public void translateKeyNotFound() {
     // Arrange
-    Locale locale = Locale.ENGLISH;
-    AdapterConfig config =
-        ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing");
+    var locale = Locale.ENGLISH;
+    var config = ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing");
     // Act
     ResourceBundleAdapter underTest = new ResourceBundleAdapter(config, locale);
     Optional<String> value = underTest.getTranslation("translate.me.butImNotThere");

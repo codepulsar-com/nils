@@ -9,7 +9,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.api.NilsFactory;
 import com.codepulsar.nils.api.error.NilsException;
 import com.codepulsar.nils.core.testdata.Dummy;
@@ -20,13 +19,9 @@ public class ResourceBundleIntegrationTest {
   private Locale current;
 
   @BeforeEach
-  public void defineDefault() {
+  public void setup() {
     current = Locale.getDefault();
     Locale.setDefault(Locale.ENGLISH);
-  }
-
-  @BeforeEach
-  public void setup() {
     adapterConfig = ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/integration");
   }
 
@@ -39,8 +34,7 @@ public class ResourceBundleIntegrationTest {
   public void string_getByKey_found() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(adapterConfig);
-    var underTest = NilsFactory.init(config).nls(locale);
+    var underTest = NilsFactory.init(adapterConfig).nls(locale);
 
     // Act
     var value = underTest.get("simple");
@@ -53,8 +47,7 @@ public class ResourceBundleIntegrationTest {
   public void string_getByKey() {
     // Arrange
     var locale = Locale.GERMAN;
-    var config = NilsConfig.init(adapterConfig);
-    var underTest = NilsFactory.init(config).nls(locale);
+    var underTest = NilsFactory.init(adapterConfig).nls(locale);
 
     // Act
     var value = underTest.get("simple");
@@ -67,8 +60,7 @@ public class ResourceBundleIntegrationTest {
   public void string_getByKey_fallback() {
     // Arrange
     var locale = Locale.GERMAN;
-    var config = NilsConfig.init(adapterConfig);
-    var underTest = NilsFactory.init(config).nls(locale);
+    var underTest = NilsFactory.init(adapterConfig).nls(locale);
 
     // Act
     var value = underTest.get("fallback");
@@ -81,8 +73,7 @@ public class ResourceBundleIntegrationTest {
   public void string_getByKey_notFound_escaping() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(adapterConfig).suppressErrors(true);
-    var underTest = NilsFactory.init(config).nls(locale);
+    var underTest = NilsFactory.init(adapterConfig.suppressErrors(true)).nls(locale);
 
     // Act
     var value = underTest.get("not.found");
@@ -95,8 +86,7 @@ public class ResourceBundleIntegrationTest {
   public void string_getByKey_notFound_exception() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(adapterConfig).suppressErrors(false);
-    var underTest = NilsFactory.init(config).nls(locale);
+    var underTest = NilsFactory.init(adapterConfig.suppressErrors(false)).nls(locale);
 
     // Act / Assert
     assertThatThrownBy(() -> underTest.get("not.found"))
@@ -108,8 +98,7 @@ public class ResourceBundleIntegrationTest {
   public void string_getByKeyAndArgs_found() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(adapterConfig);
-    var underTest = NilsFactory.init(config).nls(locale);
+    var underTest = NilsFactory.init(adapterConfig).nls(locale);
 
     // Act
     var value = underTest.get("with_args", "First", 200L);
@@ -122,8 +111,7 @@ public class ResourceBundleIntegrationTest {
   public void class_getByKey_found() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(adapterConfig);
-    var underTest = NilsFactory.init(config).nls(locale);
+    var underTest = NilsFactory.init(adapterConfig).nls(locale);
 
     // Act
     var value = underTest.get(Dummy.class, "attribute");
@@ -136,7 +124,7 @@ public class ResourceBundleIntegrationTest {
   public void class_getByKey_notFound_escaping_changed() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(adapterConfig).escapePattern(">>{0}<<").suppressErrors(true);
+    var config = adapterConfig.escapePattern(">>{0}<<").suppressErrors(true);
     var underTest = NilsFactory.init(config).nls(locale);
 
     // Act
@@ -150,7 +138,7 @@ public class ResourceBundleIntegrationTest {
   public void resolveKeyForOtherIncludeTag() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(adapterConfig).includeTag("[include]");
+    var config = adapterConfig.includeTag("[include]");
     var adapter = new ResourceBundleAdapter(adapterConfig, locale);
     var underTest = NilsFactory.init(config).nls(locale);
 
@@ -170,9 +158,8 @@ public class ResourceBundleIntegrationTest {
   public void resolveValueWithMoreLevels() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(adapterConfig);
     var adapter = new ResourceBundleAdapter(adapterConfig, locale);
-    var underTest = NilsFactory.init(config).nls(locale);
+    var underTest = NilsFactory.init(adapterConfig).nls(locale);
 
     // Actual
     assertThat(adapter.getTranslation("Level2._include").isPresent()).isTrue();
@@ -191,9 +178,8 @@ public class ResourceBundleIntegrationTest {
   public void circularInclude() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(adapterConfig);
     var adapter = new ResourceBundleAdapter(adapterConfig, locale);
-    var underTest = NilsFactory.init(config).nls(locale);
+    var underTest = NilsFactory.init(adapterConfig).nls(locale);
 
     // Actual
     assertThat(adapter.getTranslation("Cycle1._include").isPresent()).isTrue();

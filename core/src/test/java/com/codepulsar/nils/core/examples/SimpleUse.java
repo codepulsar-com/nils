@@ -32,14 +32,12 @@ public class SimpleUse {
   }
 
   public void config1() {
-    NilsConfig config =
-        NilsConfig.init(ResourceBundleAdapterConfig.init(SimpleUse.class)).suppressErrors(false);
+    NilsConfig<?> config = ResourceBundleAdapterConfig.init(SimpleUse.class).suppressErrors(false);
     NilsFactory.init(config);
   }
 
   public void config2() {
-    NilsConfig config =
-        NilsConfig.init(ResourceBundleAdapterConfig.init(SimpleUse.class)).escapePattern("@{0}");
+    NilsConfig<?> config = ResourceBundleAdapterConfig.init(SimpleUse.class).escapePattern("@{0}");
     NilsFactory.init(config);
   }
 }

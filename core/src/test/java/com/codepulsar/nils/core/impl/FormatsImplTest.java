@@ -51,7 +51,7 @@ public class FormatsImplTest {
   public void constructor_nullConfig() {
     // Arrange
     var locale = Locale.US;
-    NilsConfig config = null;
+    NilsConfig<?> config = null;
 
     // Act / Assert
     assertThatThrownBy(() -> new FormatsImpl(locale, config))
@@ -239,8 +239,8 @@ public class FormatsImplTest {
     assertThat(result).isEqualTo(expected);
   }
 
-  private NilsConfig createTestConfig(FormatStyle style) {
-    var config = NilsConfig.init(new StaticAdapterConfig());
+  private NilsConfig<?> createTestConfig(FormatStyle style) {
+    var config = new StaticAdapterConfig();
     if (style != null) {
       config.dateFormatStyle(style);
     }

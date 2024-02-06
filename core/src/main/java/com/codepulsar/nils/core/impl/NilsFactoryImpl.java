@@ -19,12 +19,12 @@ import com.codepulsar.nils.core.util.ParameterCheck;
 /** Factory for getting access to the provided NLS. A requested NLS object is cached. */
 public class NilsFactoryImpl implements NilsFactory {
   private static final Logger LOG = LoggerFactory.getLogger(NilsFactoryImpl.class);
-  private final NilsConfig config;
+  private final NilsConfig<?> config;
   private AdapterFactory<?> adapterFactory;
 
   private final Map<Locale, NLS> translationCache = new HashMap<>();
 
-  public NilsFactoryImpl(NilsConfig config) {
+  public NilsFactoryImpl(NilsConfig<?> config) {
     this.config = ParameterCheck.notNull(config, "config", NILS_CONFIG);
   }
 
@@ -88,16 +88,14 @@ public class NilsFactoryImpl implements NilsFactory {
     return nls(locale).context(context);
   }
 
-  private NLSImpl createImpl(Locale locale, NilsConfig config) {
-    return new NLSImpl(
-        getAdapterFactory().create(config.getAdapterConfig(), locale), config, locale);
+  private NLSImpl createImpl(Locale locale, NilsConfig<?> config) {
+    return new NLSImpl(getAdapterFactory().create(config, locale), config, locale);
   }
 
   private AdapterFactory<?> getAdapterFactory() {
     if (adapterFactory == null) {
       try {
-        this.adapterFactory =
-            config.getAdapterConfig().getFactoryClass().getConstructor().newInstance();
+        this.adapterFactory = config.getFactoryClass().getConstructor().newInstance();
       } catch (ReflectiveOperationException | IllegalArgumentException | SecurityException e) {
         LOG.error("Could not create AdapterFactory. Reason {}", e.getMessage(), e);
         throw new NilsException(ErrorTypes.ADAPTER_ERROR, "Could not create AdapterFactory.", e);

@@ -13,7 +13,7 @@
 			}
 		},
 		"Message": {
-			"@include": "data.BaseMessage",
+			"_include": "data.BaseMessage",
 			"[include]": "data.AlternativeMessage",
 			"buttons": {
 				"cancel": "Cancel (Message)"
@@ -29,15 +29,15 @@
 		"value": "Value (Level0)"
 	},
 	"Level1": {
-		"@include": "Level0"
+		"_include": "Level0"
 	},
 	"Level2": {
-		"@include": "Level1"
+		"_include": "Level1"
 	},
 	"Cycle1": {
-		"@include": "Cycle2"
+		"_include": "Cycle2"
 	},
 	"Cycle2": {
-		"@include": "Cycle1"
+		"_include": "Cycle1"
 	}
 }

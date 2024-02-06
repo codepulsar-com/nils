@@ -42,7 +42,7 @@ public class NilsConfigTest {
     assertThat(underTest.getAdapterConfig()).isEqualTo(adapterConfig);
     assertThat(underTest.isSuppressErrors()).isEqualTo(false);
     assertThat(underTest.getEscapePattern()).isEqualTo("[{0}]");
-    assertThat(underTest.getIncludeTag()).isEqualTo("@include");
+    assertThat(underTest.getIncludeTag()).isEqualTo("_include");
     assertThat(underTest.getClassPrefixResolver()).isEqualTo(ClassPrefixResolver.SIMPLE_CLASSNAME);
     assertThat(underTest.getTranslationFormatter()).isEqualTo(TranslationFormatter.MESSAGE_FORMAT);
     assertThat(underTest.getDateFormatStyle()).isEqualTo(FormatStyle.MEDIUM);

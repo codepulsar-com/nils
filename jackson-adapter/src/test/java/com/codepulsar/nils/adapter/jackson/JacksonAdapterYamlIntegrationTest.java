@@ -157,7 +157,7 @@ public class JacksonAdapterYamlIntegrationTest {
   public void resolveValueWithMoreLevels() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(adapterConfig).includeTag("_include");
+    var config = NilsConfig.init(adapterConfig);
     var adapter = new JacksonAdapter(adapterConfig, locale);
     var underTest = NilsFactory.init(config).nls(locale);
 
@@ -178,7 +178,7 @@ public class JacksonAdapterYamlIntegrationTest {
   public void circularInclude() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(adapterConfig).includeTag("_include");
+    var config = NilsConfig.init(adapterConfig);
     var adapter = new JacksonAdapter(adapterConfig, locale);
     var underTest = NilsFactory.init(config).nls(locale);
 

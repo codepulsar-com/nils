@@ -14,7 +14,7 @@ import com.codepulsar.nils.core.util.ParameterCheck;
 public class NilsConfig {
   private AdapterConfig adapterConfig;
   private String escapePattern = "[{0}]";
-  private String includeTag = "@include";
+  private String includeTag = "_include";
   private boolean suppressErrors = false;
   private ClassPrefixResolver classPrefixResolver = ClassPrefixResolver.SIMPLE_CLASSNAME;
   private TranslationFormatter translationFormatter = TranslationFormatter.MESSAGE_FORMAT;
@@ -64,7 +64,7 @@ public class NilsConfig {
   /**
    * Gets the tag for include translations from other key.
    *
-   * <p>The default value is <code>@include</code>.
+   * <p>The default value is <code>_include</code>.
    *
    * @return The tag used including translations.
    * @see #includeTag(String)

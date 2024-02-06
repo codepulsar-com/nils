@@ -2,8 +2,8 @@ package com.codepulsar.nils.adapter.jackson.utils;
 
 import static com.codepulsar.nils.adapter.jackson.utils.JacksonErrorTypes.MISSING_DEPENDENCY;
 
+import com.codepulsar.nils.api.error.NilsException;
 import com.codepulsar.nils.core.error.ErrorTypes;
-import com.codepulsar.nils.core.error.NilsException;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

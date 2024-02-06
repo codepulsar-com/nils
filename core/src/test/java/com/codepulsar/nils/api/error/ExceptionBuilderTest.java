@@ -1,4 +1,4 @@
-package com.codepulsar.nils.core.error;
+package com.codepulsar.nils.api.error;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -9,6 +9,9 @@ import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+
+import com.codepulsar.nils.api.error.ErrorType;
+import com.codepulsar.nils.api.error.ExceptionBuilder;
 
 public class ExceptionBuilderTest {
 

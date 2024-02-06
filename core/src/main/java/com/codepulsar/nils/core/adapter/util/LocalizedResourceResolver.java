@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.codepulsar.nils.api.error.NilsException;
 import com.codepulsar.nils.core.adapter.config.LocalizedResourceResolverConfig;
-import com.codepulsar.nils.core.error.NilsException;
 import com.codepulsar.nils.core.util.ParameterCheck;
 /**
  * The class <strong>LocalizedResourceResolver</strong> is used to get a resource for a specific

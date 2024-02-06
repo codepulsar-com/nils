@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.codepulsar.nils.api.NilsConfig;
-import com.codepulsar.nils.core.error.ErrorType;
-import com.codepulsar.nils.core.error.NilsException;
+import com.codepulsar.nils.api.error.ErrorType;
+import com.codepulsar.nils.api.error.NilsException;
 
 class ErrorHandler {
 

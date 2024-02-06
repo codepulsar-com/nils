@@ -1,6 +1,6 @@
 package com.codepulsar.nils.adapter.snakeyaml.utils;
 
-import com.codepulsar.nils.core.error.ErrorType;
+import com.codepulsar.nils.api.error.ErrorType;
 
 public class SnakeYamlErrorTypes {
 

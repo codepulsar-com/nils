@@ -13,8 +13,8 @@ import com.codepulsar.nils.api.NLS;
 import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.api.NilsFactory;
 import com.codepulsar.nils.api.adapter.AdapterFactory;
+import com.codepulsar.nils.api.error.NilsException;
 import com.codepulsar.nils.core.error.ErrorTypes;
-import com.codepulsar.nils.core.error.NilsException;
 import com.codepulsar.nils.core.util.ParameterCheck;
 /** Factory for getting access to the provided NLS. A requested NLS object is cached. */
 public class NilsFactoryImpl implements NilsFactory {

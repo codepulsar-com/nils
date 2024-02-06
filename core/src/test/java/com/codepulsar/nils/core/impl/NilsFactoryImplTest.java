@@ -12,7 +12,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.api.NilsFactory;
-import com.codepulsar.nils.core.error.NilsConfigException;
+import com.codepulsar.nils.api.error.NilsConfigException;
 import com.codepulsar.nils.core.testadapter.StaticAdapterConfig;
 import com.codepulsar.nils.core.testdata.Dummy;
 

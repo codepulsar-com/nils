@@ -21,9 +21,9 @@ import org.yaml.snakeyaml.Yaml;
 
 import com.codepulsar.nils.api.adapter.Adapter;
 import com.codepulsar.nils.api.adapter.AdapterConfig;
+import com.codepulsar.nils.api.error.NilsConfigException;
+import com.codepulsar.nils.api.error.NilsException;
 import com.codepulsar.nils.core.adapter.util.LocalizedResourceResolver;
-import com.codepulsar.nils.core.error.NilsConfigException;
-import com.codepulsar.nils.core.error.NilsException;
 import com.codepulsar.nils.core.util.ParameterCheck;
 /** An {@link Adapter} implementation using YAML files for the translations. */
 public class SnakeYamlAdapter implements Adapter {

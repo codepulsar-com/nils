@@ -17,9 +17,9 @@ import org.slf4j.LoggerFactory;
 
 import com.codepulsar.nils.api.adapter.Adapter;
 import com.codepulsar.nils.api.adapter.AdapterConfig;
+import com.codepulsar.nils.api.error.NilsConfigException;
+import com.codepulsar.nils.api.error.NilsException;
 import com.codepulsar.nils.core.adapter.util.LocalizedResourceResolver;
-import com.codepulsar.nils.core.error.NilsConfigException;
-import com.codepulsar.nils.core.error.NilsException;
 import com.codepulsar.nils.core.util.ParameterCheck;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;

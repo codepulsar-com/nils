@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 
 import com.codepulsar.nils.adapter.rb.ResourceBundleAdapterConfig;
 import com.codepulsar.nils.api.adapter.AdapterConfig;
-import com.codepulsar.nils.core.error.NilsConfigException;
-import com.codepulsar.nils.core.error.NilsException;
+import com.codepulsar.nils.api.error.NilsConfigException;
+import com.codepulsar.nils.api.error.NilsException;
 
 public class JacksonAdapterJsonTest {
 

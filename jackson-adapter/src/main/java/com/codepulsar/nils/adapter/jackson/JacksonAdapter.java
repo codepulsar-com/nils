@@ -20,9 +20,9 @@ import org.slf4j.LoggerFactory;
 import com.codepulsar.nils.adapter.jackson.utils.ObjectMapperFactory;
 import com.codepulsar.nils.api.adapter.Adapter;
 import com.codepulsar.nils.api.adapter.AdapterConfig;
+import com.codepulsar.nils.api.error.NilsConfigException;
+import com.codepulsar.nils.api.error.NilsException;
 import com.codepulsar.nils.core.adapter.util.LocalizedResourceResolver;
-import com.codepulsar.nils.core.error.NilsConfigException;
-import com.codepulsar.nils.core.error.NilsException;
 import com.codepulsar.nils.core.util.ParameterCheck;
 import com.fasterxml.jackson.databind.ObjectMapper;
 /** An {@link Adapter} implementation using for JSON and YAML files for the translations. */

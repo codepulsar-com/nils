@@ -12,7 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.codepulsar.nils.api.adapter.AdapterConfig;
-import com.codepulsar.nils.core.error.NilsConfigException;
+import com.codepulsar.nils.api.error.NilsConfigException;
 import com.codepulsar.nils.core.testadapter.StaticAdapterConfig;
 
 public class ResourceBundleAdapterTest {

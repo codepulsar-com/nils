@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.Test;
 
-import com.codepulsar.nils.core.error.NilsConfigException;
+import com.codepulsar.nils.api.error.NilsConfigException;
 
 public class GsonAdapterConfigTest {
   @Test

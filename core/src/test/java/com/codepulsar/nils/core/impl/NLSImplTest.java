@@ -11,7 +11,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.api.adapter.Adapter;
-import com.codepulsar.nils.core.error.NilsException;
+import com.codepulsar.nils.api.error.NilsException;
 import com.codepulsar.nils.core.handler.ClassPrefixResolver;
 import com.codepulsar.nils.core.handler.TranslationFormatter;
 import com.codepulsar.nils.core.testadapter.StaticAdapter;

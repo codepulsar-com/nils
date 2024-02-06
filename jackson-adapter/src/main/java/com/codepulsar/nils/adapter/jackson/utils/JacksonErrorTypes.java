@@ -1,6 +1,6 @@
 package com.codepulsar.nils.adapter.jackson.utils;
 
-import com.codepulsar.nils.core.error.ErrorType;
+import com.codepulsar.nils.api.error.ErrorType;
 
 public class JacksonErrorTypes {
   public static final ErrorType MISSING_DEPENDENCY = new ErrorType("NILS-200");

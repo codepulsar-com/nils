@@ -1,5 +1,7 @@
 package com.codepulsar.nils.core.error;
 
+import com.codepulsar.nils.api.error.ErrorType;
+
 /**
  * A <strong>ErrorType</strong> configures a type of error.
  *

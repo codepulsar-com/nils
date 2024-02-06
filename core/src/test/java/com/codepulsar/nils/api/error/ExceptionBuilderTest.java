@@ -10,9 +10,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import com.codepulsar.nils.api.error.ErrorType;
-import com.codepulsar.nils.api.error.ExceptionBuilder;
-
 public class ExceptionBuilderTest {
 
   private static final ErrorType NO_MSG = new ErrorType("NILS-0");

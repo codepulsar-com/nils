@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import com.codepulsar.nils.adapter.rb.ResourceBundleAdapter;
 import com.codepulsar.nils.adapter.rb.ResourceBundleAdapterConfig;
 import com.codepulsar.nils.api.NilsConfig;
-import com.codepulsar.nils.api.adapter.AdapterConfig;
 import com.codepulsar.nils.api.error.NilsException;
 
 public class IncludeHandlerTest {
@@ -20,16 +19,18 @@ public class IncludeHandlerTest {
   private ResourceBundleAdapter adapter;
   private NLSImpl nls;
   private IncludeHandler underTest;
-  private AdapterConfig adapterConfig;
+  private NilsConfig<?> config;
 
   @BeforeEach
   public void arrange() {
     // Arrange
-    adapterConfig = ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/includes");
-    adapter = new ResourceBundleAdapter(adapterConfig, Locale.ENGLISH);
-    NilsConfig nilsConfig = NilsConfig.init(adapterConfig).suppressErrors(false);
-    nls = new NLSImpl(adapter, nilsConfig, Locale.ENGLISH);
-    underTest = new IncludeHandler(nilsConfig, adapter::getTranslation);
+    config =
+        ResourceBundleAdapterConfig.init(this)
+            .resourcesBundleName("test/includes")
+            .suppressErrors(false);
+    adapter = new ResourceBundleAdapter(config, Locale.ENGLISH);
+    nls = new NLSImpl(adapter, config, Locale.ENGLISH);
+    underTest = new IncludeHandler(config, adapter::getTranslation);
   }
 
   @Test
@@ -193,7 +194,7 @@ public class IncludeHandlerTest {
   @Test
   public void circularInclude_exception() {
     // Arrange
-    var nilsConfig = NilsConfig.init(adapterConfig).suppressErrors(false);
+    var nilsConfig = config.suppressErrors(false);
     var nls_ = new NLSImpl(adapter, nilsConfig, Locale.ENGLISH);
     var underTest_ = new IncludeHandler(nilsConfig, adapter::getTranslation);
 
@@ -217,7 +218,7 @@ public class IncludeHandlerTest {
   @Test
   public void circularInclude_suppress() {
     // Arrange
-    var nilsConfig = NilsConfig.init(adapterConfig).suppressErrors(true);
+    var nilsConfig = config.suppressErrors(true);
     var nls_ = new NLSImpl(adapter, nilsConfig, Locale.ENGLISH);
     var underTest_ = new IncludeHandler(nilsConfig, adapter::getTranslation);
 
@@ -263,12 +264,13 @@ public class IncludeHandlerTest {
   @Test
   public void resolveKeyForOtherIncludeTag() {
     // Arrange
-    var _adapterConfig =
-        ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/includes");
-    var _adapter = new ResourceBundleAdapter(_adapterConfig, Locale.ENGLISH);
-    var _nilsConfig = NilsConfig.init(_adapterConfig).includeTag("[include]");
-    var _nls = new NLSImpl(adapter, _nilsConfig, Locale.ENGLISH);
-    var _underTest = new IncludeHandler(_nilsConfig, adapter::getTranslation);
+    var _config =
+        ResourceBundleAdapterConfig.init(this)
+            .resourcesBundleName("test/includes")
+            .includeTag("[include]");
+    var _adapter = new ResourceBundleAdapter(_config, Locale.ENGLISH);
+    var _nls = new NLSImpl(adapter, _config, Locale.ENGLISH);
+    var _underTest = new IncludeHandler(_config, adapter::getTranslation);
 
     // Actual
     assertThat(_adapter.getTranslation("data.Message.[include]").isPresent()).isTrue();

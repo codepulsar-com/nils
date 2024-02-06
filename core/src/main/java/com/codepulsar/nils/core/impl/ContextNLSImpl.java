@@ -18,7 +18,7 @@ public class ContextNLSImpl implements NLS {
   private final ErrorHandler errorHandler;
   private final NLSKeyUtil keyUtil;
 
-  ContextNLSImpl(NLS parent, NilsConfig config, String context) {
+  ContextNLSImpl(NLS parent, NilsConfig<?> config, String context) {
     this.parent = ParameterCheck.notNull(parent, "parent");
     ParameterCheck.notNull(config, "config");
     this.context = ParameterCheck.notNullEmptyOrBlank(context, "context");

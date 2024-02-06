@@ -7,7 +7,7 @@ import java.util.Locale;
 
 import org.junit.jupiter.api.Test;
 
-import com.codepulsar.nils.api.adapter.AdapterConfig;
+import com.codepulsar.nils.api.NilsConfig;
 
 public class GsonAdapterFactoryTest {
 
@@ -15,7 +15,7 @@ public class GsonAdapterFactoryTest {
   public void create_configIsNull() {
     // Arrange
     var locale = Locale.ENGLISH;
-    AdapterConfig config = null;
+    NilsConfig<?> config = null;
     var underTest = new GsonAdapterFactory();
 
     // Act / Assert
@@ -28,7 +28,7 @@ public class GsonAdapterFactoryTest {
   public void create_localeIsNull() {
     // Arrange
     Locale locale = null;
-    AdapterConfig config = GsonAdapterConfig.init(this);
+    var config = GsonAdapterConfig.init(this);
     var underTest = new GsonAdapterFactory();
 
     // Act / Assert

@@ -26,7 +26,7 @@ public class ContextNLSImplTest {
   @Test
   public void constructor_nullParent() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig());
+    var config = new StaticAdapterConfig();
     NLS parent = null;
 
     // Act / Assert
@@ -38,7 +38,7 @@ public class ContextNLSImplTest {
   @Test
   public void constructor_nullConfig() {
     // Arrange
-    NilsConfig config = null;
+    NilsConfig<?> config = null;
     var parent = createParent();
 
     // Act / Assert
@@ -50,7 +50,7 @@ public class ContextNLSImplTest {
   @Test
   public void constructor_emptyContext() {
     // Arrange
-    NilsConfig config = NilsConfig.init(new StaticAdapterConfig());
+    var config = new StaticAdapterConfig();
     var parent = createParent();
 
     // Act / Assert
@@ -63,7 +63,7 @@ public class ContextNLSImplTest {
   @MethodSource(DATA_PROVIDER + "#source_string_getByKey_invalid")
   public void string_getByKey_invalid(String key, String errMsg) {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig());
+    var config = new StaticAdapterConfig();
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -77,7 +77,7 @@ public class ContextNLSImplTest {
   @MethodSource(DATA_PROVIDER + "#source_string_getByKey_invalid_suppressed")
   public void string_getByKey_invalid_suppressed(String key, String expected) {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
+    var config = new StaticAdapterConfig().suppressErrors(true);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -91,7 +91,7 @@ public class ContextNLSImplTest {
   @Test
   public void string_getByKey_found() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig());
+    var config = new StaticAdapterConfig();
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -106,7 +106,7 @@ public class ContextNLSImplTest {
   @Test
   public void string_getByKey_notFound_escaping() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
+    var config = new StaticAdapterConfig().suppressErrors(true);
     var parent = createParent(config);
 
     var underTest = new ContextNLSImpl(parent, config, "context");
@@ -121,7 +121,7 @@ public class ContextNLSImplTest {
   @Test
   public void string_getByKey_notFound_exception() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(false);
+    var config = new StaticAdapterConfig().suppressErrors(false);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -142,7 +142,7 @@ public class ContextNLSImplTest {
   @MethodSource(DATA_PROVIDER + "#source_string_getByKeyAndArgs_invalid")
   public void string_getByKeyAndArgs_invalid(String key, Object[] args, String errMsg) {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig());
+    var config = new StaticAdapterConfig();
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -157,7 +157,7 @@ public class ContextNLSImplTest {
   public void string_getByKeyAndArgs_invalid_suppressed(
       String key, Object[] args, String expected) {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
+    var config = new StaticAdapterConfig().suppressErrors(true);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -171,7 +171,7 @@ public class ContextNLSImplTest {
   @Test
   public void string_getByKeyAndArgs_nullArgs() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig());
+    var config = new StaticAdapterConfig();
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -186,7 +186,7 @@ public class ContextNLSImplTest {
   @Test
   public void string_getByKeyAndArgs_emptyArgs() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig());
+    var config = new StaticAdapterConfig();
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -201,7 +201,7 @@ public class ContextNLSImplTest {
   @Test
   public void string_getByKeyAndArgs_found() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig());
+    var config = new StaticAdapterConfig();
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -216,7 +216,7 @@ public class ContextNLSImplTest {
   @Test
   public void string_getByKeyAndArgs_notFound_escaping() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
+    var config = new StaticAdapterConfig().suppressErrors(true);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -231,7 +231,7 @@ public class ContextNLSImplTest {
   @Test
   public void string_getByKeyAndArgs_notFound_exception() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(false);
+    var config = new StaticAdapterConfig().suppressErrors(false);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -251,9 +251,7 @@ public class ContextNLSImplTest {
   @Test
   public void string_getByKeyAndArgs_found_stringformat() {
     // Arrange
-    var config =
-        NilsConfig.init(new StaticAdapterConfig())
-            .translationFormatter(TranslationFormatter.STRING_FORMAT);
+    var config = new StaticAdapterConfig().translationFormatter(TranslationFormatter.STRING_FORMAT);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -269,7 +267,7 @@ public class ContextNLSImplTest {
   @MethodSource(DATA_PROVIDER + "#source_class_getByKey_invalid")
   public void class_getByKey_invalid(Class<?> key, String subKey, String errMsg) {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig());
+    var config = new StaticAdapterConfig();
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -283,7 +281,7 @@ public class ContextNLSImplTest {
   @MethodSource(DATA_PROVIDER + "#source_class_getByKey_invalid_suppressed")
   public void class_getByKey_invalid_suppressed(Class<?> key, String subKey, String expected) {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
+    var config = new StaticAdapterConfig().suppressErrors(true);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -297,7 +295,7 @@ public class ContextNLSImplTest {
   @Test
   public void class_getByKey_foundSimpleClassnameResolver() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig());
+    var config = new StaticAdapterConfig();
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -313,9 +311,7 @@ public class ContextNLSImplTest {
   @Test
   public void class_getByKey_foundFqnClassnameResolver() {
     // Arrange
-    NilsConfig config =
-        NilsConfig.init(new StaticAdapterConfig())
-            .classPrefixResolver(ClassPrefixResolver.FQN_CLASSNAME);
+    var config = new StaticAdapterConfig().classPrefixResolver(ClassPrefixResolver.FQN_CLASSNAME);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -329,7 +325,7 @@ public class ContextNLSImplTest {
   @Test
   public void class_getByKey_notFound_escaping() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
+    var config = new StaticAdapterConfig().suppressErrors(true);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -346,7 +342,7 @@ public class ContextNLSImplTest {
   public void class_getByKeyAndArgs_invalid(
       Class<?> key, String subKey, Object[] args, String errMsg) {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig());
+    var config = new StaticAdapterConfig();
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -361,7 +357,7 @@ public class ContextNLSImplTest {
   public void class_getByKeyAndArgs_invalid_suppressed(
       Class<?> key, String subKey, Object[] args, String expected) {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
+    var config = new StaticAdapterConfig().suppressErrors(true);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -375,7 +371,7 @@ public class ContextNLSImplTest {
   @Test
   public void class_getByKeyAndArgs_nullArgs() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig());
+    var config = new StaticAdapterConfig();
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -389,7 +385,7 @@ public class ContextNLSImplTest {
   @Test
   public void class_getByKeyAndArgs_emptyArgs() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig());
+    var config = new StaticAdapterConfig();
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -403,7 +399,7 @@ public class ContextNLSImplTest {
   @Test
   public void class_getByKeyAndArgs_found() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig());
+    var config = new StaticAdapterConfig();
     var parent = createParent(config);
 
     var underTest = new ContextNLSImpl(parent, config, "context");
@@ -418,7 +414,7 @@ public class ContextNLSImplTest {
   @Test
   public void class_getByKeyAndArgs_notFound_escaping() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
+    var config = new StaticAdapterConfig().suppressErrors(true);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -433,7 +429,7 @@ public class ContextNLSImplTest {
   @Test
   public void class_getByKeyAndArgs_notFound_exception() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(false);
+    var config = new StaticAdapterConfig().suppressErrors(false);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -453,7 +449,7 @@ public class ContextNLSImplTest {
   @Test
   public void context_string() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(false);
+    var config = new StaticAdapterConfig().suppressErrors(false);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -475,7 +471,7 @@ public class ContextNLSImplTest {
   @Test
   public void context_class() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(false);
+    var config = new StaticAdapterConfig().suppressErrors(false);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -497,7 +493,7 @@ public class ContextNLSImplTest {
   @Test
   public void getFormats() {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig());
+    var config = new StaticAdapterConfig();
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -511,7 +507,7 @@ public class ContextNLSImplTest {
   @MethodSource(DATA_PROVIDER + "#source_context_string_invalid")
   public void context_string_invalid_exception(String context, String errorMsg) {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(false);
+    var config = new StaticAdapterConfig().suppressErrors(false);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -525,7 +521,7 @@ public class ContextNLSImplTest {
   @MethodSource(DATA_PROVIDER + "#source_context_string_invalid")
   public void context_string_invalid_suppressed(String context, String errorMsg) {
     // Arrange
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
+    var config = new StaticAdapterConfig().suppressErrors(true);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -540,7 +536,7 @@ public class ContextNLSImplTest {
   public void context_class_invalid_exception() {
     // Arrange
     Class<?> context = null;
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(false);
+    var config = new StaticAdapterConfig().suppressErrors(false);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -555,7 +551,7 @@ public class ContextNLSImplTest {
     // Arrange
     Class<?> context = null;
 
-    var config = NilsConfig.init(new StaticAdapterConfig()).suppressErrors(true);
+    var config = new StaticAdapterConfig().suppressErrors(true);
     var parent = createParent(config);
     var underTest = new ContextNLSImpl(parent, config, "context");
 
@@ -567,11 +563,11 @@ public class ContextNLSImplTest {
   }
 
   private NLS createParent() {
-    var config = NilsConfig.init(new StaticAdapterConfig());
+    var config = new StaticAdapterConfig();
     return createParent(config);
   }
 
-  private NLS createParent(NilsConfig config) {
+  private NLS createParent(NilsConfig<?> config) {
     var locale = Locale.US;
     return new NLSImpl(new StaticAdapter(), config, locale);
   }

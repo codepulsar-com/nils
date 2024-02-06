@@ -25,15 +25,14 @@ public class NilsFactoryImplTest {
 
   @BeforeEach
   public void setup() {
-    var adapterConfig = new StaticAdapterConfig();
-    var nilsConfig = NilsConfig.init(adapterConfig);
-    underTest = new NilsFactoryImpl(nilsConfig);
+    var config = new StaticAdapterConfig();
+    underTest = new NilsFactoryImpl(config);
   }
 
   @Test
   public void init_nilsConfigNull() {
     // Arrange
-    NilsConfig nilsConfig = null;
+    NilsConfig<?> nilsConfig = null;
     // Act / Assert
     assertThatThrownBy(() -> new NilsFactoryImpl(nilsConfig))
         .isInstanceOf(NilsConfigException.class)
@@ -44,8 +43,7 @@ public class NilsFactoryImplTest {
   public void init_nilsConfig() {
     // Arrange
     var adapterConfig = new StaticAdapterConfig();
-    var nilsConfig = NilsConfig.init(adapterConfig);
-    NilsFactory _underTest = NilsFactory.init(nilsConfig);
+    NilsFactory _underTest = NilsFactory.init(adapterConfig);
 
     // Act
     var nls = _underTest.nls();

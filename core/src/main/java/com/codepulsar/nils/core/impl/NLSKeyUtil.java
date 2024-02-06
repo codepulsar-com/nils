@@ -8,10 +8,10 @@ import com.codepulsar.nils.core.util.ParameterCheck;
 
 class NLSKeyUtil {
 
-  private final NilsConfig config;
+  private final NilsConfig<?> config;
   private final ClassPrefixResolver classPrefixResolver;
 
-  NLSKeyUtil(NilsConfig config) {
+  NLSKeyUtil(NilsConfig<?> config) {
     this.config = ParameterCheck.notNull(config, "config");
     this.classPrefixResolver = config.getClassPrefixResolver();
   }

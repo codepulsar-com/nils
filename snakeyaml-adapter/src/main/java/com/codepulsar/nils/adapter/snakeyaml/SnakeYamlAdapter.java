@@ -19,8 +19,8 @@ import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 
+import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.api.adapter.Adapter;
-import com.codepulsar.nils.api.adapter.AdapterConfig;
 import com.codepulsar.nils.api.error.NilsConfigException;
 import com.codepulsar.nils.api.error.NilsException;
 import com.codepulsar.nils.core.adapter.util.LocalizedResourceResolver;
@@ -37,7 +37,7 @@ public class SnakeYamlAdapter implements Adapter {
 
   private Map<String, Object> translations = Map.of();
 
-  public SnakeYamlAdapter(AdapterConfig config, Locale locale) {
+  public SnakeYamlAdapter(NilsConfig<?> config, Locale locale) {
     ParameterCheck.notNull(config, "config");
     ParameterCheck.notNull(locale, "locale");
     if (!(config instanceof SnakeYamlAdapterConfig)) {

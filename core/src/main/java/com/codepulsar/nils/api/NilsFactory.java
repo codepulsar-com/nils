@@ -2,7 +2,6 @@ package com.codepulsar.nils.api;
 
 import java.util.Locale;
 
-import com.codepulsar.nils.api.adapter.AdapterConfig;
 import com.codepulsar.nils.core.handler.ClassPrefixResolver;
 import com.codepulsar.nils.core.impl.NilsFactoryImpl;
 /** Factory for getting access to the provided NLS. A requested NLS object is cached. */
@@ -109,22 +108,12 @@ public interface NilsFactory {
   NLS nlsWithContext(Locale locale, Class<?> context);
 
   /**
-   * Initialize the factory for an adapter using its {@link AdapterConfig}.
-   *
-   * @param adapterConfig A {@link AdapterConfig} object.
-   * @return The create factory.
-   */
-  public static NilsFactory init(AdapterConfig adapterConfig) {
-    return new NilsFactoryImpl(NilsConfig.init(adapterConfig));
-  }
-
-  /**
    * Initialize the factory using a {@link NilsConfig}.
    *
    * @param config A {@link NilsConfig} object.
    * @return The create factory.
    */
-  public static NilsFactory init(NilsConfig config) {
+  static NilsFactory init(NilsConfig<?> config) {
     return new NilsFactoryImpl(config);
   }
 }

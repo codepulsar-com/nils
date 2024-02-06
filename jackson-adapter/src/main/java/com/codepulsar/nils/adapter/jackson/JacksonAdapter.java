@@ -18,8 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.codepulsar.nils.adapter.jackson.utils.ObjectMapperFactory;
+import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.api.adapter.Adapter;
-import com.codepulsar.nils.api.adapter.AdapterConfig;
 import com.codepulsar.nils.api.error.NilsConfigException;
 import com.codepulsar.nils.api.error.NilsException;
 import com.codepulsar.nils.core.adapter.util.LocalizedResourceResolver;
@@ -37,7 +37,7 @@ public class JacksonAdapter implements Adapter {
 
   private Map<String, Object> translations = Map.of();
 
-  public JacksonAdapter(AdapterConfig config, Locale locale) {
+  public JacksonAdapter(NilsConfig<?> config, Locale locale) {
     ParameterCheck.notNull(config, "config");
     ParameterCheck.notNull(locale, "locale");
     if (!(config instanceof JacksonAdapterConfig)) {

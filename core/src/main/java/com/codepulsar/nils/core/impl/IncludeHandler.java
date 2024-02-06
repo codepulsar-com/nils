@@ -20,9 +20,9 @@ class IncludeHandler {
 
   private static final Logger LOG = LoggerFactory.getLogger(IncludeHandler.class);
   private final Function<String, Optional<String>> keyResolver;
-  private final NilsConfig nilsConfig;
+  private final NilsConfig<?> nilsConfig;
 
-  IncludeHandler(NilsConfig nilsConfig, Function<String, Optional<String>> keyResolver) {
+  IncludeHandler(NilsConfig<?> nilsConfig, Function<String, Optional<String>> keyResolver) {
     this.nilsConfig = nilsConfig;
     this.keyResolver = keyResolver;
   }

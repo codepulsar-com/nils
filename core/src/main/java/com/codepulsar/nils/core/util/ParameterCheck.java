@@ -2,9 +2,9 @@ package com.codepulsar.nils.core.util;
 
 import java.util.function.Function;
 
-import com.codepulsar.nils.core.error.ErrorType;
-import com.codepulsar.nils.core.error.NilsConfigException;
-import com.codepulsar.nils.core.error.NilsException;
+import com.codepulsar.nils.api.error.ErrorType;
+import com.codepulsar.nils.api.error.NilsConfigException;
+import com.codepulsar.nils.api.error.NilsException;
 
 public class ParameterCheck {
 

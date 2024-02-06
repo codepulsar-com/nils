@@ -1,6 +1,7 @@
 module com.codepulsar.nils.core {
   exports com.codepulsar.nils.api;
   exports com.codepulsar.nils.api.adapter;
+  exports com.codepulsar.nils.api.error;
   exports com.codepulsar.nils.core.adapter.config;
   exports com.codepulsar.nils.adapter.rb;
   exports com.codepulsar.nils.core.adapter.util;

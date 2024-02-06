@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.api.NilsFactory;
-import com.codepulsar.nils.core.error.NilsException;
+import com.codepulsar.nils.api.error.NilsException;
 import com.codepulsar.nils.core.testdata.Dummy;
 
 public class ResourceBundleIntegrationTest {

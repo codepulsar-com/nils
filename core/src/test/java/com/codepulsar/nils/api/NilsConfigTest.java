@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import com.codepulsar.nils.api.adapter.AdapterConfig;
-import com.codepulsar.nils.core.error.NilsConfigException;
+import com.codepulsar.nils.api.error.NilsConfigException;
 import com.codepulsar.nils.core.handler.ClassPrefixResolver;
 import com.codepulsar.nils.core.handler.TranslationFormatter;
 import com.codepulsar.nils.core.testadapter.StaticAdapterConfig;

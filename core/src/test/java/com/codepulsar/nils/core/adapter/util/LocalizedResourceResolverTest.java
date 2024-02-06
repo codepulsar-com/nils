@@ -10,8 +10,8 @@ import java.util.function.Function;
 
 import org.junit.jupiter.api.Test;
 
+import com.codepulsar.nils.api.error.NilsException;
 import com.codepulsar.nils.core.adapter.config.LocalizedResourceResolverConfig;
-import com.codepulsar.nils.core.error.NilsException;
 
 public class LocalizedResourceResolverTest {
 

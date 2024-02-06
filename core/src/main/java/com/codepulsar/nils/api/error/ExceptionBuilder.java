@@ -1,4 +1,4 @@
-package com.codepulsar.nils.core.error;
+package com.codepulsar.nils.api.error;
 
 import java.util.Objects;
 /**

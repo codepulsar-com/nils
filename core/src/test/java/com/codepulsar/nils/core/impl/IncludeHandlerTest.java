@@ -13,7 +13,7 @@ import com.codepulsar.nils.adapter.rb.ResourceBundleAdapter;
 import com.codepulsar.nils.adapter.rb.ResourceBundleAdapterConfig;
 import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.api.adapter.AdapterConfig;
-import com.codepulsar.nils.core.error.NilsException;
+import com.codepulsar.nils.api.error.NilsException;
 
 public class IncludeHandlerTest {
 

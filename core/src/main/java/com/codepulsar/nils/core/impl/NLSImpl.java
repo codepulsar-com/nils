@@ -14,7 +14,7 @@ import com.codepulsar.nils.api.Formats;
 import com.codepulsar.nils.api.NLS;
 import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.api.adapter.Adapter;
-import com.codepulsar.nils.core.error.NilsException;
+import com.codepulsar.nils.api.error.NilsException;
 import com.codepulsar.nils.core.handler.TranslationFormatter;
 import com.codepulsar.nils.core.util.ParameterCheck;
 /**

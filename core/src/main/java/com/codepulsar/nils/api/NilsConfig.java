@@ -6,7 +6,7 @@ import java.text.MessageFormat;
 import java.time.format.FormatStyle;
 
 import com.codepulsar.nils.api.adapter.AdapterConfig;
-import com.codepulsar.nils.core.error.NilsConfigException;
+import com.codepulsar.nils.api.error.NilsConfigException;
 import com.codepulsar.nils.core.handler.ClassPrefixResolver;
 import com.codepulsar.nils.core.handler.TranslationFormatter;
 import com.codepulsar.nils.core.util.ParameterCheck;

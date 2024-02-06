@@ -1,4 +1,7 @@
-package com.codepulsar.nils.core.error;
+package com.codepulsar.nils.api.error;
+
+import com.codepulsar.nils.core.error.ErrorTypes;
+
 /**
  * This exception is thrown by NILS if the configuration of NILS or the used adapter is erroneous.
  */

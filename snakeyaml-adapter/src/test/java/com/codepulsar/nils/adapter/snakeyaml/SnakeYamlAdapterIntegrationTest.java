@@ -157,7 +157,7 @@ public class SnakeYamlAdapterIntegrationTest {
   public void resolveValueWithMoreLevels() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(adapterConfig).includeTag("_include");
+    var config = NilsConfig.init(adapterConfig);
     var adapter = new SnakeYamlAdapter(adapterConfig, locale);
     var underTest = NilsFactory.init(config).nls(locale);
 
@@ -178,7 +178,7 @@ public class SnakeYamlAdapterIntegrationTest {
   public void circularInclude() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = NilsConfig.init(adapterConfig).includeTag("_include");
+    var config = NilsConfig.init(adapterConfig);
     var adapter = new SnakeYamlAdapter(adapterConfig, locale);
     var underTest = NilsFactory.init(config).nls(locale);
 

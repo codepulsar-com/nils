@@ -175,8 +175,8 @@ public class ResourceBundleIntegrationTest {
     var underTest = NilsFactory.init(config).nls(locale);
 
     // Actual
-    assertThat(adapter.getTranslation("Level2.@include").isPresent()).isTrue();
-    assertThat(adapter.getTranslation("Level1.@include").isPresent()).isTrue();
+    assertThat(adapter.getTranslation("Level2._include").isPresent()).isTrue();
+    assertThat(adapter.getTranslation("Level1._include").isPresent()).isTrue();
     assertThat(adapter.getTranslation("Level1.value").isPresent()).isFalse();
     assertThat(adapter.getTranslation("Level0.value").isPresent()).isTrue();
 
@@ -196,8 +196,8 @@ public class ResourceBundleIntegrationTest {
     var underTest = NilsFactory.init(config).nls(locale);
 
     // Actual
-    assertThat(adapter.getTranslation("Cycle1.@include").isPresent()).isTrue();
-    assertThat(adapter.getTranslation("Cycle2.@include").isPresent()).isTrue();
+    assertThat(adapter.getTranslation("Cycle1._include").isPresent()).isTrue();
+    assertThat(adapter.getTranslation("Cycle2._include").isPresent()).isTrue();
     assertThat(adapter.getTranslation("Cycle1.value").isPresent()).isFalse();
     assertThat(adapter.getTranslation("Cycle2.value").isPresent()).isFalse();
 

@@ -15,11 +15,11 @@ import com.codepulsar.nils.core.adapter.AdapterContext;
 
 public class JacksonAdapterJsonIntegrationTest {
 
-  private JacksonAdapterConfig adapterConfig;
+  private JacksonAdapterJsonConfig adapterConfig;
 
   @BeforeEach
   public void setup() {
-    adapterConfig = JacksonAdapterConfig.init(this).baseFileName("test/integration");
+    adapterConfig = JacksonAdapterJsonConfig.init(this).baseFileName("test/integration");
   }
 
   @Test

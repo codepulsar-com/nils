@@ -15,11 +15,11 @@ import com.codepulsar.nils.core.adapter.AdapterContext;
 
 public class JacksonAdapterYamlIntegrationTest {
 
-  private JacksonAdapterConfig adapterConfig;
+  private JacksonAdapterYamlConfig adapterConfig;
 
   @BeforeEach
   public void setup() {
-    adapterConfig = JacksonAdapterConfig.init(this).baseFileName("test/integration.yaml");
+    adapterConfig = JacksonAdapterYamlConfig.init(this).baseFileName("test/integration.yaml");
   }
 
   @Test

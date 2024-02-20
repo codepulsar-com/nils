@@ -22,7 +22,7 @@ import com.codepulsar.nils.core.adapter.util.MapTranslationRetriever;
 import com.fasterxml.jackson.databind.ObjectMapper;
 /** An {@link Adapter} implementation using for JSON and YAML files for the translations. */
 public class JacksonAdapter
-    extends BaseLocalizedResourceAdapter<JacksonAdapter, JacksonAdapterConfig> {
+    extends BaseLocalizedResourceAdapter<JacksonAdapter, JacksonAdapterConfig<?>> {
   private static final Logger LOG = LoggerFactory.getLogger(JacksonAdapter.class);
 
   public JacksonAdapter(AdapterContext<JacksonAdapter> context) {

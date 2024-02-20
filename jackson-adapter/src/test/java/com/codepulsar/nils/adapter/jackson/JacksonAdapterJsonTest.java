@@ -35,7 +35,7 @@ public class JacksonAdapterJsonTest {
   public void nullLocale() {
     // Arrange
     Locale locale = null;
-    var config = JacksonAdapterConfig.init(this);
+    var config = JacksonAdapterJsonConfig.init(this);
     context.config(config).locale(locale);
 
     // Act / Assert
@@ -61,7 +61,7 @@ public class JacksonAdapterJsonTest {
   public void defaultConfig() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = JacksonAdapterConfig.init(this);
+    var config = JacksonAdapterJsonConfig.init(this);
     context.config(config).locale(locale);
 
     // Act
@@ -76,7 +76,7 @@ public class JacksonAdapterJsonTest {
   public void invalidBaseFileName() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = JacksonAdapterConfig.init(this).baseFileName("test/non_existing");
+    var config = JacksonAdapterJsonConfig.init(this).baseFileName("test/non_existing");
     context.config(config).locale(locale);
 
     // Act / Assert
@@ -90,7 +90,7 @@ public class JacksonAdapterJsonTest {
   public void fallbackFile() {
     // Arrange
     var locale = Locale.ITALIAN;
-    var config = JacksonAdapterConfig.init(this).baseFileName("test/existing");
+    var config = JacksonAdapterJsonConfig.init(this).baseFileName("test/existing");
     context.config(config).locale(locale);
     var underTest = new JacksonAdapter(context);
 
@@ -106,7 +106,7 @@ public class JacksonAdapterJsonTest {
   public void translateKeyFound_nestedKeys() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = JacksonAdapterConfig.init(this);
+    var config = JacksonAdapterJsonConfig.init(this);
     context.config(config).locale(locale);
     var underTest = new JacksonAdapter(context);
 
@@ -137,7 +137,7 @@ public class JacksonAdapterJsonTest {
   public void translateKeyFound1() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = JacksonAdapterConfig.init(this).baseFileName("test/existing");
+    var config = JacksonAdapterJsonConfig.init(this).baseFileName("test/existing");
     context.config(config).locale(locale);
     var underTest = new JacksonAdapter(context);
 
@@ -153,7 +153,7 @@ public class JacksonAdapterJsonTest {
   public void translateKeyFound2() {
     // Arrange
     var locale = Locale.GERMAN;
-    var config = JacksonAdapterConfig.init(this).baseFileName("test/existing");
+    var config = JacksonAdapterJsonConfig.init(this).baseFileName("test/existing");
     context.config(config).locale(locale);
     var underTest = new JacksonAdapter(context);
 
@@ -169,7 +169,7 @@ public class JacksonAdapterJsonTest {
   public void translateKeyFallback() {
     // Arrange
     var locale = Locale.GERMAN;
-    var config = JacksonAdapterConfig.init(this).baseFileName("test/existing");
+    var config = JacksonAdapterJsonConfig.init(this).baseFileName("test/existing");
     context.config(config).locale(locale);
     var underTest = new JacksonAdapter(context);
 
@@ -185,7 +185,7 @@ public class JacksonAdapterJsonTest {
   public void translateKeyFallbackNotFound() {
     // Arrange
     var locale = Locale.GERMAN;
-    var config = JacksonAdapterConfig.init(this).baseFileName("test/existing");
+    var config = JacksonAdapterJsonConfig.init(this).baseFileName("test/existing");
     context.config(config).locale(locale);
     var underTest = new JacksonAdapter(context);
 
@@ -200,7 +200,7 @@ public class JacksonAdapterJsonTest {
   public void translateKeyNotFound() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = JacksonAdapterConfig.init(this).baseFileName("test/existing");
+    var config = JacksonAdapterJsonConfig.init(this).baseFileName("test/existing");
     context.config(config).locale(locale);
     var underTest = new JacksonAdapter(context);
 
@@ -214,7 +214,7 @@ public class JacksonAdapterJsonTest {
   public void corruptJsonFile() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = JacksonAdapterConfig.init(this).baseFileName("test/corrupt");
+    var config = JacksonAdapterJsonConfig.init(this).baseFileName("test/corrupt");
     context.config(config).locale(locale);
 
     // Act / Assert
@@ -227,7 +227,7 @@ public class JacksonAdapterJsonTest {
   public void nonJsonFile() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = JacksonAdapterConfig.init(this).baseFileName("test/non_json");
+    var config = JacksonAdapterJsonConfig.init(this).baseFileName("test/non_json");
     context.config(config).locale(locale);
 
     // Act / Assert

@@ -36,7 +36,7 @@ public class JacksonAdapterYamlTest {
   public void nullLocale() {
     // Arrange
     Locale locale = null;
-    var config = JacksonAdapterConfig.init(this);
+    var config = JacksonAdapterYamlConfig.init(this);
     context.config(config).locale(locale);
 
     // Act / Assert
@@ -62,7 +62,7 @@ public class JacksonAdapterYamlTest {
   public void defaultConfig() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = JacksonAdapterConfig.init(this);
+    var config = JacksonAdapterYamlConfig.init(this);
     context.config(config).locale(locale);
 
     // Act
@@ -77,7 +77,7 @@ public class JacksonAdapterYamlTest {
   public void baseFileNameForYaml() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = JacksonAdapterConfig.init(this).baseFileName("test/existing.yaml");
+    var config = JacksonAdapterYamlConfig.init(this).baseFileName("test/existing.yaml");
     context.config(config).locale(locale);
     var underTest = new JacksonAdapter(context);
 
@@ -93,21 +93,21 @@ public class JacksonAdapterYamlTest {
   public void invalidBaseFileName() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = JacksonAdapterConfig.init(this).baseFileName("test/non_existing");
+    var config = JacksonAdapterYamlConfig.init(this).baseFileName("test/non_existing");
     context.config(config).locale(locale);
 
     // Act / Assert
     assertThatThrownBy(() -> new JacksonAdapter(context))
         .isInstanceOf(NilsException.class)
         .hasMessage(
-            "NILS-008: Could not find a resource for baseFilename 'test/non_existing.json'.");
+            "NILS-008: Could not find a resource for baseFilename 'test/non_existing.yaml'.");
   }
 
   @Test
   public void fallbackFile() {
     // Arrange
     var locale = Locale.ITALIAN;
-    var config = JacksonAdapterConfig.init(this).baseFileName("test/existing.yaml");
+    var config = JacksonAdapterYamlConfig.init(this).baseFileName("test/existing.yaml");
     context.config(config).locale(locale);
     var underTest = new JacksonAdapter(context);
 
@@ -123,7 +123,7 @@ public class JacksonAdapterYamlTest {
   public void translateKeyFound_nestedKeys() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = JacksonAdapterConfig.init(this).baseFileName("nls/translation.yaml");
+    var config = JacksonAdapterYamlConfig.init(this);
     context.config(config).locale(locale);
     var underTest = new JacksonAdapter(context);
 
@@ -154,7 +154,7 @@ public class JacksonAdapterYamlTest {
   public void translateKeyFound1() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = JacksonAdapterConfig.init(this).baseFileName("test/existing.yaml");
+    var config = JacksonAdapterYamlConfig.init(this).baseFileName("test/existing.yaml");
     context.config(config).locale(locale);
     var underTest = new JacksonAdapter(context);
 
@@ -170,7 +170,7 @@ public class JacksonAdapterYamlTest {
   public void translateKeyFound2() {
     // Arrange
     var locale = Locale.GERMAN;
-    var config = JacksonAdapterConfig.init(this).baseFileName("test/existing.yaml");
+    var config = JacksonAdapterYamlConfig.init(this).baseFileName("test/existing.yaml");
     context.config(config).locale(locale);
     var underTest = new JacksonAdapter(context);
 
@@ -186,7 +186,7 @@ public class JacksonAdapterYamlTest {
   public void translateKeyFallback() {
     // Arrange
     var locale = Locale.GERMAN;
-    var config = JacksonAdapterConfig.init(this).baseFileName("test/existing.yaml");
+    var config = JacksonAdapterYamlConfig.init(this).baseFileName("test/existing.yaml");
     context.config(config).locale(locale);
     var underTest = new JacksonAdapter(context);
 
@@ -202,7 +202,7 @@ public class JacksonAdapterYamlTest {
   public void translateKeyFallbackNotFound() {
     // Arrange
     var locale = Locale.GERMAN;
-    var config = JacksonAdapterConfig.init(this).baseFileName("test/existing.yaml");
+    var config = JacksonAdapterYamlConfig.init(this).baseFileName("test/existing.yaml");
     context.config(config).locale(locale);
     var underTest = new JacksonAdapter(context);
 
@@ -217,7 +217,7 @@ public class JacksonAdapterYamlTest {
   public void translateKeyNotFound() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = JacksonAdapterConfig.init(this).baseFileName("test/existing.yaml");
+    var config = JacksonAdapterYamlConfig.init(this).baseFileName("test/existing.yaml");
     context.config(config).locale(locale);
     var underTest = new JacksonAdapter(context);
 
@@ -231,7 +231,7 @@ public class JacksonAdapterYamlTest {
   public void corruptJsonFile() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = JacksonAdapterConfig.init(this).baseFileName("test/corrupt.yaml");
+    var config = JacksonAdapterYamlConfig.init(this).baseFileName("test/corrupt.yaml");
     context.config(config).locale(locale);
 
     // Act / Assert
@@ -244,7 +244,7 @@ public class JacksonAdapterYamlTest {
   public void nonJsonFile() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = JacksonAdapterConfig.init(this).baseFileName("test/non_yaml.yaml");
+    var config = JacksonAdapterYamlConfig.init(this).baseFileName("test/non_yaml.yaml");
     context.config(config).locale(locale);
 
     // Act / Assert

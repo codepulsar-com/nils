@@ -30,7 +30,7 @@ public class JacksonAdapterFactoryTest {
   public void create_localeIsNull() {
     // Arrange
     Locale locale = null;
-    var config = JacksonAdapterConfig.init(this);
+    var config = JacksonAdapterJsonConfig.init(this);
     var underTest = new JacksonAdapterFactory();
 
     // Act / Assert
@@ -40,10 +40,24 @@ public class JacksonAdapterFactoryTest {
   }
 
   @Test
-  public void create() {
+  public void createForJson() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = JacksonAdapterConfig.init(this).baseFileName("test/existing");
+    var config = JacksonAdapterJsonConfig.init(this).baseFileName("test/existing");
+    var underTest = new JacksonAdapterFactory();
+
+    // Act
+    var result = underTest.create(config, locale);
+
+    // Assert
+    assertThat(result).isNotNull();
+  }
+
+  @Test
+  public void createForYaml() {
+    // Arrange
+    var locale = Locale.ENGLISH;
+    var config = JacksonAdapterYamlConfig.init(this).baseFileName("test/existing");
     var underTest = new JacksonAdapterFactory();
 
     // Act

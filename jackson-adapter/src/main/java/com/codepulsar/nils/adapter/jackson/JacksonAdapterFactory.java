@@ -17,7 +17,7 @@ public class JacksonAdapterFactory implements AdapterFactory<JacksonAdapter> {
 
     if (!(config instanceof JacksonAdapterConfig)) {
       throw new NilsConfigException(
-          "The provided AdapterConfig (%s) is not of type %s",
+          "The provided AdapterConfig (%s) is not of type %s.",
           config, JacksonAdapterConfig.class.getName());
     }
     var adapterContext =

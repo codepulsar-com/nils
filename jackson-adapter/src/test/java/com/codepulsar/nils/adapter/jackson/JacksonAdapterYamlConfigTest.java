@@ -7,13 +7,13 @@ import org.junit.jupiter.api.Test;
 
 import com.codepulsar.nils.api.error.NilsConfigException;
 
-public class JacksonAdapterConfigTest {
+public class JacksonAdapterYamlConfigTest {
   @Test
   public void initClassNull() {
     // Arrange
     Class<?> nullClass = null;
     // Act / Assert
-    assertThatThrownBy(() -> JacksonAdapterConfig.init(nullClass))
+    assertThatThrownBy(() -> JacksonAdapterYamlConfig.init(nullClass))
         .isInstanceOf(NilsConfigException.class)
         .hasMessage("NILS-004: Parameter 'owner' cannot be null.");
   }
@@ -23,7 +23,7 @@ public class JacksonAdapterConfigTest {
     // Arrange
     Object nullObject = null;
     // Act / Assert
-    assertThatThrownBy(() -> JacksonAdapterConfig.init(nullObject))
+    assertThatThrownBy(() -> JacksonAdapterYamlConfig.init(nullObject))
         .isInstanceOf(NilsConfigException.class)
         .hasMessage("NILS-004: Parameter 'owner' cannot be null.");
   }
@@ -31,47 +31,47 @@ public class JacksonAdapterConfigTest {
   @Test
   public void initFromClass() {
     // Act
-    var underTest = JacksonAdapterConfig.init(getClass());
+    var underTest = JacksonAdapterYamlConfig.init(getClass());
 
     // Assert
     assertThat(underTest).isNotNull();
     assertThat(underTest.getOwner()).isEqualTo(getClass().getModule());
-    assertThat(underTest.getBaseFileName()).isEqualTo("nls/translation.json");
+    assertThat(underTest.getBaseFileName()).isEqualTo("nls/translation.yaml");
     assertThat(underTest.getFactoryClass()).isEqualTo(JacksonAdapterFactory.class);
   }
 
   @Test
   public void initFromObject() {
     // Act
-    var underTest = JacksonAdapterConfig.init(this);
+    var underTest = JacksonAdapterYamlConfig.init(this);
 
     // Assert
     assertThat(underTest).isNotNull();
     assertThat(underTest.getOwner()).isEqualTo(this.getClass().getModule());
-    assertThat(underTest.getBaseFileName()).isEqualTo("nls/translation.json");
+    assertThat(underTest.getBaseFileName()).isEqualTo("nls/translation.yaml");
   }
 
   @Test
   public void baseFileName_withoutFileExtension() {
     // Assert
-    var underTest = JacksonAdapterConfig.init(this);
+    var underTest = JacksonAdapterYamlConfig.init(this);
 
     // Act
     var returnValue = underTest.baseFileName("TestBundleName");
     assertThat(returnValue).isNotNull();
     assertThat(returnValue).isEqualTo(underTest);
-    assertThat(underTest.getBaseFileName()).isEqualTo("TestBundleName.json");
+    assertThat(underTest.getBaseFileName()).isEqualTo("TestBundleName.yaml");
   }
 
   @Test
   public void baseFileName_withFileExtension() {
     // Assert
-    var underTest = JacksonAdapterConfig.init(this);
+    var underTest = JacksonAdapterYamlConfig.init(this);
 
     // Act
-    var returnValue = underTest.baseFileName("TestBundleName.jsn");
+    var returnValue = underTest.baseFileName("TestBundleName.yml");
     assertThat(returnValue).isNotNull();
     assertThat(returnValue).isEqualTo(underTest);
-    assertThat(underTest.getBaseFileName()).isEqualTo("TestBundleName.jsn");
+    assertThat(underTest.getBaseFileName()).isEqualTo("TestBundleName.yml");
   }
 }

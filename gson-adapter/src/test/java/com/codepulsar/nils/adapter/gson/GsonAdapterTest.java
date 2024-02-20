@@ -9,19 +9,21 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.codepulsar.nils.adapter.rb.ResourceBundleAdapterConfig;
 import com.codepulsar.nils.api.NilsConfig;
-import com.codepulsar.nils.api.error.NilsConfigException;
 import com.codepulsar.nils.api.error.NilsException;
+import com.codepulsar.nils.core.adapter.AdapterContext;
+import com.codepulsar.nils.core.adapter.BaseLocalizedResourceAdapter;
 
 public class GsonAdapterTest {
 
   private Locale current;
+  private AdapterContext<GsonAdapter> adapterContext;
 
   @BeforeEach
   public void defineDefault() {
     current = Locale.getDefault();
     Locale.setDefault(Locale.ENGLISH);
+    adapterContext = new AdapterContext<GsonAdapter>().factory(new GsonAdapterFactory());
   }
 
   @AfterEach
@@ -34,11 +36,12 @@ public class GsonAdapterTest {
     // Arrange
     Locale locale = null;
     var config = GsonAdapterConfig.init(this);
+    var context = adapterContext.locale(locale).config(config);
 
     // Act / Assert
-    assertThatThrownBy(() -> new GsonAdapter(config, locale))
+    assertThatThrownBy(() -> new GsonAdapter(context))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Parameter 'locale' cannot be null.");
+        .hasMessage("Parameter 'context.locale' cannot be null.");
   }
 
   @Test
@@ -46,37 +49,27 @@ public class GsonAdapterTest {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig<?> config = null;
+    var context = adapterContext.locale(locale).config(config);
 
     // Act / Assert
-    assertThatThrownBy(() -> new GsonAdapter(config, locale))
+    assertThatThrownBy(() -> new GsonAdapter(context))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Parameter 'config' cannot be null.");
+        .hasMessage("Parameter 'context.config' cannot be null.");
   }
 
   @Test
-  public void invalidAdapterConfig() {
-    // Arrange
-    var locale = Locale.ENGLISH;
-    var config = ResourceBundleAdapterConfig.init(this);
-
-    // Act / Assert
-    assertThatThrownBy(() -> new GsonAdapter(config, locale))
-        .isInstanceOf(NilsConfigException.class)
-        .hasMessageContaining("The provided AdapterConfig")
-        .hasMessageContaining("is not of type");
-  }
-
-  @Test
-  public void resourceBundleAdapter_defautltConfig() {
+  public void defaultConfig() {
     // Arrange
     var locale = Locale.ENGLISH;
     var config = GsonAdapterConfig.init(this);
+    var context = adapterContext.locale(locale).config(config);
 
     // Act
-    var underTest = new GsonAdapter(config, locale);
+    var underTest = new GsonAdapter(context);
 
     // Assert
     assertThat(underTest).isNotNull();
+    assertThat(underTest).isInstanceOf(BaseLocalizedResourceAdapter.class);
   }
 
   @Test
@@ -84,9 +77,10 @@ public class GsonAdapterTest {
     // Arrange
     var locale = Locale.ENGLISH;
     var config = GsonAdapterConfig.init(this).baseFileName("test/non_existing");
+    var context = adapterContext.locale(locale).config(config);
 
     // Act / Assert
-    assertThatThrownBy(() -> new GsonAdapter(config, locale))
+    assertThatThrownBy(() -> new GsonAdapter(context))
         .isInstanceOf(NilsException.class)
         .hasMessage(
             "NILS-008: Could not find a resource for baseFilename 'test/non_existing.json'.");
@@ -97,7 +91,8 @@ public class GsonAdapterTest {
     // Arrange
     var locale = Locale.ITALIAN;
     var config = GsonAdapterConfig.init(this).baseFileName("test/existing");
-    var underTest = new GsonAdapter(config, locale);
+    var context = adapterContext.locale(locale).config(config);
+    var underTest = new GsonAdapter(context);
 
     // Act
     var value = underTest.getTranslation("translate.me");
@@ -112,7 +107,8 @@ public class GsonAdapterTest {
     // Arrange
     var locale = Locale.ENGLISH;
     var config = GsonAdapterConfig.init(this);
-    var underTest = new GsonAdapter(config, locale);
+    var context = adapterContext.locale(locale).config(config);
+    var underTest = new GsonAdapter(context);
 
     // Act
     var value = underTest.getTranslation("deep");
@@ -142,7 +138,8 @@ public class GsonAdapterTest {
     // Arrange
     var locale = Locale.ENGLISH;
     var config = GsonAdapterConfig.init(this).baseFileName("test/existing");
-    var underTest = new GsonAdapter(config, locale);
+    var context = adapterContext.locale(locale).config(config);
+    var underTest = new GsonAdapter(context);
 
     // Act
     var value = underTest.getTranslation("translate.me");
@@ -157,7 +154,8 @@ public class GsonAdapterTest {
     // Arrange
     var locale = Locale.GERMAN;
     var config = GsonAdapterConfig.init(this).baseFileName("test/existing");
-    var underTest = new GsonAdapter(config, locale);
+    var context = adapterContext.locale(locale).config(config);
+    var underTest = new GsonAdapter(context);
 
     // Act
     var value = underTest.getTranslation("translate.me");
@@ -172,7 +170,8 @@ public class GsonAdapterTest {
     // Arrange
     var locale = Locale.GERMAN;
     var config = GsonAdapterConfig.init(this).baseFileName("test/existing");
-    var underTest = new GsonAdapter(config, locale);
+    var context = adapterContext.locale(locale).config(config);
+    var underTest = new GsonAdapter(context);
 
     // Act
     var value = underTest.getTranslation("translate.fallback");
@@ -187,7 +186,8 @@ public class GsonAdapterTest {
     // Arrange
     var locale = Locale.GERMAN;
     var config = GsonAdapterConfig.init(this).baseFileName("test/existing");
-    var underTest = new GsonAdapter(config, locale);
+    var context = adapterContext.locale(locale).config(config);
+    var underTest = new GsonAdapter(context);
 
     // Act
     var value = underTest.getTranslation("translate.fallback_notfound");
@@ -201,7 +201,8 @@ public class GsonAdapterTest {
     // Arrange
     var locale = Locale.ENGLISH;
     var config = GsonAdapterConfig.init(this).baseFileName("test/existing");
-    var underTest = new GsonAdapter(config, locale);
+    var context = adapterContext.locale(locale).config(config);
+    var underTest = new GsonAdapter(context);
 
     // Act
     var value = underTest.getTranslation("translate.me.butImNotThere");
@@ -214,9 +215,10 @@ public class GsonAdapterTest {
     // Arrange
     var locale = Locale.ENGLISH;
     var config = GsonAdapterConfig.init(this).baseFileName("test/corrupt");
+    var context = adapterContext.locale(locale).config(config);
 
     // Act / Assert
-    assertThatThrownBy(() -> new GsonAdapter(config, locale))
+    assertThatThrownBy(() -> new GsonAdapter(context))
         .isInstanceOf(NilsException.class)
         .hasMessage("NILS-100: Error reading JSON file '/test/corrupt.json'.");
   }
@@ -226,9 +228,10 @@ public class GsonAdapterTest {
     // Arrange
     var locale = Locale.ENGLISH;
     var config = GsonAdapterConfig.init(this).baseFileName("test/non_json");
+    var context = adapterContext.locale(locale).config(config);
 
     // Act / Assert
-    assertThatThrownBy(() -> new GsonAdapter(config, locale))
+    assertThatThrownBy(() -> new GsonAdapter(context))
         .isInstanceOf(NilsException.class)
         .hasMessage("NILS-100: Error reading JSON file '/test/non_json.json'.");
   }

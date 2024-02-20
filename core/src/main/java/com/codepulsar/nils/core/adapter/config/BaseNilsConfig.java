@@ -10,7 +10,15 @@ import com.codepulsar.nils.api.error.NilsConfigException;
 import com.codepulsar.nils.core.handler.ClassPrefixResolver;
 import com.codepulsar.nils.core.handler.TranslationFormatter;
 import com.codepulsar.nils.core.util.ParameterCheck;
-
+/**
+ * The {@link BaseNilsConfig} is a base implementation of {@link NilsConfig}.
+ *
+ * <p>Adapter, that must extend the nils config with further configuration parameter should use this
+ * class as base class for their configuration, instead of implementing the {@link NilsConfig}
+ * interface directly.
+ *
+ * @param <CFG> The class extending {@link BaseNilsConfig}.
+ */
 public abstract class BaseNilsConfig<CFG extends BaseNilsConfig<?>> implements NilsConfig<CFG> {
   private String escapePattern = "[{0}]";
   private String includeTag = "_include";
@@ -108,7 +116,7 @@ public abstract class BaseNilsConfig<CFG extends BaseNilsConfig<?>> implements N
     try {
       MessageFormat.format(pattern, "TEST");
     } catch (IllegalArgumentException ex) {
-      throw new NilsConfigException("Parameter 'escapePattern' is invalid: " + ex.getMessage());
+      throw new NilsConfigException("Parameter 'escapePattern' is invalid: %s.", ex.getMessage());
     }
     return pattern;
   }

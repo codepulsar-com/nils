@@ -9,19 +9,21 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.codepulsar.nils.adapter.rb.ResourceBundleAdapterConfig;
 import com.codepulsar.nils.api.NilsConfig;
-import com.codepulsar.nils.api.error.NilsConfigException;
 import com.codepulsar.nils.api.error.NilsException;
+import com.codepulsar.nils.core.adapter.AdapterContext;
+import com.codepulsar.nils.core.adapter.BaseLocalizedResourceAdapter;
 
 public class JacksonAdapterJsonTest {
 
   private Locale current;
+  AdapterContext<JacksonAdapter> context;
 
   @BeforeEach
   public void defineDefault() {
     current = Locale.getDefault();
     Locale.setDefault(Locale.ENGLISH);
+    context = new AdapterContext<JacksonAdapter>().factory(new JacksonAdapterFactory());
   }
 
   @AfterEach
@@ -34,11 +36,12 @@ public class JacksonAdapterJsonTest {
     // Arrange
     Locale locale = null;
     var config = JacksonAdapterConfig.init(this);
+    context.config(config).locale(locale);
 
     // Act / Assert
-    assertThatThrownBy(() -> new JacksonAdapter(config, locale))
+    assertThatThrownBy(() -> new JacksonAdapter(context))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Parameter 'locale' cannot be null.");
+        .hasMessage("Parameter 'context.locale' cannot be null.");
   }
 
   @Test
@@ -46,37 +49,27 @@ public class JacksonAdapterJsonTest {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig<?> config = null;
+    context.config(config).locale(locale);
 
     // Act / Assert
-    assertThatThrownBy(() -> new JacksonAdapter(config, locale))
+    assertThatThrownBy(() -> new JacksonAdapter(context))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Parameter 'config' cannot be null.");
+        .hasMessage("Parameter 'context.config' cannot be null.");
   }
 
   @Test
-  public void invalidAdapterConfig() {
-    // Arrange
-    var locale = Locale.ENGLISH;
-    var config = ResourceBundleAdapterConfig.init(this);
-
-    // Act / Assert
-    assertThatThrownBy(() -> new JacksonAdapter(config, locale))
-        .isInstanceOf(NilsConfigException.class)
-        .hasMessageContaining("The provided AdapterConfig")
-        .hasMessageContaining("is not of type");
-  }
-
-  @Test
-  public void resourceBundleAdapter_defautltConfig() {
+  public void defaultConfig() {
     // Arrange
     var locale = Locale.ENGLISH;
     var config = JacksonAdapterConfig.init(this);
+    context.config(config).locale(locale);
 
     // Act
-    var underTest = new JacksonAdapter(config, locale);
+    var underTest = new JacksonAdapter(context);
 
     // Assert
     assertThat(underTest).isNotNull();
+    assertThat(underTest).isInstanceOf(BaseLocalizedResourceAdapter.class);
   }
 
   @Test
@@ -84,9 +77,10 @@ public class JacksonAdapterJsonTest {
     // Arrange
     var locale = Locale.ENGLISH;
     var config = JacksonAdapterConfig.init(this).baseFileName("test/non_existing");
+    context.config(config).locale(locale);
 
     // Act / Assert
-    assertThatThrownBy(() -> new JacksonAdapter(config, locale))
+    assertThatThrownBy(() -> new JacksonAdapter(context))
         .isInstanceOf(NilsException.class)
         .hasMessage(
             "NILS-008: Could not find a resource for baseFilename 'test/non_existing.json'.");
@@ -97,7 +91,8 @@ public class JacksonAdapterJsonTest {
     // Arrange
     var locale = Locale.ITALIAN;
     var config = JacksonAdapterConfig.init(this).baseFileName("test/existing");
-    var underTest = new JacksonAdapter(config, locale);
+    context.config(config).locale(locale);
+    var underTest = new JacksonAdapter(context);
 
     // Act
     var value = underTest.getTranslation("translate.me");
@@ -112,7 +107,8 @@ public class JacksonAdapterJsonTest {
     // Arrange
     var locale = Locale.ENGLISH;
     var config = JacksonAdapterConfig.init(this);
-    var underTest = new JacksonAdapter(config, locale);
+    context.config(config).locale(locale);
+    var underTest = new JacksonAdapter(context);
 
     // Act
     var value = underTest.getTranslation("deep");
@@ -142,7 +138,8 @@ public class JacksonAdapterJsonTest {
     // Arrange
     var locale = Locale.ENGLISH;
     var config = JacksonAdapterConfig.init(this).baseFileName("test/existing");
-    var underTest = new JacksonAdapter(config, locale);
+    context.config(config).locale(locale);
+    var underTest = new JacksonAdapter(context);
 
     // Act
     var value = underTest.getTranslation("translate.me");
@@ -157,7 +154,8 @@ public class JacksonAdapterJsonTest {
     // Arrange
     var locale = Locale.GERMAN;
     var config = JacksonAdapterConfig.init(this).baseFileName("test/existing");
-    var underTest = new JacksonAdapter(config, locale);
+    context.config(config).locale(locale);
+    var underTest = new JacksonAdapter(context);
 
     // Act
     var value = underTest.getTranslation("translate.me");
@@ -172,7 +170,8 @@ public class JacksonAdapterJsonTest {
     // Arrange
     var locale = Locale.GERMAN;
     var config = JacksonAdapterConfig.init(this).baseFileName("test/existing");
-    var underTest = new JacksonAdapter(config, locale);
+    context.config(config).locale(locale);
+    var underTest = new JacksonAdapter(context);
 
     // Act
     var value = underTest.getTranslation("translate.fallback");
@@ -187,7 +186,8 @@ public class JacksonAdapterJsonTest {
     // Arrange
     var locale = Locale.GERMAN;
     var config = JacksonAdapterConfig.init(this).baseFileName("test/existing");
-    var underTest = new JacksonAdapter(config, locale);
+    context.config(config).locale(locale);
+    var underTest = new JacksonAdapter(context);
 
     // Act
     var value = underTest.getTranslation("translate.fallback_notfound");
@@ -201,7 +201,8 @@ public class JacksonAdapterJsonTest {
     // Arrange
     var locale = Locale.ENGLISH;
     var config = JacksonAdapterConfig.init(this).baseFileName("test/existing");
-    var underTest = new JacksonAdapter(config, locale);
+    context.config(config).locale(locale);
+    var underTest = new JacksonAdapter(context);
 
     // Act
     var value = underTest.getTranslation("translate.me.butImNotThere");
@@ -214,9 +215,10 @@ public class JacksonAdapterJsonTest {
     // Arrange
     var locale = Locale.ENGLISH;
     var config = JacksonAdapterConfig.init(this).baseFileName("test/corrupt");
+    context.config(config).locale(locale);
 
     // Act / Assert
-    assertThatThrownBy(() -> new JacksonAdapter(config, locale))
+    assertThatThrownBy(() -> new JacksonAdapter(context))
         .isInstanceOf(NilsException.class)
         .hasMessage("NILS-201: Error reading file '/test/corrupt.json'.");
   }
@@ -226,9 +228,10 @@ public class JacksonAdapterJsonTest {
     // Arrange
     var locale = Locale.ENGLISH;
     var config = JacksonAdapterConfig.init(this).baseFileName("test/non_json");
+    context.config(config).locale(locale);
 
     // Act / Assert
-    assertThatThrownBy(() -> new JacksonAdapter(config, locale))
+    assertThatThrownBy(() -> new JacksonAdapter(context))
         .isInstanceOf(NilsException.class)
         .hasMessage("NILS-201: Error reading file '/test/non_json.json'.");
   }

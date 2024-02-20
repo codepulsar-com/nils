@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import com.codepulsar.nils.api.NLS;
 import com.codepulsar.nils.api.NilsFactory;
 import com.codepulsar.nils.api.error.NilsException;
+import com.codepulsar.nils.core.adapter.AdapterContext;
 
 public class SnakeYamlAdapterIntegrationTest {
 
@@ -132,7 +133,12 @@ public class SnakeYamlAdapterIntegrationTest {
     // Arrange
     var locale = Locale.ENGLISH;
     var config = adapterConfig.includeTag("INCLUDE");
-    var adapter = new SnakeYamlAdapter(adapterConfig, locale);
+    var context =
+        new AdapterContext<SnakeYamlAdapter>()
+            .factory(new SnakeYamlAdapterFactory())
+            .locale(locale)
+            .config(config);
+    var adapter = new SnakeYamlAdapter(context);
     var underTest = NilsFactory.init(config).nls(locale);
 
     // Actual
@@ -151,7 +157,12 @@ public class SnakeYamlAdapterIntegrationTest {
   public void resolveValueWithMoreLevels() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var adapter = new SnakeYamlAdapter(adapterConfig, locale);
+    var context =
+        new AdapterContext<SnakeYamlAdapter>()
+            .factory(new SnakeYamlAdapterFactory())
+            .locale(locale)
+            .config(adapterConfig);
+    var adapter = new SnakeYamlAdapter(context);
     var underTest = NilsFactory.init(adapterConfig).nls(locale);
 
     // Actual
@@ -171,7 +182,12 @@ public class SnakeYamlAdapterIntegrationTest {
   public void circularInclude() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var adapter = new SnakeYamlAdapter(adapterConfig, locale);
+    var context =
+        new AdapterContext<SnakeYamlAdapter>()
+            .factory(new SnakeYamlAdapterFactory())
+            .locale(locale)
+            .config(adapterConfig);
+    var adapter = new SnakeYamlAdapter(context);
     var underTest = NilsFactory.init(adapterConfig).nls(locale);
 
     // Actual

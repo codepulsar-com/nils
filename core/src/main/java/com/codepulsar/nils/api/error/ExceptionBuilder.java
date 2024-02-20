@@ -21,6 +21,8 @@ public class ExceptionBuilder {
   /**
    * Set the message. If not set the default message of the {@link ErrorType} is used.
    *
+   * <p>For the message <code>String.format()</code> is used if arguments are passed in.
+   *
    * @param message The message
    * @return The {@linkplain ExceptionBuilder}
    */
@@ -31,6 +33,8 @@ public class ExceptionBuilder {
 
   /**
    * Set the arguments for the message.
+   *
+   * <p>For the message <code>String.format()</code> is used if arguments are passed in.
    *
    * @param args The arguments.
    * @return The {@linkplain ExceptionBuilder}

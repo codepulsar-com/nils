@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import com.codepulsar.nils.api.NLS;
 import com.codepulsar.nils.api.NilsFactory;
 import com.codepulsar.nils.api.error.NilsException;
+import com.codepulsar.nils.core.adapter.AdapterContext;
 
 public class JacksonAdapterYamlIntegrationTest {
 
@@ -132,7 +133,12 @@ public class JacksonAdapterYamlIntegrationTest {
     // Arrange
     var locale = Locale.ENGLISH;
     var config = adapterConfig.includeTag("INCLUDE");
-    var adapter = new JacksonAdapter(adapterConfig, locale);
+    var context =
+        new AdapterContext<JacksonAdapter>()
+            .config(config)
+            .locale(locale)
+            .factory(new JacksonAdapterFactory());
+    var adapter = new JacksonAdapter(context);
     var underTest = NilsFactory.init(config).nls(locale);
 
     // Actual
@@ -151,7 +157,12 @@ public class JacksonAdapterYamlIntegrationTest {
   public void resolveValueWithMoreLevels() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var adapter = new JacksonAdapter(adapterConfig, locale);
+    var context =
+        new AdapterContext<JacksonAdapter>()
+            .config(adapterConfig)
+            .locale(locale)
+            .factory(new JacksonAdapterFactory());
+    var adapter = new JacksonAdapter(context);
     var underTest = NilsFactory.init(adapterConfig).nls(locale);
 
     // Actual
@@ -171,7 +182,12 @@ public class JacksonAdapterYamlIntegrationTest {
   public void circularInclude() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var adapter = new JacksonAdapter(adapterConfig, locale);
+    var context =
+        new AdapterContext<JacksonAdapter>()
+            .config(adapterConfig)
+            .locale(locale)
+            .factory(new JacksonAdapterFactory());
+    var adapter = new JacksonAdapter(context);
     var underTest = NilsFactory.init(adapterConfig).nls(locale);
 
     // Actual

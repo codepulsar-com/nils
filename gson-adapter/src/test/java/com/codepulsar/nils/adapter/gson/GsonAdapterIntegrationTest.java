@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import com.codepulsar.nils.api.NLS;
 import com.codepulsar.nils.api.NilsFactory;
 import com.codepulsar.nils.api.error.NilsException;
+import com.codepulsar.nils.core.adapter.AdapterContext;
 
 public class GsonAdapterIntegrationTest {
 
@@ -132,7 +133,12 @@ public class GsonAdapterIntegrationTest {
     // Arrange
     var locale = Locale.ENGLISH;
     var config = adapterConfig.includeTag("[include]");
-    var adapter = new GsonAdapter(adapterConfig, locale);
+    var context =
+        new AdapterContext<GsonAdapter>()
+            .config(config)
+            .locale(locale)
+            .factory(new GsonAdapterFactory());
+    var adapter = new GsonAdapter(context);
     var underTest = NilsFactory.init(config).nls(locale);
 
     // Actual
@@ -151,7 +157,12 @@ public class GsonAdapterIntegrationTest {
   public void resolveValueWithMoreLevels() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var adapter = new GsonAdapter(adapterConfig, locale);
+    var context =
+        new AdapterContext<GsonAdapter>()
+            .config(adapterConfig)
+            .locale(locale)
+            .factory(new GsonAdapterFactory());
+    var adapter = new GsonAdapter(context);
     var underTest = NilsFactory.init(adapterConfig).nls(locale);
 
     // Actual
@@ -171,7 +182,12 @@ public class GsonAdapterIntegrationTest {
   public void circularInclude() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var adapter = new GsonAdapter(adapterConfig, locale);
+    var context =
+        new AdapterContext<GsonAdapter>()
+            .config(adapterConfig)
+            .locale(locale)
+            .factory(new GsonAdapterFactory());
+    var adapter = new GsonAdapter(context);
     var underTest = NilsFactory.init(adapterConfig).nls(locale);
 
     // Actual

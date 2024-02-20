@@ -10,8 +10,8 @@ import java.util.function.Function;
 
 import org.junit.jupiter.api.Test;
 
+import com.codepulsar.nils.api.adapter.config.LocalizedResourceConfig;
 import com.codepulsar.nils.api.error.NilsException;
-import com.codepulsar.nils.core.adapter.config.LocalizedResourceResolverConfig;
 
 public class LocalizedResourceResolverTest {
 
@@ -33,7 +33,7 @@ public class LocalizedResourceResolverTest {
   @Test
   public void ctor_parameterConfigIsNull() {
     // Arrange
-    LocalizedResourceResolverConfig resolverConfig = null;
+    LocalizedResourceConfig resolverConfig = null;
     var locale = Locale.FRANCE;
     Function<String, InputStream> resourceToInputStreamResolver = this::getInputStream;
 
@@ -174,7 +174,7 @@ public class LocalizedResourceResolverTest {
     }
   }
 
-  private class LocalizedResourceResolverConfigTestImpl implements LocalizedResourceResolverConfig {
+  private class LocalizedResourceResolverConfigTestImpl implements LocalizedResourceConfig {
 
     private String baseFileName;
 
@@ -185,6 +185,11 @@ public class LocalizedResourceResolverTest {
     @Override
     public String getBaseFileName() {
       return baseFileName;
+    }
+
+    @Override
+    public Module getOwner() {
+      return getClass().getModule();
     }
   }
 }

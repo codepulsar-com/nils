@@ -20,7 +20,14 @@ public class NilsException extends RuntimeException {
     super(Objects.requireNonNull(errType).getErrCode() + ": " + message);
     this.errType = errType;
   }
-
+  /**
+   * Create a new {@link NilsException} based on the parameters. The message and the args will be
+   * formatted using <code>String.format()</code>.
+   *
+   * @param errType The {@link ErrorType}
+   * @param message The message text
+   * @param args The arguments for the message
+   */
   public NilsException(ErrorType errType, String message, Object... args) {
     this(errType, String.format(message, args));
   }
@@ -37,6 +44,15 @@ public class NilsException extends RuntimeException {
     this.errType = errType;
   }
 
+  /**
+   * Create a new {@link NilsException} based on the parameters. The message and the args will be
+   * formatted using <code>String.format()</code>.
+   *
+   * @param errType The {@link ErrorType}
+   * @param message The message text
+   * @param cause The root cause
+   * @param args The arguments for the message
+   */
   public NilsException(ErrorType errType, String message, Throwable cause, Object... args) {
     super(
         Objects.requireNonNull(errType).getErrCode() + ": " + String.format(message, args), cause);

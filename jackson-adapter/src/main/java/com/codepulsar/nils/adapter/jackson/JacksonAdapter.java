@@ -7,141 +7,49 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
-import java.util.StringTokenizer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.codepulsar.nils.adapter.jackson.utils.ObjectMapperFactory;
-import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.api.adapter.Adapter;
-import com.codepulsar.nils.api.error.NilsConfigException;
 import com.codepulsar.nils.api.error.NilsException;
+import com.codepulsar.nils.core.adapter.AdapterContext;
+import com.codepulsar.nils.core.adapter.BaseLocalizedResourceAdapter;
 import com.codepulsar.nils.core.adapter.util.LocalizedResourceResolver;
-import com.codepulsar.nils.core.util.ParameterCheck;
+import com.codepulsar.nils.core.adapter.util.MapTranslationRetriever;
 import com.fasterxml.jackson.databind.ObjectMapper;
 /** An {@link Adapter} implementation using for JSON and YAML files for the translations. */
-public class JacksonAdapter implements Adapter {
+public class JacksonAdapter
+    extends BaseLocalizedResourceAdapter<JacksonAdapter, JacksonAdapterConfig> {
   private static final Logger LOG = LoggerFactory.getLogger(JacksonAdapter.class);
 
-  private final JacksonAdapterConfig adapterConfig;
-  private final Locale locale;
-  private String resourceName;
-  private boolean fallbackAvailable = true;
-  private JacksonAdapter fallbackAdapter;
-
-  private Map<String, Object> translations = Map.of();
-
-  public JacksonAdapter(NilsConfig<?> config, Locale locale) {
-    ParameterCheck.notNull(config, "config");
-    ParameterCheck.notNull(locale, "locale");
-    if (!(config instanceof JacksonAdapterConfig)) {
-      throw new NilsConfigException(
-          String.format(
-              "The provided AdapterConfig (%s) is not of type %s",
-              config, JacksonAdapterConfig.class.getName()));
-    }
-    this.adapterConfig = (JacksonAdapterConfig) config;
-    this.locale = locale;
-    initTranslations();
+  public JacksonAdapter(AdapterContext<JacksonAdapter> context) {
+    super(context);
   }
 
   @Override
-  public Optional<String> getTranslation(String key) {
-    ParameterCheck.notNullEmptyOrBlank(key, "key");
-    var value = retrieveTranslationFromCurrentData(key);
-
-    if (value.isPresent()) {
-      return value;
-    }
-
-    if (fallbackAvailable) {
-      value = getFallbackAdapter().getTranslation(key);
-    }
-
-    return value;
-  }
-
   @SuppressWarnings("unchecked")
-  private Optional<String> retrieveTranslationFromCurrentData(String key) {
-    StringTokenizer keyParts = new StringTokenizer(key, ".");
-    Map<String, Object> latest = translations;
-    while (keyParts.hasMoreTokens()) {
-      String part = keyParts.nextToken();
-      Object value = latest.get(part);
-      if (value == null) {
-        return Optional.empty();
-      } else if (value instanceof String) {
-        if (!keyParts.hasMoreTokens()) {
-          return Optional.of((String) value);
-        } else {
-          return Optional.empty();
-        }
-      } else {
-        if (value instanceof Map) {
-          if (keyParts.hasMoreTokens()) {
-            latest = (Map<String, Object>) value;
-          } else {
-            return Optional.empty();
-          }
-        } else if (value instanceof List) {
-          if (keyParts.hasMoreTokens()) {
-            List<Map<String, Object>> innerList = (List<Map<String, Object>>) value;
-            Map<String, Object> next = new HashMap<>();
-            innerList.forEach(c -> next.putAll(c));
-            latest = next;
-          } else {
-            return Optional.empty();
-          }
-        } else {
-          return Optional.of(value.toString());
-        }
-      }
-    }
-    return Optional.empty();
-  }
-
-  @SuppressWarnings("unchecked")
-  private void initTranslations() {
-
+  protected void initTranslations(LocalizedResourceResolver resolver) {
     ObjectMapper objectMapper = resolveObjectMapper();
-    var resolver = new LocalizedResourceResolver(adapterConfig, locale, this::resolveInputStream);
     try (var fileReader = new InputStreamReader(resolver.resolve(), StandardCharsets.UTF_8); ) {
-      translations = objectMapper.readValue(fileReader, Map.class);
+      Map<String, Object> translations = objectMapper.readValue(fileReader, Map.class);
+      translation = new MapTranslationRetriever(translations);
       LOG.debug("Translation for locale {} read.", locale);
     } catch (NilsException e) {
       throw e;
     } catch (Exception e) {
-      throw new NilsException(
-          CORRUPT_FILE_ERROR, "Error reading file '" + resolver.getUsedResourceName() + "'.", e);
+      throw CORRUPT_FILE_ERROR
+          .asException()
+          .message("Error reading file '%s'.")
+          .args(resolver.getUsedResourceName())
+          .cause(e)
+          .go();
     } finally {
       resolver.close();
     }
     this.resourceName = resolver.getUsedResourceName();
-    this.fallbackAvailable =
-        !locale.equals(new Locale("")) || !resourceName.endsWith(adapterConfig.getBaseFileName());
-  }
-
-  private JacksonAdapter getFallbackAdapter() {
-    if (fallbackAdapter == null) {
-      var variant = locale.getVariant();
-      var country = locale.getCountry();
-      var language = locale.getLanguage();
-      if (variant.isEmpty() && !country.isEmpty() && !language.isEmpty()) {
-        country = "";
-      } else if (variant.isEmpty() && country.isEmpty() && !language.isEmpty()) {
-        language = "";
-      }
-      Locale parent = new Locale(language, country);
-      fallbackAdapter = new JacksonAdapterFactory().create(adapterConfig, parent);
-    }
-
-    return fallbackAdapter;
   }
 
   private ObjectMapper resolveObjectMapper() {
@@ -150,13 +58,14 @@ public class JacksonAdapter implements Adapter {
     return new ObjectMapperFactory().resolve(fileExtension);
   }
 
-  private InputStream resolveInputStream(String resource) {
+  @Override
+  protected InputStream resolveInputStream(String resource) {
     try {
       var owner = adapterConfig.getOwner();
       return owner.getResourceAsStream(resource);
     } catch (IOException e) {
       LOG.error("Error getting resource {}.", e, resource);
-      throw new NilsException(IO_ERROR, "Error getting resource " + resource + ".", e);
+      throw new NilsException(IO_ERROR, "Error getting resource %s", e, resource);
     }
   }
 }

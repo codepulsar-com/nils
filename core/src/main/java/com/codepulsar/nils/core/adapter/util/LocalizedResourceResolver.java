@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.codepulsar.nils.api.adapter.config.LocalizedResourceConfig;
 import com.codepulsar.nils.api.error.NilsException;
-import com.codepulsar.nils.core.adapter.config.LocalizedResourceResolverConfig;
 import com.codepulsar.nils.core.util.ParameterCheck;
 /**
  * The class <strong>LocalizedResourceResolver</strong> is used to get a resource for a specific
@@ -44,7 +44,7 @@ import com.codepulsar.nils.core.util.ParameterCheck;
 public class LocalizedResourceResolver implements AutoCloseable {
 
   private static final Logger LOG = LoggerFactory.getLogger(LocalizedResourceResolver.class);
-  private final LocalizedResourceResolverConfig config;
+  private final LocalizedResourceConfig config;
   private final Locale locale;
   private Function<String, InputStream> resourceToInputStreamResolver;
   private String baseFileName;
@@ -56,13 +56,13 @@ public class LocalizedResourceResolver implements AutoCloseable {
   /**
    * Create a new <strong>LocalizedResourceResolver</strong>.
    *
-   * @param resolverConfig A {@link LocalizedResourceResolverConfig} object.
+   * @param resolverConfig A {@link LocalizedResourceConfig} object.
    * @param locale The target Locale
    * @param resourceToInputStreamResolver A Function that returns an InputStream based on a resource
    *     name.
    */
   public LocalizedResourceResolver(
-      LocalizedResourceResolverConfig resolverConfig,
+      LocalizedResourceConfig resolverConfig,
       Locale locale,
       Function<String, InputStream> resourceToInputStreamResolver) {
     this.config = ParameterCheck.notNull(resolverConfig, "resolverConfig");
@@ -91,12 +91,13 @@ public class LocalizedResourceResolver implements AutoCloseable {
         }
       } catch (Exception e) {
         LOG.error("Error getting resource {}.", e, resource);
-        throw new NilsException(IO_ERROR, "Error getting resource '" + resource + "'.", e);
+        throw new NilsException(IO_ERROR, "Error getting resource '%s'.", e, resource);
       }
     }
     throw new NilsException(
         MISSING_RESOURCE_FILE_ERROR,
-        "Could not find a resource for baseFilename '" + config.getBaseFileName() + "'.");
+        "Could not find a resource for baseFilename '%s'.",
+        config.getBaseFileName());
   }
 
   /**
@@ -137,10 +138,9 @@ public class LocalizedResourceResolver implements AutoCloseable {
         inputStream.close();
       } catch (IOException e) {
         LOG.warn(
-            "Error closing inputStream of resource '"
-                + usedResourceName
-                + "'. Reason: "
-                + e.getMessage(),
+            "Error closing inputStream of resource '{}'. Reason: {}",
+            usedResourceName,
+            e.getMessage(),
             e);
       }
     }

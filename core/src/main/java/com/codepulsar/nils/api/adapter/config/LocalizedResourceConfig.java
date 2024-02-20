@@ -1,15 +1,15 @@
-package com.codepulsar.nils.core.adapter.config;
+package com.codepulsar.nils.api.adapter.config;
 
 import com.codepulsar.nils.api.adapter.Adapter;
 import com.codepulsar.nils.core.adapter.util.LocalizedResourceResolver;
 
 /**
- * The interface <strong>LocalizedResourceResolverConfig</strong> defines methods used by the {@link
+ * The interface <strong>LocalizedResourceConfig</strong> defines methods used by the {@link
  * LocalizedResourceResolver}.
  *
  * <p><em>Note:</em> This interface is normally internally used by {@link Adapter} implementations.
  */
-public interface LocalizedResourceResolverConfig {
+public interface LocalizedResourceConfig {
   /**
    * Gets the base name of the resource files.
    *
@@ -19,4 +19,11 @@ public interface LocalizedResourceResolverConfig {
    * @return The base name of the resource files.
    */
   String getBaseFileName();
+
+  /**
+   * Gets the owner module for the nls support.
+   *
+   * @return A Module object.
+   */
+  Module getOwner();
 }

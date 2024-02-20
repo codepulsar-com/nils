@@ -3,12 +3,13 @@ package com.codepulsar.nils.adapter.jackson;
 import static com.codepulsar.nils.core.util.ParameterCheck.NILS_CONFIG;
 
 import com.codepulsar.nils.api.adapter.AdapterFactory;
+import com.codepulsar.nils.api.adapter.config.LocalizedResourceConfig;
 import com.codepulsar.nils.core.adapter.config.BaseNilsConfig;
-import com.codepulsar.nils.core.adapter.config.LocalizedResourceResolverConfig;
 import com.codepulsar.nils.core.util.ParameterCheck;
 /** Configuration for the {@link JacksonAdapter} implementation. */
+// TODO devide config in JacksonAdapterJsonConfig and JacksonAdapterYamlConfig
 public class JacksonAdapterConfig extends BaseNilsConfig<JacksonAdapterConfig>
-    implements LocalizedResourceResolverConfig {
+    implements LocalizedResourceConfig {
 
   private Module owner;
 
@@ -22,6 +23,7 @@ public class JacksonAdapterConfig extends BaseNilsConfig<JacksonAdapterConfig>
    *
    * @return A Module object.
    */
+  @Override
   public Module getOwner() {
     return owner;
   }

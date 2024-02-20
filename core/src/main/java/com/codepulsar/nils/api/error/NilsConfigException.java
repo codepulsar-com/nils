@@ -19,6 +19,17 @@ public class NilsConfigException extends NilsException {
   }
 
   /**
+   * Create a new {@link NilsConfigException} based on the parameters. The message and the args will
+   * be formatted using <code>String.format()</code>.
+   *
+   * @param message The message text
+   * @param args The arguments for the message
+   */
+  public NilsConfigException(String message, Object... args) {
+    super(ErrorTypes.CONFIG_ERROR, message, args);
+  }
+
+  /**
    * Create a new {@link NilsConfigException}
    *
    * @param message The message text

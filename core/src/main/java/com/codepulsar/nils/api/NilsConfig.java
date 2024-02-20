@@ -14,7 +14,7 @@ public interface NilsConfig<CFG extends NilsConfig<?>> {
    * <p>The escape pattern must contain <code>{0}</code>.
    *
    * @return The pattern.
-   * @see #getSuppressErrors()
+   * @see #isSuppressErrors()
    * @see #escapePattern(String)
    */
   String getEscapePattern();
@@ -26,7 +26,7 @@ public interface NilsConfig<CFG extends NilsConfig<?>> {
    *
    * @param escapePattern the pattern
    * @return This config object.
-   * @see #getSuppressErrors()
+   * @see #isSuppressErrors()
    * @see #getEscapePattern()
    */
   CFG escapePattern(String escapePattern);
@@ -62,6 +62,7 @@ public interface NilsConfig<CFG extends NilsConfig<?>> {
    * <p>The default value is <code>false</code>.
    *
    * @param suppressErrors The value of the flag
+   * @return This config object.
    * @see #isSuppressErrors()
    */
   CFG suppressErrors(boolean suppressErrors);
@@ -118,6 +119,7 @@ public interface NilsConfig<CFG extends NilsConfig<?>> {
    * <p>The default is <code>FormatStyle.MEDIUM</code>.
    *
    * @param dateFormatStyle The <code>FormatStyle</code>.
+   * @return This config object.
    * @see #getDateFormatStyle()
    * @see com.codepulsar.nils.api.Formats
    */

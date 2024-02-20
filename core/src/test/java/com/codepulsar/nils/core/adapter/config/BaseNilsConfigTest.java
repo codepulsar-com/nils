@@ -213,7 +213,7 @@ public class BaseNilsConfigTest {
             "NILS-004: Parameter 'escapePattern' is invalid: It must contain the string \"{0}\"."),
         arguments(
             "{{0}}",
-            "NILS-004: Parameter 'escapePattern' is invalid: can't parse argument number: {0}"),
+            "NILS-004: Parameter 'escapePattern' is invalid: can't parse argument number: {0}."),
         arguments(
             "Missing: '{0}'",
             "NILS-004: Parameter 'escapePattern' is invalid: It must contain the string \"{0}\"."));

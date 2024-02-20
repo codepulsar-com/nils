@@ -12,8 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.codepulsar.nils.api.NilsConfig;
-import com.codepulsar.nils.api.error.NilsConfigException;
-import com.codepulsar.nils.core.testadapter.StaticAdapterConfig;
 
 public class ResourceBundleAdapterTest {
 
@@ -50,18 +48,6 @@ public class ResourceBundleAdapterTest {
     assertThatThrownBy(() -> new ResourceBundleAdapter(config, locale))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Parameter 'config' cannot be null.");
-  }
-
-  @Test
-  public void resourceBundleAdapter_invalidAdapterConfig() {
-    // Arrange
-    var locale = Locale.ENGLISH;
-    var config = new StaticAdapterConfig();
-    // Act / Assert
-    assertThatThrownBy(() -> new ResourceBundleAdapter(config, locale))
-        .isInstanceOf(NilsConfigException.class)
-        .hasMessageContaining("The provided AdapterConfig")
-        .hasMessageContaining("is not of type");
   }
 
   @Test

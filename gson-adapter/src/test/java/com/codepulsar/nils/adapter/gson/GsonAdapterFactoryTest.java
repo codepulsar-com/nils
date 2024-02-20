@@ -7,7 +7,9 @@ import java.util.Locale;
 
 import org.junit.jupiter.api.Test;
 
+import com.codepulsar.nils.adapter.rb.ResourceBundleAdapterConfig;
 import com.codepulsar.nils.api.NilsConfig;
+import com.codepulsar.nils.api.error.NilsConfigException;
 
 public class GsonAdapterFactoryTest {
 
@@ -49,5 +51,19 @@ public class GsonAdapterFactoryTest {
 
     // Assert
     assertThat(result).isNotNull();
+  }
+
+  @Test
+  public void invalidAdapterConfig() {
+    // Arrange
+    var locale = Locale.ENGLISH;
+    var config = ResourceBundleAdapterConfig.init(this);
+    var underTest = new GsonAdapterFactory();
+
+    // Act / Assert
+    assertThatThrownBy(() -> underTest.create(config, locale))
+        .isInstanceOf(NilsConfigException.class)
+        .hasMessageContaining("The provided AdapterConfig")
+        .hasMessageContaining("is not of type");
   }
 }

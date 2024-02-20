@@ -21,7 +21,12 @@ public class ErrorType {
   public ErrorType(String errCode) {
     this.errCode = Objects.requireNonNull(errCode);
   }
-
+  /**
+   * Create a new {@link ErrorType}.
+   *
+   * @param errCode A error code.
+   * @param defaultMessage A default message.
+   */
   public ErrorType(String errCode, String defaultMessage) {
     this.errCode = Objects.requireNonNull(errCode);
     this.defaultMessage = defaultMessage;

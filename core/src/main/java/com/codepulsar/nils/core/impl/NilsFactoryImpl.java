@@ -1,6 +1,10 @@
 package com.codepulsar.nils.core.impl;
 
+import static com.codepulsar.nils.core.error.ErrorTypes.NLS_PARAMETER_CHECK;
 import static com.codepulsar.nils.core.util.ParameterCheck.NILS_CONFIG;
+import static com.codepulsar.nils.core.util.ParameterCheck.nilsException;
+import static com.codepulsar.nils.core.util.ParameterCheck.notNull;
+import static com.codepulsar.nils.core.util.ParameterCheck.notNullEmptyOrBlank;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -19,13 +23,16 @@ import com.codepulsar.nils.core.util.ParameterCheck;
 /** Factory for getting access to the provided NLS. A requested NLS object is cached. */
 public class NilsFactoryImpl implements NilsFactory {
   private static final Logger LOG = LoggerFactory.getLogger(NilsFactoryImpl.class);
+  private static final NLS FALLSAVE = new FallsaveNLSImpl();
   private final NilsConfig<?> config;
+  private final ErrorHandler errorHandler;
   private AdapterFactory<?> adapterFactory;
 
   private final Map<Locale, NLS> translationCache = new HashMap<>();
 
   public NilsFactoryImpl(NilsConfig<?> config) {
     this.config = ParameterCheck.notNull(config, "config", NILS_CONFIG);
+    this.errorHandler = new ErrorHandler(config);
   }
 
   @Override
@@ -35,68 +42,111 @@ public class NilsFactoryImpl implements NilsFactory {
 
   @Override
   public NLS nls(String lang) {
-    ParameterCheck.notNullEmptyOrBlank(lang, "lang");
-    lang = lang.replace("_", "-");
-    return nls(Locale.forLanguageTag(lang));
+    try {
+      notNullEmptyOrBlank(lang, "lang", nilsException(NLS_PARAMETER_CHECK));
+      lang = lang.replace("_", "-");
+      return nls(Locale.forLanguageTag(lang));
+    } catch (NilsException ex) {
+      errorHandler.handle(ex);
+      return FALLSAVE;
+    }
   }
 
   @Override
   public NLS nls(Locale locale) {
-
-    NLS result =
-        translationCache.computeIfAbsent(
-            locale,
-            (l) -> {
-              return createImpl(locale, config);
-            });
-    return result;
+    try {
+      notNull(locale, "locale", nilsException(NLS_PARAMETER_CHECK));
+      return translationCache.computeIfAbsent(locale, (l) -> createImpl(locale, config));
+    } catch (NilsException ex) {
+      errorHandler.handle(ex);
+      return FALLSAVE;
+    }
   }
 
   @Override
   public NLS nlsWithContext(String context) {
-    ParameterCheck.notNullEmptyOrBlank(context, "context");
-    return nls().context(context);
+    try {
+      notNullEmptyOrBlank(context, "context", nilsException(NLS_PARAMETER_CHECK));
+      return nls().context(context);
+    } catch (NilsException ex) {
+      errorHandler.handle(ex);
+      return FALLSAVE;
+    }
   }
 
   @Override
   public NLS nlsWithContext(String lang, String context) {
-    ParameterCheck.notNullEmptyOrBlank(context, "context");
-    return nls(lang).context(context);
+    try {
+      notNullEmptyOrBlank(lang, "lang", nilsException(NLS_PARAMETER_CHECK));
+      notNullEmptyOrBlank(context, "context", nilsException(NLS_PARAMETER_CHECK));
+      return nls(lang).context(context);
+    } catch (NilsException ex) {
+      errorHandler.handle(ex);
+      return FALLSAVE;
+    }
   }
 
   @Override
   public NLS nlsWithContext(Locale locale, String context) {
-    ParameterCheck.notNullEmptyOrBlank(context, "context");
-    return nls(locale).context(context);
+    try {
+      notNull(locale, "locale", nilsException(NLS_PARAMETER_CHECK));
+      notNullEmptyOrBlank(context, "context", nilsException(NLS_PARAMETER_CHECK));
+      return nls(locale).context(context);
+    } catch (NilsException ex) {
+      errorHandler.handle(ex);
+      return FALLSAVE;
+    }
   }
 
   @Override
   public NLS nlsWithContext(Class<?> context) {
-    ParameterCheck.notNull(context, "context");
-    return nls().context(context);
+    try {
+      notNull(context, "context", nilsException(NLS_PARAMETER_CHECK));
+      return nls().context(context);
+    } catch (NilsException ex) {
+      errorHandler.handle(ex);
+      return FALLSAVE;
+    }
   }
 
   @Override
   public NLS nlsWithContext(String lang, Class<?> context) {
-    ParameterCheck.notNull(context, "context");
-    return nls(lang).context(context);
+    try {
+      notNullEmptyOrBlank(lang, "lang", nilsException(NLS_PARAMETER_CHECK));
+      notNull(context, "context", nilsException(NLS_PARAMETER_CHECK));
+      return nls(lang).context(context);
+    } catch (NilsException ex) {
+      errorHandler.handle(ex);
+      return FALLSAVE;
+    }
   }
 
   @Override
   public NLS nlsWithContext(Locale locale, Class<?> context) {
-    ParameterCheck.notNull(context, "context");
-    return nls(locale).context(context);
+    try {
+      notNull(locale, "locale", nilsException(NLS_PARAMETER_CHECK));
+      notNull(context, "context", nilsException(NLS_PARAMETER_CHECK));
+      return nls(locale).context(context);
+    } catch (NilsException ex) {
+      errorHandler.handle(ex);
+      return FALLSAVE;
+    }
   }
 
-  private NLSImpl createImpl(Locale locale, NilsConfig<?> config) {
-    return new NLSImpl(getAdapterFactory().create(config, locale), config, locale);
+  private NLS createImpl(Locale locale, NilsConfig<?> config) {
+    try {
+      return new NLSImpl(getAdapterFactory().create(config, locale), config, locale);
+    } catch (NilsException ex) {
+      errorHandler.handle(ex);
+      return FALLSAVE;
+    }
   }
 
   private AdapterFactory<?> getAdapterFactory() {
     if (adapterFactory == null) {
       try {
         this.adapterFactory = config.getFactoryClass().getConstructor().newInstance();
-      } catch (ReflectiveOperationException | IllegalArgumentException | SecurityException e) {
+      } catch (Exception e) {
         LOG.error("Could not create AdapterFactory. Reason {}", e.getMessage(), e);
         throw new NilsException(ErrorTypes.ADAPTER_ERROR, "Could not create AdapterFactory.", e);
       }

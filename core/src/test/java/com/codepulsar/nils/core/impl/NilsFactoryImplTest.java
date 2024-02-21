@@ -13,7 +13,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.api.NilsFactory;
 import com.codepulsar.nils.api.error.NilsConfigException;
+import com.codepulsar.nils.api.error.NilsException;
+import com.codepulsar.nils.core.testadapter.InvalidAdapterFactory;
 import com.codepulsar.nils.core.testadapter.StaticAdapterConfig;
+import com.codepulsar.nils.core.testadapter.TestFactoryAdapterConfig;
 import com.codepulsar.nils.core.testdata.Dummy;
 
 public class NilsFactoryImplTest {
@@ -22,10 +25,11 @@ public class NilsFactoryImplTest {
       "com.codepulsar.nils.core.impl.NilsFactoryImplTestDataProvider";
 
   private NilsFactory underTest;
+  private NilsConfig<?> config;
 
   @BeforeEach
   public void setup() {
-    var config = new StaticAdapterConfig();
+    config = new StaticAdapterConfig();
     underTest = new NilsFactoryImpl(config);
   }
 
@@ -81,11 +85,25 @@ public class NilsFactoryImplTest {
   public void nlsFromLocaleNull() {
     // Arrange
     Locale locale = null;
+    config.suppressErrors(false);
 
     // Act / Assert
     assertThatThrownBy(() -> underTest.nls(locale))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Parameter 'locale' cannot be null.");
+        .isInstanceOf(NilsException.class)
+        .hasMessageContaining("Parameter 'locale' cannot be null.");
+  }
+
+  @Test
+  public void nlsFromLocaleNull_suppressErrors() {
+    // Arrange
+    Locale locale = null;
+    config.suppressErrors(true);
+
+    // Act
+    var nls = underTest.nls(locale);
+
+    // Assert
+    assertThat(nls).isInstanceOf(FallsaveNLSImpl.class);
   }
 
   @Test
@@ -121,10 +139,27 @@ public class NilsFactoryImplTest {
   @ParameterizedTest
   @MethodSource(DATA_PROVIDER + "#nlsFromLang_invalid")
   public void nlsFromLang_invalid(String lang, String errorMsg) {
+    // Arrange
+    config.suppressErrors(false);
+
     // Act / Assert
     assertThatThrownBy(() -> underTest.nls(lang))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage(errorMsg);
+        .isInstanceOf(NilsException.class)
+        .hasMessageContaining(errorMsg);
+  }
+
+  @ParameterizedTest
+  @MethodSource(DATA_PROVIDER + "#nlsFromLang_invalid")
+  public void nlsFromLang_invalid_suppressErrors(String lang, String errorMsg) {
+    // Arrange
+    config.suppressErrors(true);
+
+    // Act
+    var nls = underTest.nls(lang);
+
+    // Assert
+
+    assertThat(nls).isInstanceOf(FallsaveNLSImpl.class);
   }
 
   @Test
@@ -154,19 +189,50 @@ public class NilsFactoryImplTest {
   @ParameterizedTest
   @MethodSource(DATA_PROVIDER + "#nlsWithContext_string_invalid")
   public void nlsWithContext_string_invalid(String context, String errorMsg) {
+    // Arrange
+    config.suppressErrors(false);
     // Act / Assert
     assertThatThrownBy(() -> underTest.nlsWithContext(context))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage(errorMsg);
+        .isInstanceOf(NilsException.class)
+        .hasMessageContaining(errorMsg);
   }
 
+  @ParameterizedTest
+  @MethodSource(DATA_PROVIDER + "#nlsWithContext_string_invalid")
+  public void nlsWithContext_string_invalid_suppressErrors(String context, String errorMsg) {
+    // Arrange
+    config.suppressErrors(true);
+
+    // Act
+    var nls = underTest.nlsWithContext(context);
+
+    // Assert
+    assertThat(nls).isInstanceOf(FallsaveNLSImpl.class);
+  }
+
+  @Test
   public void nlsWithContext_class_null() {
     // Arrange
+    config.suppressErrors(false);
     Class<?> context = null;
+
     // Act / Assert
     assertThatThrownBy(() -> underTest.nlsWithContext(context))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("errorMsg");
+        .isInstanceOf(NilsException.class)
+        .hasMessageContaining("Parameter 'context' cannot be null.");
+  }
+
+  @Test
+  public void nlsWithContext_class_null_suppressErrors() {
+    // Arrange
+    config.suppressErrors(true);
+    Class<?> context = null;
+
+    // Act
+    var nls = underTest.nlsWithContext(context);
+
+    // Assert
+    assertThat(nls).isInstanceOf(FallsaveNLSImpl.class);
   }
 
   @Test
@@ -196,20 +262,53 @@ public class NilsFactoryImplTest {
   @ParameterizedTest
   @MethodSource(DATA_PROVIDER + "#nlsWithContext_fromLang_string_invalid")
   public void nlsWithContext_fromLang_string_invalid(String lang, String context, String errorMsg) {
+    // Arrange
+    config.suppressErrors(false);
+
     // Act / Assert
     assertThatThrownBy(() -> underTest.nlsWithContext(lang, context))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage(errorMsg);
+        .isInstanceOf(NilsException.class)
+        .hasMessageContaining(errorMsg);
+  }
+
+  @ParameterizedTest
+  @MethodSource(DATA_PROVIDER + "#nlsWithContext_fromLang_string_invalid")
+  public void nlsWithContext_fromLang_string_invalid_suppressErrors(
+      String lang, String context, String errorMsg) {
+    // Arrange
+    config.suppressErrors(true);
+
+    // Act
+    var nls = underTest.nlsWithContext(lang, context);
+
+    // Assert
+    assertThat(nls).isInstanceOf(FallsaveNLSImpl.class);
   }
 
   @ParameterizedTest
   @MethodSource(DATA_PROVIDER + "#nlsWithContext_fromLang_class_invalid")
   public void nlsWithContext_fromLang_class_invalid(
       String lang, Class<?> context, String errorMsg) {
+    // Arrange
+    config.suppressErrors(false);
     // Act / Assert
     assertThatThrownBy(() -> underTest.nlsWithContext(lang, context))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage(errorMsg);
+        .isInstanceOf(NilsException.class)
+        .hasMessageContaining(errorMsg);
+  }
+
+  @ParameterizedTest
+  @MethodSource(DATA_PROVIDER + "#nlsWithContext_fromLang_class_invalid")
+  public void nlsWithContext_fromLang_class_invalid_suppressErrors(
+      String lang, Class<?> context, String errorMsg) {
+    // Arrange
+    config.suppressErrors(true);
+
+    // Act
+    var nls = underTest.nlsWithContext(lang, context);
+
+    // Assert
+    assertThat(nls).isInstanceOf(FallsaveNLSImpl.class);
   }
 
   @Test
@@ -240,21 +339,106 @@ public class NilsFactoryImplTest {
   @MethodSource(DATA_PROVIDER + "#nlsWithContext_fromLocale_string_invalid")
   public void nlsWithContext_fromLocale_string_invalid(
       Locale locale, String context, String errorMsg) {
+    // Arrange
+    config.suppressErrors(false);
 
     // Act / Assert
     assertThatThrownBy(() -> underTest.nlsWithContext(locale, context))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage(errorMsg);
+        .isInstanceOf(NilsException.class)
+        .hasMessageContaining(errorMsg);
+  }
+
+  @ParameterizedTest
+  @MethodSource(DATA_PROVIDER + "#nlsWithContext_fromLocale_string_invalid")
+  public void nlsWithContext_fromLocale_string_invalid_suppressErrors(
+      Locale locale, String context, String errorMsg) {
+    // Arrange
+    config.suppressErrors(true);
+
+    // Act
+    var nls = underTest.nlsWithContext(locale, context);
+
+    // Assert
+    assertThat(nls).isInstanceOf(FallsaveNLSImpl.class);
   }
 
   @ParameterizedTest
   @MethodSource(DATA_PROVIDER + "#nlsWithContext_fromLocale_class_invalid")
   public void nlsWithContext_fromLocale_class_invalid(
       Locale locale, Class<?> context, String errorMsg) {
-
+    // Arrange
+    config.suppressErrors(false);
     // Act / Assert
     assertThatThrownBy(() -> underTest.nlsWithContext(locale, context))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage(errorMsg);
+        .isInstanceOf(NilsException.class)
+        .hasMessageContaining(errorMsg);
+  }
+
+  @ParameterizedTest
+  @MethodSource(DATA_PROVIDER + "#nlsWithContext_fromLocale_class_invalid")
+  public void nlsWithContext_fromLocale_class_invalid_suppressErrors(
+      Locale locale, Class<?> context, String errorMsg) {
+    // Arrange
+    config.suppressErrors(true);
+
+    // Act
+    var nls = underTest.nlsWithContext(locale, context);
+
+    // Assert
+    assertThat(nls).isInstanceOf(FallsaveNLSImpl.class);
+  }
+
+  @Test
+  public void nullAdapterFactoryClass() {
+    var _config = new TestFactoryAdapterConfig(null);
+    _config.suppressErrors(false);
+
+    NilsFactory _underTest = NilsFactory.init(_config);
+
+    // Act / Assert
+    assertThatThrownBy(() -> _underTest.nls())
+        .isInstanceOf(NilsException.class)
+        .hasMessageContaining("Could not create AdapterFactory");
+  }
+
+  @Test
+  public void nullAdapterFactoryClass_suppressErrors() {
+    var _config = new TestFactoryAdapterConfig(null);
+    _config.suppressErrors(true);
+
+    NilsFactory _underTest = NilsFactory.init(_config);
+
+    // Act
+    var nls = _underTest.nls();
+
+    // Assert
+    assertThat(nls).isInstanceOf(FallsaveNLSImpl.class);
+  }
+
+  @Test
+  public void adapterFactoryWithNonEmptyCtor() {
+    var _config = new TestFactoryAdapterConfig(InvalidAdapterFactory.class);
+    _config.suppressErrors(false);
+
+    NilsFactory _underTest = NilsFactory.init(_config);
+
+    // Act / Assert
+    assertThatThrownBy(() -> _underTest.nls())
+        .isInstanceOf(NilsException.class)
+        .hasMessageContaining("Could not create AdapterFactory");
+  }
+
+  @Test
+  public void adapterFactoryWithNonEmptyCtor_suppressErrors() {
+    var _config = new TestFactoryAdapterConfig(InvalidAdapterFactory.class);
+    _config.suppressErrors(true);
+
+    NilsFactory _underTest = NilsFactory.init(_config);
+
+    // Act
+    var nls = _underTest.nls();
+
+    // Assert
+    assertThat(nls).isInstanceOf(FallsaveNLSImpl.class);
   }
 }

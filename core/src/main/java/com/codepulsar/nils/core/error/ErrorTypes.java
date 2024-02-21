@@ -10,7 +10,7 @@ import com.codepulsar.nils.api.error.ErrorType;
 public class ErrorTypes {
   /** Include other keys leads into a loop. */
   public static final ErrorType INCLUDE_LOOP_DETECTED = new ErrorType("NILS-002");
-  /** The translation source does not provide a translation for the requested key. */
+  /** The translation resource does not provide a translation for the requested key. */
   public static final ErrorType MISSING_TRANSLATION =
       new ErrorType("NILS-001", "Could not find a translation for key '%s' and locale '%s'.");
   /** The parameter call at the NLS interface is invalid. */

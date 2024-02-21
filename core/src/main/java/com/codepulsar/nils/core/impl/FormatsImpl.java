@@ -39,7 +39,7 @@ public class FormatsImpl implements Formats {
   public FormatsImpl(Locale locale, NilsConfig<?> config) {
     this.locale = ParameterCheck.notNull(locale, "locale");
     ParameterCheck.notNull(config, "config");
-    this.formatStyle = config.getDateFormatStyle();
+    formatStyle = config.getDateFormatStyle();
     dateFormatStyle = toDateFormatStyle(formatStyle);
   }
 

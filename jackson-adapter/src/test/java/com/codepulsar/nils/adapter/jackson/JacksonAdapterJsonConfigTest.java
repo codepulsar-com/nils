@@ -38,6 +38,7 @@ public class JacksonAdapterJsonConfigTest {
     assertThat(underTest.getOwner()).isEqualTo(getClass().getModule());
     assertThat(underTest.getBaseFileName()).isEqualTo("nls/translation.json");
     assertThat(underTest.getFactoryClass()).isEqualTo(JacksonAdapterFactory.class);
+    assertThat(underTest.isFallbackActive()).isTrue();
   }
 
   @Test

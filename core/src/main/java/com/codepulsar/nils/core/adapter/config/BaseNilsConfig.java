@@ -13,9 +13,8 @@ import com.codepulsar.nils.core.util.ParameterCheck;
 /**
  * The {@link BaseNilsConfig} is a base implementation of {@link NilsConfig}.
  *
- * <p>Adapter, that must extend the nils config with further configuration parameter should use this
- * class as base class for their configuration, instead of implementing the {@link NilsConfig}
- * interface directly.
+ * <p>Adapter, uses the {@link NilsConfig} should use this class as base class for their
+ * configuration, instead of implementing the interfaces directly.
  *
  * @param <CFG> The class extending {@link BaseNilsConfig}.
  */

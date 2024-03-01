@@ -197,6 +197,22 @@ public class SnakeYamlAdapterTest {
   }
 
   @Test
+  public void translateKeyFallback_fallbackInactive() {
+    // Arrange
+    var locale = Locale.GERMAN;
+    var config =
+        SnakeYamlAdapterConfig.init(this).baseFileName("test/existing").fallbackActive(false);
+    context.locale(locale).config(config);
+    var underTest = new SnakeYamlAdapter(context);
+
+    // Act
+    var value = underTest.getTranslation("translate.fallback");
+
+    // Assert
+    assertThat(value).isEmpty();
+  }
+
+  @Test
   public void translateKeyNotFound() {
     // Arrange
     var locale = Locale.ENGLISH;

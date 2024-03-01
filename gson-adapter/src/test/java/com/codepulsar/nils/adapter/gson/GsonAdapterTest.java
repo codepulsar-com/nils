@@ -182,6 +182,21 @@ public class GsonAdapterTest {
   }
 
   @Test
+  public void translateKeyFallback_fallbackInactive() {
+    // Arrange
+    var locale = Locale.GERMAN;
+    var config = GsonAdapterConfig.init(this).baseFileName("test/existing").fallbackActive(false);
+    var context = adapterContext.locale(locale).config(config);
+    var underTest = new GsonAdapter(context);
+
+    // Act
+    var value = underTest.getTranslation("translate.fallback");
+
+    // Assert
+    assertThat(value).isEmpty();
+  }
+
+  @Test
   public void translateKeyFallbackNotFound() {
     // Arrange
     var locale = Locale.GERMAN;

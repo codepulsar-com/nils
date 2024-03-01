@@ -36,6 +36,11 @@ public class BaseLocalizedResourceAdapterTesteeConfig
     return BaseLocalizedResourceAdapterTesteeFactory.class;
   }
 
+  @Override
+  public boolean isFallbackActive() {
+    return true;
+  }
+
   public static BaseLocalizedResourceAdapterTesteeConfig init(Class<?> owner) {
     return new BaseLocalizedResourceAdapterTesteeConfig(owner.getModule());
   }

@@ -62,6 +62,33 @@ public class JacksonAdapterYamlIntegrationTest {
   }
 
   @Test
+  public void string_getByKey_fallbackInactive_exception() {
+    // Arrange
+    var locale = Locale.GERMAN;
+    var config = adapterConfig.fallbackActive(false);
+    var underTest = NilsFactory.init(config).nls(locale);
+
+    // Act / Assert
+    assertThatThrownBy(() -> underTest.get("fallback"))
+        .isInstanceOf(NilsException.class)
+        .hasMessage("NILS-001: Could not find a translation for key 'fallback' and locale 'de'.");
+  }
+
+  @Test
+  public void string_getByKey_fallbackInactive_escaping() {
+    // Arrange
+    var locale = Locale.GERMAN;
+    var config = adapterConfig.fallbackActive(false).suppressErrors(true);
+    var underTest = NilsFactory.init(config).nls(locale);
+
+    // Act
+    var value = underTest.get("fallback");
+
+    // Assert
+    assertThat(value).isEqualTo("[fallback]");
+  }
+
+  @Test
   public void string_getByKey_notFound_escaping() {
     // Arrange
     var locale = Locale.ENGLISH;

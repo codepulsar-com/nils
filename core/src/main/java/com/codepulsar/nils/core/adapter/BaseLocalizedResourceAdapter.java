@@ -99,8 +99,7 @@ public abstract class BaseLocalizedResourceAdapter<A extends Adapter, C extends 
         language = "";
       }
       Locale parent = new Locale(language, country);
-      fallbackAdapter =
-          adapterContext.getFactory().create(adapterContext.getConfig(), parent);
+      fallbackAdapter = adapterContext.getFactory().create(adapterContext.getConfig(), parent);
     }
 
     return fallbackAdapter;
@@ -115,7 +114,8 @@ public abstract class BaseLocalizedResourceAdapter<A extends Adapter, C extends 
   protected void initFallbackAvailable() {
     var config = (LocalizedResourceConfig) adapterConfig;
     this.fallbackPossible =
-        !ROOT_LOCALE.equals(locale) || !resourceName.endsWith(config.getBaseFileName());
+        config.isFallbackActive()
+            && (!ROOT_LOCALE.equals(locale) || !resourceName.endsWith(config.getBaseFileName()));
   }
 
   /**

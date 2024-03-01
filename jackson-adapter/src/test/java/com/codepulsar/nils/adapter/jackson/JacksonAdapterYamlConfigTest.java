@@ -38,6 +38,7 @@ public class JacksonAdapterYamlConfigTest {
     assertThat(underTest.getOwner()).isEqualTo(getClass().getModule());
     assertThat(underTest.getBaseFileName()).isEqualTo("nls/translation.yaml");
     assertThat(underTest.getFactoryClass()).isEqualTo(JacksonAdapterFactory.class);
+    assertThat(underTest.isFallbackActive()).isTrue();
   }
 
   @Test

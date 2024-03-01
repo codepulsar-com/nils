@@ -1,66 +1,20 @@
 package com.codepulsar.nils.adapter.gson;
 
 import static com.codepulsar.nils.core.util.ParameterCheck.NILS_CONFIG;
+import static com.codepulsar.nils.core.util.ParameterCheck.notNull;
 
 import com.codepulsar.nils.api.adapter.AdapterFactory;
-import com.codepulsar.nils.api.adapter.config.LocalizedResourceConfig;
-import com.codepulsar.nils.core.adapter.config.BaseNilsConfig;
-import com.codepulsar.nils.core.util.ParameterCheck;
+import com.codepulsar.nils.core.adapter.config.BaseLocalizedResourceNilsConfig;
 
-/** Configuration for the {@link GsonAdapter} implementation. */
-public class GsonAdapterConfig extends BaseNilsConfig<GsonAdapterConfig>
-    implements LocalizedResourceConfig {
-
-  private Module owner;
-
-  private String baseFileName = "nls/translation.json";
+/**
+ * Configuration for the {@link GsonAdapter} implementation.
+ *
+ * <p>The default base file name is {@code nls/translation.json}.
+ */
+public class GsonAdapterConfig extends BaseLocalizedResourceNilsConfig<GsonAdapterConfig> {
 
   private GsonAdapterConfig(Module owner) {
-    this.owner = owner;
-  }
-  /**
-   * Gets the owner module for the nls support.
-   *
-   * @return A Module object.
-   */
-  public Module getOwner() {
-    return owner;
-  }
-
-  // TODO useFallback (cascade for not found keys in the current locale)
-
-  /**
-   * Gets the base name of the json files.
-   *
-   * <p>The name can include the paths, but must not contains the file extension <code>.json</code>.
-   *
-   * <p>The default value is <code>nls/translation</code>.
-   *
-   * @return The base name of the json files.
-   * @see #baseFileName(String)
-   */
-  @Override
-  public String getBaseFileName() {
-    return baseFileName;
-  }
-  /**
-   * Sets the base name of the json files.
-   *
-   * <p>The name can include the paths, but must not contains the file extension <code>.json</code>.
-   *
-   * <p>The default value is <code>nls/translation</code>.
-   *
-   * @param baseFileName The base name of the json files.
-   * @return This config object.
-   * @see #getBaseFileName()
-   */
-  public GsonAdapterConfig baseFileName(String baseFileName) {
-    this.baseFileName =
-        ParameterCheck.notNullEmptyOrBlank(baseFileName, "baseFileName", NILS_CONFIG);
-    if (baseFileName.lastIndexOf(".") < 0) {
-      this.baseFileName += ".json";
-    }
-    return this;
+    super(owner, ".json");
   }
 
   @Override
@@ -76,7 +30,7 @@ public class GsonAdapterConfig extends BaseNilsConfig<GsonAdapterConfig>
    * @return The created GsonAdapterConfig.
    */
   public static GsonAdapterConfig init(Class<?> owner) {
-    ParameterCheck.notNull(owner, "owner", NILS_CONFIG);
+    notNull(owner, "owner", NILS_CONFIG);
     return new GsonAdapterConfig(owner.getModule());
   }
 
@@ -89,7 +43,7 @@ public class GsonAdapterConfig extends BaseNilsConfig<GsonAdapterConfig>
    * @return The created GsonAdapterConfig.
    */
   public static GsonAdapterConfig init(Object owner) {
-    ParameterCheck.notNull(owner, "owner", NILS_CONFIG);
+    notNull(owner, "owner", NILS_CONFIG);
     return init(owner.getClass());
   }
 }

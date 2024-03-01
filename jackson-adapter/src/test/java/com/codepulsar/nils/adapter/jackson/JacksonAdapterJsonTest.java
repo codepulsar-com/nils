@@ -197,6 +197,22 @@ public class JacksonAdapterJsonTest {
   }
 
   @Test
+  public void translateKeyFallback_fallbackInactive() {
+    // Arrange
+    var locale = Locale.GERMAN;
+    var config =
+        JacksonAdapterJsonConfig.init(this).baseFileName("test/existing").fallbackActive(false);
+    context.locale(locale).config(config);
+    var underTest = new JacksonAdapter(context);
+
+    // Act
+    var value = underTest.getTranslation("translate.fallback");
+
+    // Assert
+    assertThat(value).isEmpty();
+  }
+
+  @Test
   public void translateKeyNotFound() {
     // Arrange
     var locale = Locale.ENGLISH;

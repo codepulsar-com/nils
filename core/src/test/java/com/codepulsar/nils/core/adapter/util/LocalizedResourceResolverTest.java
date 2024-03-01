@@ -191,5 +191,10 @@ public class LocalizedResourceResolverTest {
     public Module getOwner() {
       return getClass().getModule();
     }
+
+    @Override
+    public boolean isFallbackActive() {
+      return true;
+    }
   }
 }

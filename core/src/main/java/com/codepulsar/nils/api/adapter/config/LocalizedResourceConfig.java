@@ -11,15 +11,25 @@ import com.codepulsar.nils.core.adapter.util.LocalizedResourceResolver;
  */
 public interface LocalizedResourceConfig {
   /**
-   * Gets the base name of the resource files.
+   * Gets the base name for the localized files.
    *
-   * <p>The name can include the paths and may contains a file extension, depending on the {@link
-   * Adapter} implementation.
+   * <p>The name can include the paths with a file extension.
    *
-   * @return The base name of the resource files.
+   * <p>See for information about the default value in the concrete implementation class.
+   *
+   * @return The base name of the localized files.
+   * @see #baseFileName(String)
    */
   String getBaseFileName();
-
+  /**
+   * Gets the flag, if a fallback to other resource files is active.
+   *
+   * <p>In case it is set to {@code true} a fallback to other localized resources ("de_DE" &gt; "de"
+   * &gt; "") will be performed.
+   *
+   * @return {@code true} if active, else {@code false}.
+   */
+  boolean isFallbackActive();
   /**
    * Gets the owner module for the nls support.
    *

@@ -1,27 +1,20 @@
 package com.codepulsar.nils.adapter.jackson;
 
-import java.util.Locale;
+import java.util.List;
 
 import com.codepulsar.nils.api.NilsConfig;
-import com.codepulsar.nils.api.adapter.AdapterFactory;
-import com.codepulsar.nils.api.error.NilsConfigException;
 import com.codepulsar.nils.core.adapter.AdapterContext;
-import com.codepulsar.nils.core.util.ParameterCheck;
+import com.codepulsar.nils.core.adapter.BaseAdapterFactory;
 /** The factory for the {@link JacksonAdapter}. */
-public class JacksonAdapterFactory implements AdapterFactory<JacksonAdapter> {
+public class JacksonAdapterFactory extends BaseAdapterFactory<JacksonAdapter> {
 
   @Override
-  public JacksonAdapter create(NilsConfig<?> config, Locale locale) {
-    ParameterCheck.notNull(config, "config");
-    ParameterCheck.notNull(locale, "locale");
+  protected List<Class<? extends NilsConfig<?>>> getValidAdapterConfigClasses() {
+    return List.of(JacksonAdapterJsonConfig.class, JacksonAdapterYamlConfig.class);
+  }
 
-    if (!(config instanceof JacksonAdapterConfig)) {
-      throw new NilsConfigException(
-          "The provided AdapterConfig (%s) is not of type %s.",
-          config, JacksonAdapterConfig.class.getName());
-    }
-    var adapterContext =
-        new AdapterContext<JacksonAdapter>().config(config).locale(locale).factory(this);
-    return new JacksonAdapter(adapterContext);
+  @Override
+  protected JacksonAdapter createAdapter(AdapterContext<JacksonAdapter> context) {
+    return new JacksonAdapter(context);
   }
 }

@@ -66,7 +66,7 @@ public class ExceptionBuilder {
     }
 
     var message = msg != null ? msg : errorType.getDefaultMessage();
-    if (cause == null) { // TODO Bug: should be cause != null
+    if (cause != null) {
       if (args == null || args.length == 0) {
         return new NilsException(errorType, message, cause);
       }

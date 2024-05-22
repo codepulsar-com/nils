@@ -21,6 +21,7 @@
 		<module>gson-adapter</module>
 		<module>snakeyaml-adapter</module>
 		<module>jackson-adapter</module>
+		<module>jdbc-adapter</module>
 	</modules>
 
 	<dependencyManagement>

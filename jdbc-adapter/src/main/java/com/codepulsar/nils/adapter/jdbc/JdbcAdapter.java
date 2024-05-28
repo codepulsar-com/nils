@@ -25,8 +25,6 @@ import com.codepulsar.nils.core.adapter.util.FallbackAdapterHandler;
 /** An {@link Adapter} implementation for accessing a database via JDBC to get the translations. */
 public class JdbcAdapter implements Adapter {
   private static final Logger LOG = LoggerFactory.getLogger(JdbcAdapter.class);
-  /** Constant for an empty {@code Locale} */
-  private static final Locale ROOT_LOCALE = new Locale("");
 
   private final ReentrantLock lock = new ReentrantLock();
   private final AdapterContext<JdbcAdapter> adapterContext;
@@ -49,7 +47,8 @@ public class JdbcAdapter implements Adapter {
     }
     adapterConfig = (JdbcAdapterConfig) context.getConfig();
     locale = context.getLocale();
-    this.fallbackAdapterHandler = new FallbackAdapterHandler<>(adapterContext);
+    this.fallbackAdapterHandler =
+        new FallbackAdapterHandler<>(adapterContext, adapterConfig.getRootLocale());
     checkConnectionConfig();
     initSelectStatement();
     initFallbackAvailable();
@@ -150,6 +149,7 @@ public class JdbcAdapter implements Adapter {
   }
 
   private void initFallbackAvailable() {
-    this.fallbackPossible = adapterConfig.isFallbackActive() && (!ROOT_LOCALE.equals(locale));
+    this.fallbackPossible =
+        adapterConfig.isFallbackActive() && (!adapterConfig.getRootLocale().equals(locale));
   }
 }

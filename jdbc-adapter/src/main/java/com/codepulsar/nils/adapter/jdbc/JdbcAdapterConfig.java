@@ -1,7 +1,10 @@
 package com.codepulsar.nils.adapter.jdbc;
 
 import static com.codepulsar.nils.core.util.ParameterCheck.NILS_CONFIG;
+import static com.codepulsar.nils.core.util.ParameterCheck.notNull;
 import static com.codepulsar.nils.core.util.ParameterCheck.notNullEmptyOrBlank;
+
+import java.util.Locale;
 
 import com.codepulsar.nils.api.adapter.AdapterFactory;
 import com.codepulsar.nils.core.adapter.config.BaseNilsConfig;
@@ -15,6 +18,7 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
   private String password = "";
   private String driverClass;
   private boolean fallbackActive = true;
+  private Locale rootLocale = new Locale("");
 
   private String schema = null;
   private String tableName = "NILS_TRANSLATION";
@@ -290,6 +294,28 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
    */
   public JdbcAdapterConfig fallbackActive(boolean fallback) {
     this.fallbackActive = fallback;
+    return this;
+  }
+  /**
+   * Get the root {@code Locale}.
+   *
+   * <p>The default value is a Locale without any language information ("").
+   *
+   * @return The root locale.
+   */
+  public Locale getRootLocale() {
+    return rootLocale;
+  }
+  // TODO docu / test / public docs
+  /**
+   * Set the root {@code Locale}.
+   *
+   * @param rootLocale The root locale.
+   * @return This config object.
+   * @see #getRootLocale()
+   */
+  public JdbcAdapterConfig rootLocale(Locale rootLocale) {
+    this.rootLocale = notNull(rootLocale, "rootLocale", NILS_CONFIG);
     return this;
   }
 

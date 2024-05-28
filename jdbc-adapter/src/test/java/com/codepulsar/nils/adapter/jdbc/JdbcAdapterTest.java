@@ -120,6 +120,22 @@ public class JdbcAdapterTest {
   }
 
   @Test
+  public void fallback_alternativeRootLocale() {
+    // Arrange
+    var locale = Locale.ITALIAN;
+    var config = JdbcAdapterConfig.init(url, username, password).rootLocale(Locale.GERMAN);
+    context.locale(locale).config(config);
+    var underTest = new JdbcAdapter(context);
+
+    // Act
+    var value = underTest.getTranslation("translate.me");
+
+    // Assert
+    assertThat(value).isNotEmpty();
+    assertThat(value.get()).isEqualTo("Ich bin übersetzt!");
+  }
+
+  @Test
   public void translateKeyFound_nestedKeys() {
     // Arrange
     var locale = Locale.ENGLISH;

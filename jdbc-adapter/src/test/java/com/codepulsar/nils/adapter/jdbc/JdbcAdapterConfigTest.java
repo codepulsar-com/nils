@@ -3,6 +3,8 @@ package com.codepulsar.nils.adapter.jdbc;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.Locale;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -26,6 +28,7 @@ public class JdbcAdapterConfigTest {
     assertThat(underTest.getUrl()).isEqualTo("URL");
     assertThat(underTest.getUsername()).isEqualTo("user");
     assertThat(underTest.getPassword()).isEqualTo("password");
+    assertThat(underTest.getRootLocale()).isEqualTo(new Locale(""));
     assertThat(underTest.getDriverClass()).isEqualTo(null);
     assertThat(underTest.getSchema()).isEqualTo(null);
     assertThat(underTest.getTableName()).isEqualTo("NILS_TRANSLATION");
@@ -59,6 +62,30 @@ public class JdbcAdapterConfigTest {
     // Assert
     assertThat(next).isNotNull();
     assertThat(next.getCacheTimeout()).isEqualTo(1000L);
+  }
+
+  @Test
+  public void rootLocale() {
+    // Arrange
+    var underTest = JdbcAdapterConfig.init("URL", "user", "password");
+
+    // Act
+    var next = underTest.rootLocale(Locale.FRANCE);
+
+    // Assert
+    assertThat(next).isNotNull();
+    assertThat(next.getRootLocale()).isEqualTo(Locale.FRANCE);
+  }
+
+  @Test
+  public void rootLocale_invalid() {
+    // Arrange
+    var underTest = JdbcAdapterConfig.init("URL", "user", "password");
+    Locale locale = null;
+    // Act / Assert
+    assertThatThrownBy(() -> underTest.rootLocale(locale))
+        .isInstanceOf(NilsException.class)
+        .hasMessage("NILS-004: Parameter 'rootLocale' cannot be null.");
   }
 
   @ParameterizedTest

@@ -1,6 +1,7 @@
 package com.codepulsar.nils.core.adapter.util;
 
 import java.util.Locale;
+import java.util.Objects;
 
 import com.codepulsar.nils.api.adapter.Adapter;
 import com.codepulsar.nils.core.adapter.AdapterContext;
@@ -13,8 +14,15 @@ public class FallbackAdapterHandler<A extends Adapter> {
   /** The {@link AdapterContext} of the adapter. */
   private final AdapterContext<A> adapterContext;
 
+  private Locale rootLocale;
+
   public FallbackAdapterHandler(AdapterContext<A> adapterContext) {
     this.adapterContext = adapterContext;
+  }
+
+  public FallbackAdapterHandler(AdapterContext<A> adapterContext, Locale rootLocale) {
+    this(adapterContext);
+    this.rootLocale = Objects.requireNonNull(rootLocale, "'rootLocale' cannot be null.");
   }
   /**
    * Gets the {@link Adapter} for the fallback to another {@code Locale}.
@@ -33,6 +41,10 @@ public class FallbackAdapterHandler<A extends Adapter> {
         language = "";
       }
       Locale parent = new Locale(language, country);
+      if ("".equals(language) && rootLocale != null) {
+        parent = rootLocale;
+      }
+
       fallbackAdapter = adapterContext.getFactory().create(adapterContext.getConfig(), parent);
     }
 

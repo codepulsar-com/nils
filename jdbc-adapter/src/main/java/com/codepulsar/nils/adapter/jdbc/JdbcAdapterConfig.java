@@ -27,6 +27,7 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
   private String valueField = "NLS_VALUE";
 
   private long cacheTimeout = -1L;
+
   /**
    * Get the database URL.
    *
@@ -51,6 +52,7 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
     this.url = notNullEmptyOrBlank(url, "url", NILS_CONFIG).trim();
     return this;
   }
+
   /**
    * Get the user name to connect to the database.
    *
@@ -75,6 +77,7 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
     this.username = notNullEmptyOrBlank(username, "username", NILS_CONFIG).trim();
     return this;
   }
+
   /**
    * Get the password to connect to the database.
    *
@@ -99,6 +102,7 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
     this.password = ParameterCheck.notNull(password, "password", NILS_CONFIG).trim();
     return this;
   }
+
   /**
    * Get the driver class name of the JDBC driver implementation.
    *
@@ -110,6 +114,7 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
   public String getDriverClass() {
     return driverClass;
   }
+
   /**
    * Set the driver class name of the JDBC driver implementation.
    *
@@ -124,6 +129,7 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
     this.driverClass = notNullEmptyOrBlank(driverClass, "driverClass", NILS_CONFIG).trim();
     return this;
   }
+
   /**
    * Get the database schema the translation table is located in.
    *
@@ -135,6 +141,7 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
   public String getSchema() {
     return schema;
   }
+
   /**
    * Set the database schema the translation table is located in.
    *
@@ -149,6 +156,7 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
     this.schema = notNullEmptyOrBlank(schema, "schema", NILS_CONFIG).trim();
     return this;
   }
+
   /**
    * Get the name of the translation table.
    *
@@ -173,6 +181,7 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
     this.tableName = notNullEmptyOrBlank(tableName, "tableName", NILS_CONFIG).trim();
     return this;
   }
+
   /**
    * Get the name of the locale field in the translation table.
    *
@@ -197,6 +206,7 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
     this.localeField = notNullEmptyOrBlank(localeField, "localeField", NILS_CONFIG).trim();
     return this;
   }
+
   /**
    * Get the name of the translation key field in the translation table.
    *
@@ -207,6 +217,7 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
   public String getKeyField() {
     return keyField;
   }
+
   /**
    * Set the name of the translation key field in the translation table.
    *
@@ -285,6 +296,7 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
   public boolean isFallbackActive() {
     return fallbackActive;
   }
+
   /**
    * Set the flag, if a fallback to other locale is active.
    *
@@ -296,6 +308,7 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
     this.fallbackActive = fallback;
     return this;
   }
+
   /**
    * Get the root {@code Locale}.
    *
@@ -306,7 +319,7 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
   public Locale getRootLocale() {
     return rootLocale;
   }
-  // TODO docu / test / public docs
+
   /**
    * Set the root {@code Locale}.
    *
@@ -323,6 +336,7 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
   public Class<? extends AdapterFactory<?>> getFactoryClass() {
     return JdbcAdapterFactory.class;
   }
+
   /**
    * Create a <code>JdbcAdapterConfig</code>.
    *

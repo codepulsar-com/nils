@@ -27,7 +27,7 @@ public class ResourceBundleAdapterConfig
   /**
    * {@inheritDoc}
    *
-   * <p><strong>Note: always {@code true} for ResourceBundles.<strong>
+   * <p><strong>Note: always {@code true} for ResourceBundles.</strong>
    */
   @Override
   public boolean isFallbackActive() {
@@ -37,7 +37,7 @@ public class ResourceBundleAdapterConfig
   /**
    * {@inheritDoc}
    *
-   * <p><strong>Note: always {@code true} for ResourceBundles.<strong>
+   * <p><strong>Note: always {@code true} for ResourceBundles.</strong>
    */
   @Override
   public ResourceBundleAdapterConfig fallbackActive(boolean fallback) {

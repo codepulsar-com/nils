@@ -6,10 +6,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.Test;
 
 import com.codepulsar.nils.api.error.NilsException;
+import com.codepulsar.nils.core.adapter.config.BaseLocalizedResourceNilsConfig;
 
 public class JacksonAdapterYamlConfigTest {
   @Test
-  public void initClassNull() {
+  void initClassNull() {
     // Arrange
     Class<?> nullClass = null;
     // Act / Assert
@@ -19,7 +20,7 @@ public class JacksonAdapterYamlConfigTest {
   }
 
   @Test
-  public void initObjectNull() {
+  void initObjectNull() {
     // Arrange
     Object nullObject = null;
     // Act / Assert
@@ -29,12 +30,13 @@ public class JacksonAdapterYamlConfigTest {
   }
 
   @Test
-  public void initFromClass() {
+  void initFromClass() {
     // Act
     var underTest = JacksonAdapterYamlConfig.init(getClass());
 
     // Assert
     assertThat(underTest).isNotNull();
+    assertThat(underTest).isInstanceOf(BaseLocalizedResourceNilsConfig.class);
     assertThat(underTest.getOwner()).isEqualTo(getClass().getModule());
     assertThat(underTest.getBaseFileName()).isEqualTo("nls/translation.yaml");
     assertThat(underTest.getFactoryClass()).isEqualTo(JacksonAdapterFactory.class);
@@ -42,7 +44,7 @@ public class JacksonAdapterYamlConfigTest {
   }
 
   @Test
-  public void initFromObject() {
+  void initFromObject() {
     // Act
     var underTest = JacksonAdapterYamlConfig.init(this);
 
@@ -53,24 +55,28 @@ public class JacksonAdapterYamlConfigTest {
   }
 
   @Test
-  public void baseFileName_withoutFileExtension() {
-    // Assert
+  void baseFileName_withoutFileExtension() {
+    // Arrange
     var underTest = JacksonAdapterYamlConfig.init(this);
 
     // Act
     var returnValue = underTest.baseFileName("TestBundleName");
+
+    // Assert
     assertThat(returnValue).isNotNull();
     assertThat(returnValue).isEqualTo(underTest);
     assertThat(underTest.getBaseFileName()).isEqualTo("TestBundleName.yaml");
   }
 
   @Test
-  public void baseFileName_withFileExtension() {
-    // Assert
+  void baseFileName_withFileExtension() {
+    // Arrange
     var underTest = JacksonAdapterYamlConfig.init(this);
 
     // Act
     var returnValue = underTest.baseFileName("TestBundleName.yml");
+
+    // Assert
     assertThat(returnValue).isNotNull();
     assertThat(returnValue).isEqualTo(underTest);
     assertThat(underTest.getBaseFileName()).isEqualTo("TestBundleName.yml");

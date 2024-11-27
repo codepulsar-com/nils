@@ -10,13 +10,16 @@ import com.codepulsar.nils.core.adapter.config.BaseLocalizedResourceNilsConfig;
 /**
  * Configuration for the {@link JacksonAdapter} implementation for {@code yaml} files.
  *
- * <p>The default base file name is {@code nls/translation.yaml}.
+ * <p>*
+ *
+ * <p>The default base file name is the package of the Class resolved in {@link #init(Class)} or
+ * {@link #init(Object)} + "translation.yaml".
  */
 public class JacksonAdapterYamlConfig
     extends BaseLocalizedResourceNilsConfig<JacksonAdapterYamlConfig>
     implements JacksonAdapterConfig<JacksonAdapterYamlConfig> {
 
-  private JacksonAdapterYamlConfig(Module owner) {
+  private JacksonAdapterYamlConfig(Class<?> owner) {
     super(owner, ".yaml");
   }
 
@@ -28,20 +31,22 @@ public class JacksonAdapterYamlConfig
   /**
    * Create a {@linkplain JacksonAdapterYamlConfig} from a class as reference.
    *
-   * <p><em>Note:</em> The class will be used to resolve the module the class is located in.
+   * <p><em>Note:</em> The {@code Class} will be used for resolving and accessing the translation
+   * files.
    *
    * @param owner A Class
    * @return The created {@linkplain JacksonAdapterYamlConfig}.
    */
   public static JacksonAdapterYamlConfig init(Class<?> owner) {
     notNull(owner, "owner", nilsException(CONFIG_ERROR));
-    return new JacksonAdapterYamlConfig(owner.getModule());
+    return new JacksonAdapterYamlConfig(owner);
   }
 
   /**
    * Create a {@linkplain JacksonAdapterYamlConfig} from an object as reference.
    *
-   * <p><em>Note:</em> The object will be used to resolve the module the object class is located in.
+   * <p><em>Note:</em> The object's class will be used for resolving and accessing the translation
+   * files.
    *
    * @param owner An object
    * @return The created {@linkplain JacksonAdapterYamlConfig}.

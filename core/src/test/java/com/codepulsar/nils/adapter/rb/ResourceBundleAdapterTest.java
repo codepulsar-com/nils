@@ -88,7 +88,7 @@ public class ResourceBundleAdapterTest {
   void translateKeyFound1() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = ResourceBundleAdapterConfig.init(this).baseFileName("test/existing");
+    var config = ResourceBundleAdapterConfig.init(this);
     // Act
     ResourceBundleAdapter underTest = new ResourceBundleAdapter(config, locale);
     Optional<String> value = underTest.getTranslation("translate.me");
@@ -101,7 +101,7 @@ public class ResourceBundleAdapterTest {
   void translateKeyFound2() {
     // Arrange
     var locale = Locale.GERMAN;
-    var config = ResourceBundleAdapterConfig.init(this).baseFileName("test/existing");
+    var config = ResourceBundleAdapterConfig.init(this);
     // Act
     ResourceBundleAdapter underTest = new ResourceBundleAdapter(config, locale);
     Optional<String> value = underTest.getTranslation("translate.me");
@@ -114,7 +114,7 @@ public class ResourceBundleAdapterTest {
   void translateKeyFallback() {
     // Arrange
     var locale = Locale.GERMAN;
-    var config = ResourceBundleAdapterConfig.init(this).baseFileName("test/existing");
+    var config = ResourceBundleAdapterConfig.init(this);
     // Act
     ResourceBundleAdapter underTest = new ResourceBundleAdapter(config, locale);
     Optional<String> value = underTest.getTranslation("translate.fallback");
@@ -127,7 +127,7 @@ public class ResourceBundleAdapterTest {
   void translateKeyNotFound() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = ResourceBundleAdapterConfig.init(this).baseFileName("test/existing");
+    var config = ResourceBundleAdapterConfig.init(this);
     // Act
     ResourceBundleAdapter underTest = new ResourceBundleAdapter(config, locale);
     Optional<String> value = underTest.getTranslation("translate.me.butImNotThere");

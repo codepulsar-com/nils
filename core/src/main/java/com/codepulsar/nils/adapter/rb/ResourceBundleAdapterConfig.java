@@ -15,7 +15,7 @@ public class ResourceBundleAdapterConfig
     extends BaseLocalizedResourceNilsConfig<ResourceBundleAdapterConfig> {
   private static Logger LOG = LoggerFactory.getLogger(ResourceBundleAdapterConfig.class);
 
-  private ResourceBundleAdapterConfig(Module owner) {
+  private ResourceBundleAdapterConfig(Class<?> owner) {
     super(owner, "properties");
   }
 
@@ -48,20 +48,22 @@ public class ResourceBundleAdapterConfig
   /**
    * Create a <code>ResourceBundleAdapterConfig</code> from a class as reference.
    *
-   * <p><em>Note:</em> The class will be used to resolve the module the class is located in.
+   * <p><em>Note:</em> The {@code Class} will be used for resolving and accessing the translation
+   * files. files.
    *
    * @param owner A Class
    * @return The created ResourceBundleAdapterConfig.
    */
   public static ResourceBundleAdapterConfig init(Class<?> owner) {
     ParameterCheck.notNull(owner, "owner", nilsException(CONFIG_ERROR));
-    return new ResourceBundleAdapterConfig(owner.getModule());
+    return new ResourceBundleAdapterConfig(owner);
   }
 
   /**
    * Create a <code>ResourceBundleAdapterConfig</code> from an object as reference.
    *
-   * <p><em>Note:</em> The object will be used to resolve the module the object class is located in.
+   * <p><em>Note:</em> The object's class will be used for resolving and accessing the translation
+   * files. files.
    *
    * @param owner An object
    * @return The created ResourceBundleAdapterConfig.

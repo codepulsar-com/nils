@@ -34,5 +34,5 @@ public interface LocalizedResourceConfig {
    *
    * @return A Module object.
    */
-  Module getOwner();
+  Module getOwnerModule();
 }

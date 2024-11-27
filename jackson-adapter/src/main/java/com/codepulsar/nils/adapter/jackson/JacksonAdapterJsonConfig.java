@@ -10,13 +10,14 @@ import com.codepulsar.nils.core.adapter.config.BaseLocalizedResourceNilsConfig;
 /**
  * Configuration for the {@link JacksonAdapter} implementation for {@code json} files.
  *
- * <p>The default base file name is {@code nls/translation.json}.
+ * <p>The default base file name is the package of the Class resolved in {@link #init(Class)} or
+ * {@link #init(Object)} + "translation.json".
  */
 public class JacksonAdapterJsonConfig
     extends BaseLocalizedResourceNilsConfig<JacksonAdapterJsonConfig>
     implements JacksonAdapterConfig<JacksonAdapterJsonConfig> {
 
-  private JacksonAdapterJsonConfig(Module owner) {
+  private JacksonAdapterJsonConfig(Class<?> owner) {
     super(owner, ".json");
   }
 
@@ -28,20 +29,22 @@ public class JacksonAdapterJsonConfig
   /**
    * Create a {@linkplain JacksonAdapterJsonConfig} from a class as reference.
    *
-   * <p><em>Note:</em> The class will be used to resolve the module the class is located in.
+   * <p><em>Note:</em> The {@code Class} will be used for resolving and accessing the translation
+   * files.
    *
    * @param owner A Class
    * @return The created {@linkplain JacksonAdapterJsonConfig}.
    */
   public static JacksonAdapterJsonConfig init(Class<?> owner) {
     notNull(owner, "owner", nilsException(CONFIG_ERROR));
-    return new JacksonAdapterJsonConfig(owner.getModule());
+    return new JacksonAdapterJsonConfig(owner);
   }
 
   /**
    * Create a {@linkplain JacksonAdapterJsonConfig} from an object as reference.
    *
-   * <p><em>Note:</em> The object will be used to resolve the module the object class is located in.
+   * <p><em>Note:</em> The object's class will be used for resolving and accessing the translation
+   * files.
    *
    * @param owner An object
    * @return The created {@linkplain JacksonAdapterJsonConfig}.

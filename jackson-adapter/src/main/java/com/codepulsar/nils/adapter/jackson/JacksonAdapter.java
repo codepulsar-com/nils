@@ -61,7 +61,7 @@ public class JacksonAdapter
   @Override
   protected InputStream resolveInputStream(String resource) {
     try {
-      var owner = adapterConfig.getOwner();
+      var owner = adapterConfig.getOwnerModule();
       return owner.getResourceAsStream(resource);
     } catch (IOException e) {
       LOG.error("Error getting resource {}.", e, resource);

@@ -20,7 +20,7 @@ public class ResourceBundleAdapter implements Adapter {
 
     this.adapterConfig = (ResourceBundleAdapterConfig) config;
     var resourceBundle = adapterConfig.getBaseFileName().replace(".properties", "");
-    this.bundle = ResourceBundle.getBundle(resourceBundle, locale, adapterConfig.getOwner());
+    this.bundle = ResourceBundle.getBundle(resourceBundle, locale, adapterConfig.getOwnerModule());
   }
 
   @Override

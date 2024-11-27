@@ -17,7 +17,7 @@ public class BaseLocalizedResourceAdapterTesteeConfig
   }
 
   @Override
-  public Module getOwner() {
+  public Module getOwnerModule() {
     return owner;
   }
 

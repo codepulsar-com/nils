@@ -22,8 +22,8 @@ import com.codepulsar.nils.core.util.ParameterCheck;
 public abstract class BaseLocalizedResourceNilsConfig<CFG extends BaseNilsConfig<?>>
     extends BaseNilsConfig<CFG> implements LocalizedResourceConfig {
 
-  private final Module owner;
-  private final String baseFileExtension;
+  private final Class<?> owner;
+  private String baseFileExtension;
   private String baseFileName;
   private boolean fallbackActive = true;
 
@@ -33,19 +33,20 @@ public abstract class BaseLocalizedResourceNilsConfig<CFG extends BaseNilsConfig
    * @param owner The owner of the resource file.
    * @param defaultBaseFileExtension The default file extension for the base file.
    */
-  protected BaseLocalizedResourceNilsConfig(Module owner, String defaultBaseFileExtension) {
+  protected BaseLocalizedResourceNilsConfig(Class<?> owner, String defaultBaseFileExtension) {
     this.owner = notNull(owner, "owner");
-    var fileExtension = notNullEmptyOrBlank(defaultBaseFileExtension, "defaultBaseFileExtension");
-    if (!fileExtension.startsWith(".")) {
-      fileExtension = "." + fileExtension;
+    baseFileExtension = notNullEmptyOrBlank(defaultBaseFileExtension, "defaultBaseFileExtension");
+    if (!baseFileExtension.startsWith(".")) {
+      baseFileExtension = "." + baseFileExtension;
     }
-    this.baseFileExtension = fileExtension;
-    this.baseFileName = "nls/translation" + fileExtension;
+    this.baseFileName =
+        String.format(
+            "%s/translation%s", owner.getPackageName().replace('.', '/'), baseFileExtension);
   }
 
   @Override
-  public Module getOwner() {
-    return owner;
+  public Module getOwnerModule() {
+    return owner.getModule();
   }
 
   @Override

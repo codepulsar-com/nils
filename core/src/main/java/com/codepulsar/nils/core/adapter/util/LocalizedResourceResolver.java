@@ -23,24 +23,25 @@ import com.codepulsar.nils.core.util.ParameterCheck;
  * The class <strong>LocalizedResourceResolver</strong> is used to get a resource for a specific
  * <code>Locale</code>.
  *
- * <p>If a resource is not available for a locale it will use the next level.
+ * <p>If a resource is not available for a specific <code>Locale</code> the next, more general, will
+ * be used.
  *
  * <p>Example:
  *
  * <ul>
- *   <li>BaseFileName is <code>/nls/translation.properties</code>
+ *   <li>The BaseFileName is <code>/com/example/app/translation.properties</code>
  *   <li>Locale is <code>de_DE</code>
  * </ul>
  *
  * The resolution will try to find the following files:
  *
- * <pre>
- * /nls/translation_de_DE.properties
- * /nls/translation_de.properties
- * /nls/translation.properties
- * </pre>
+ * <ul>
+ *   <li>{@code /com/example/app/translation_de_DE.properties}
+ *   <li>{@code /com/example/app/translation_de.properties}
+ *   <li>{@code /com/example/app/translation.properties}
+ * </ul>
  *
- * The first that was found will be returned as <code>InputStream</code>.
+ * The first resource that was found will be returned as <code>InputStream</code>.
  */
 public class LocalizedResourceResolver implements AutoCloseable {
 

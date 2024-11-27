@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import com.codepulsar.nils.api.adapter.config.LocalizedResourceConfig;
 import com.codepulsar.nils.api.error.NilsException;
 import com.codepulsar.nils.core.util.ParameterCheck;
+
 /**
  * The class <strong>LocalizedResourceResolver</strong> is used to get a resource for a specific
  * <code>Locale</code>.
@@ -112,8 +113,7 @@ public class LocalizedResourceResolver implements AutoCloseable {
   private List<String> resolveResourceNames() {
     Control ctl = Control.getControl(Control.FORMAT_DEFAULT);
     List<Locale> locales = ctl.getCandidateLocales(baseFileName, locale);
-    return locales
-        .stream()
+    return locales.stream()
         .map(l -> ctl.toBundleName(baseFileName, l) + fileExtension)
         .collect(Collectors.toList());
   }
@@ -132,17 +132,18 @@ public class LocalizedResourceResolver implements AutoCloseable {
 
   @Override
   public void close() {
-    if (inputStream != null) {
+    if (inputStream == null) {
+      return;
+    }
 
-      try {
-        inputStream.close();
-      } catch (IOException e) {
-        LOG.warn(
-            "Error closing inputStream of resource '{}'. Reason: {}",
-            usedResourceName,
-            e.getMessage(),
-            e);
-      }
+    try {
+      inputStream.close();
+    } catch (IOException e) {
+      LOG.warn(
+          "Error closing inputStream of resource '{}'. Reason: {}",
+          usedResourceName,
+          e.getMessage(),
+          e);
     }
   }
 }

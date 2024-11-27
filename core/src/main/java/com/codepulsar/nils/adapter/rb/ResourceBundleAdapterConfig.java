@@ -3,42 +3,20 @@ package com.codepulsar.nils.adapter.rb;
 import static com.codepulsar.nils.core.error.ErrorTypes.CONFIG_ERROR;
 import static com.codepulsar.nils.core.util.ParameterCheck.nilsException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.codepulsar.nils.api.adapter.AdapterFactory;
-import com.codepulsar.nils.core.adapter.config.BaseNilsConfig;
+import com.codepulsar.nils.core.adapter.config.BaseLocalizedResourceNilsConfig;
 import com.codepulsar.nils.core.util.ParameterCheck;
 
 /** Configuration for the {@link ResourceBundleAdapter} implementation. */
-public class ResourceBundleAdapterConfig extends BaseNilsConfig<ResourceBundleAdapterConfig> {
-
-  private Module owner;
-  private String resourcesBundleName = "nls/translation";
+public class ResourceBundleAdapterConfig
+    extends BaseLocalizedResourceNilsConfig<ResourceBundleAdapterConfig> {
+  private static Logger LOG = LoggerFactory.getLogger(ResourceBundleAdapterConfig.class);
 
   private ResourceBundleAdapterConfig(Module owner) {
-    this.owner = owner;
-  }
-
-  /**
-   * Gets the owner module for the nls support.
-   *
-   * @return A Module object.
-   */
-  public Module getOwner() {
-    return owner;
-  }
-
-  /**
-   * Gets the name of the resource bundle.
-   *
-   * <p>The name can include the paths, but must not contains the file extension <code>.properties
-   * </code>.
-   *
-   * <p>The default value is <code>nls/translation</code>.
-   *
-   * @return The name of the resource bundle.
-   * @see #resourcesBundleName(String)
-   */
-  public String getResourcesBundleName() {
-    return resourcesBundleName;
+    super(owner, "properties");
   }
 
   @Override
@@ -47,22 +25,24 @@ public class ResourceBundleAdapterConfig extends BaseNilsConfig<ResourceBundleAd
   }
 
   /**
-   * Sets the name of the resource bundle.
+   * {@inheritDoc}
    *
-   * <p>The name can include the paths, but must not contains the file extension <code>.properties
-   * </code>.
-   *
-   * <p>The default value is <code>nls/translation</code>.
-   *
-   * @param resourcesBundleName The name of the resource bundle.
-   * @return This config object.
-   * @see #getResourcesBundleName()
+   * <p><strong>Note: always {@code true} for ResourceBundles.<strong>
    */
-  public ResourceBundleAdapterConfig resourcesBundleName(String resourcesBundleName) {
-    this.resourcesBundleName =
-        ParameterCheck.notNullEmptyOrBlank(
-            resourcesBundleName, "resourcesBundleName", nilsException(CONFIG_ERROR));
-    return this;
+  @Override
+  public boolean isFallbackActive() {
+    return super.isFallbackActive();
+  }
+
+  /**
+   * {@inheritDoc}
+   *
+   * <p><strong>Note: always {@code true} for ResourceBundles.<strong>
+   */
+  @Override
+  public ResourceBundleAdapterConfig fallbackActive(boolean fallback) {
+    LOG.warn("Call of fallbackActive() will be ignored for ResourceBundles.");
+    return super.fallbackActive(true);
   }
 
   /**

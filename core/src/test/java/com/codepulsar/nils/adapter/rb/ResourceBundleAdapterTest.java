@@ -18,18 +18,18 @@ public class ResourceBundleAdapterTest {
   private Locale current;
 
   @BeforeEach
-  public void defineDefault() {
+  void defineDefault() {
     current = Locale.getDefault();
     Locale.setDefault(Locale.ENGLISH);
   }
 
   @AfterEach
-  public void resetLocale() {
+  void resetLocale() {
     Locale.setDefault(current);
   }
 
   @Test
-  public void resourceBundleAdapter_nullLocale() {
+  void resourceBundleAdapter_nullLocale() {
     // Arrange
     Locale locale = null;
     var config = ResourceBundleAdapterConfig.init(this);
@@ -40,7 +40,7 @@ public class ResourceBundleAdapterTest {
   }
 
   @Test
-  public void resourceBundleAdapter_nullConfig() {
+  void resourceBundleAdapter_nullConfig() {
     // Arrange
     Locale locale = Locale.ENGLISH;
     NilsConfig<?> config = null;
@@ -51,7 +51,7 @@ public class ResourceBundleAdapterTest {
   }
 
   @Test
-  public void resourceBundleAdapter_defautltConfig() {
+  void resourceBundleAdapter_defautltConfig() {
     // Arrange
     var locale = Locale.ENGLISH;
     var config = ResourceBundleAdapterConfig.init(this);
@@ -62,20 +62,20 @@ public class ResourceBundleAdapterTest {
   }
 
   @Test
-  public void invalidResourceBundle() {
+  void invalidResourceBundle() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/non_existing");
+    var config = ResourceBundleAdapterConfig.init(this).baseFileName("test/non_existing");
     // Act / Assert
     assertThatThrownBy(() -> new ResourceBundleAdapter(config, locale))
         .isInstanceOf(MissingResourceException.class);
   }
 
   @Test
-  public void missingResourceBundle() {
+  void missingResourceBundle() {
     // Arrange
     var locale = Locale.ITALIAN;
-    var config = ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing");
+    var config = ResourceBundleAdapterConfig.init(this).baseFileName("test/existing");
     // Act
     ResourceBundleAdapter underTest = new ResourceBundleAdapter(config, locale);
     Optional<String> value = underTest.getTranslation("translate.me");
@@ -85,10 +85,10 @@ public class ResourceBundleAdapterTest {
   }
 
   @Test
-  public void translateKeyFound1() {
+  void translateKeyFound1() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing");
+    var config = ResourceBundleAdapterConfig.init(this).baseFileName("test/existing");
     // Act
     ResourceBundleAdapter underTest = new ResourceBundleAdapter(config, locale);
     Optional<String> value = underTest.getTranslation("translate.me");
@@ -98,10 +98,10 @@ public class ResourceBundleAdapterTest {
   }
 
   @Test
-  public void translateKeyFound2() {
+  void translateKeyFound2() {
     // Arrange
     var locale = Locale.GERMAN;
-    var config = ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing");
+    var config = ResourceBundleAdapterConfig.init(this).baseFileName("test/existing");
     // Act
     ResourceBundleAdapter underTest = new ResourceBundleAdapter(config, locale);
     Optional<String> value = underTest.getTranslation("translate.me");
@@ -111,10 +111,10 @@ public class ResourceBundleAdapterTest {
   }
 
   @Test
-  public void translateKeyFallback() {
+  void translateKeyFallback() {
     // Arrange
     var locale = Locale.GERMAN;
-    var config = ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing");
+    var config = ResourceBundleAdapterConfig.init(this).baseFileName("test/existing");
     // Act
     ResourceBundleAdapter underTest = new ResourceBundleAdapter(config, locale);
     Optional<String> value = underTest.getTranslation("translate.fallback");
@@ -124,10 +124,10 @@ public class ResourceBundleAdapterTest {
   }
 
   @Test
-  public void translateKeyNotFound() {
+  void translateKeyNotFound() {
     // Arrange
     var locale = Locale.ENGLISH;
-    var config = ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing");
+    var config = ResourceBundleAdapterConfig.init(this).baseFileName("test/existing");
     // Act
     ResourceBundleAdapter underTest = new ResourceBundleAdapter(config, locale);
     Optional<String> value = underTest.getTranslation("translate.me.butImNotThere");

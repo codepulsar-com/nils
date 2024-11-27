@@ -19,19 +19,19 @@ public class ResourceBundleIntegrationTest {
   private Locale current;
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     current = Locale.getDefault();
     Locale.setDefault(Locale.ENGLISH);
-    adapterConfig = ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/integration");
+    adapterConfig = ResourceBundleAdapterConfig.init(this).baseFileName("test/integration");
   }
 
   @AfterEach
-  public void resetLocale() {
+  void resetLocale() {
     Locale.setDefault(current);
   }
 
   @Test
-  public void string_getByKey_found() {
+  void string_getByKey_found() {
     // Arrange
     var locale = Locale.ENGLISH;
     var underTest = NilsFactory.init(adapterConfig).nls(locale);
@@ -44,7 +44,7 @@ public class ResourceBundleIntegrationTest {
   }
 
   @Test
-  public void string_getByKey() {
+  void string_getByKey() {
     // Arrange
     var locale = Locale.GERMAN;
     var underTest = NilsFactory.init(adapterConfig).nls(locale);
@@ -57,7 +57,7 @@ public class ResourceBundleIntegrationTest {
   }
 
   @Test
-  public void string_getByKey_fallback() {
+  void string_getByKey_fallback() {
     // Arrange
     var locale = Locale.GERMAN;
     var underTest = NilsFactory.init(adapterConfig).nls(locale);
@@ -70,7 +70,7 @@ public class ResourceBundleIntegrationTest {
   }
 
   @Test
-  public void string_getByKey_notFound_escaping() {
+  void string_getByKey_notFound_escaping() {
     // Arrange
     var locale = Locale.ENGLISH;
     var underTest = NilsFactory.init(adapterConfig.suppressErrors(true)).nls(locale);
@@ -83,7 +83,7 @@ public class ResourceBundleIntegrationTest {
   }
 
   @Test
-  public void string_getByKey_notFound_exception() {
+  void string_getByKey_notFound_exception() {
     // Arrange
     var locale = Locale.ENGLISH;
     var underTest = NilsFactory.init(adapterConfig.suppressErrors(false)).nls(locale);
@@ -95,7 +95,7 @@ public class ResourceBundleIntegrationTest {
   }
 
   @Test
-  public void string_getByKeyAndArgs_found() {
+  void string_getByKeyAndArgs_found() {
     // Arrange
     var locale = Locale.ENGLISH;
     var underTest = NilsFactory.init(adapterConfig).nls(locale);
@@ -108,7 +108,7 @@ public class ResourceBundleIntegrationTest {
   }
 
   @Test
-  public void class_getByKey_found() {
+  void class_getByKey_found() {
     // Arrange
     var locale = Locale.ENGLISH;
     var underTest = NilsFactory.init(adapterConfig).nls(locale);
@@ -121,7 +121,7 @@ public class ResourceBundleIntegrationTest {
   }
 
   @Test
-  public void class_getByKey_notFound_escaping_changed() {
+  void class_getByKey_notFound_escaping_changed() {
     // Arrange
     var locale = Locale.ENGLISH;
     var config = adapterConfig.escapePattern(">>{0}<<").suppressErrors(true);
@@ -135,7 +135,7 @@ public class ResourceBundleIntegrationTest {
   }
 
   @Test
-  public void resolveKeyForOtherIncludeTag() {
+  void resolveKeyForOtherIncludeTag() {
     // Arrange
     var locale = Locale.ENGLISH;
     var config = adapterConfig.includeTag("[include]");
@@ -155,7 +155,7 @@ public class ResourceBundleIntegrationTest {
   }
 
   @Test
-  public void resolveValueWithMoreLevels() {
+  void resolveValueWithMoreLevels() {
     // Arrange
     var locale = Locale.ENGLISH;
     var adapter = new ResourceBundleAdapter(adapterConfig, locale);
@@ -175,7 +175,7 @@ public class ResourceBundleIntegrationTest {
   }
 
   @Test
-  public void circularInclude() {
+  void circularInclude() {
     // Arrange
     var locale = Locale.ENGLISH;
     var adapter = new ResourceBundleAdapter(adapterConfig, locale);

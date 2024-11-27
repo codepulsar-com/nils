@@ -22,19 +22,17 @@ public class IncludeHandlerTest {
   private NilsConfig<?> config;
 
   @BeforeEach
-  public void arrange() {
+  void arrange() {
     // Arrange
     config =
-        ResourceBundleAdapterConfig.init(this)
-            .resourcesBundleName("test/includes")
-            .suppressErrors(false);
+        ResourceBundleAdapterConfig.init(this).baseFileName("test/includes").suppressErrors(false);
     adapter = new ResourceBundleAdapter(config, Locale.ENGLISH);
     nls = new NLSImpl(adapter, config, Locale.ENGLISH);
     underTest = new IncludeHandler(config, adapter::getTranslation);
   }
 
   @Test
-  public void requestKeyHasTranslationItself() {
+  void requestKeyHasTranslationItself() {
     // Actual
     assertThat(adapter.getTranslation("com.xy.model.Customer._include").isPresent()).isTrue();
     assertThat(adapter.getTranslation("com.xy.model.Customer.name").isPresent()).isTrue();
@@ -51,7 +49,7 @@ public class IncludeHandlerTest {
   }
 
   @Test
-  public void getTranslationFrom1stElementInIncludeListButBothProvideAValue() {
+  void getTranslationFrom1stElementInIncludeListButBothProvideAValue() {
     // Actual
     assertThat(adapter.getTranslation("com.xy.model.Customer._include").isPresent()).isTrue();
     assertThat(adapter.getTranslation("com.xy.model.Customer.id").isEmpty()).isTrue();
@@ -68,7 +66,7 @@ public class IncludeHandlerTest {
   }
 
   @Test
-  public void getTranslationFrom1stElementInIncludeList() {
+  void getTranslationFrom1stElementInIncludeList() {
     // Actual
     assertThat(adapter.getTranslation("com.xy.model.Customer._include").isPresent()).isTrue();
     assertThat(adapter.getTranslation("com.xy.model.Customer.createDate").isPresent()).isFalse();
@@ -85,7 +83,7 @@ public class IncludeHandlerTest {
   }
 
   @Test
-  public void requestKeyHasTranslationItselfBut2ndIncludeProvideAlsoATranslation() {
+  void requestKeyHasTranslationItselfBut2ndIncludeProvideAlsoATranslation() {
     // Actual
     assertThat(adapter.getTranslation("com.xy.model.Customer._include").isPresent()).isTrue();
     assertThat(adapter.getTranslation("com.xy.model.Customer.street").isPresent()).isTrue();
@@ -103,7 +101,7 @@ public class IncludeHandlerTest {
   }
 
   @Test
-  public void getTranslationFrom2stElementInIncludeList() {
+  void getTranslationFrom2stElementInIncludeList() {
     // Actual
     assertThat(adapter.getTranslation("com.xy.model.Customer._include").isPresent()).isTrue();
     assertThat(adapter.getTranslation("com.xy.model.Customer.city").isPresent()).isFalse();
@@ -120,7 +118,7 @@ public class IncludeHandlerTest {
   }
 
   @Test
-  public void resolveKeyFromHigherlevelInclude() {
+  void resolveKeyFromHigherlevelInclude() {
     // Actual
     assertThat(adapter.getTranslation("data.Message._include").isPresent()).isTrue();
     assertThat(adapter.getTranslation("data.Message.buttons.ok").isPresent()).isFalse();
@@ -137,7 +135,7 @@ public class IncludeHandlerTest {
   }
 
   @Test
-  public void resolveKeyDirectlyButKeyIsAlsoInHigherLevelIncludeAvailable() {
+  void resolveKeyDirectlyButKeyIsAlsoInHigherLevelIncludeAvailable() {
     // Actual
     assertThat(adapter.getTranslation("data.Message._include").isPresent()).isTrue();
     assertThat(adapter.getTranslation("data.Message.buttons.cancel").isPresent()).isTrue();
@@ -155,7 +153,7 @@ public class IncludeHandlerTest {
   }
 
   @Test
-  public void resolveValueWithMoreLevels() {
+  void resolveValueWithMoreLevels() {
     // Actual
     assertThat(adapter.getTranslation("Level2._include").isPresent()).isTrue();
     assertThat(adapter.getTranslation("Level1._include").isPresent()).isTrue();
@@ -173,7 +171,7 @@ public class IncludeHandlerTest {
   }
 
   @Test
-  public void circularInclude() {
+  void circularInclude() {
     // Actual
     assertThat(adapter.getTranslation("Cycle1._include").isPresent()).isTrue();
     assertThat(adapter.getTranslation("Cycle2._include").isPresent()).isTrue();
@@ -192,7 +190,7 @@ public class IncludeHandlerTest {
   }
 
   @Test
-  public void circularInclude_exception() {
+  void circularInclude_exception() {
     // Arrange
     var nilsConfig = config.suppressErrors(false);
     var nls_ = new NLSImpl(adapter, nilsConfig, Locale.ENGLISH);
@@ -216,7 +214,7 @@ public class IncludeHandlerTest {
   }
 
   @Test
-  public void circularInclude_suppress() {
+  void circularInclude_suppress() {
     // Arrange
     var nilsConfig = config.suppressErrors(true);
     var nls_ = new NLSImpl(adapter, nilsConfig, Locale.ENGLISH);
@@ -241,7 +239,7 @@ public class IncludeHandlerTest {
   }
 
   @Test
-  public void circularIncludeLarger() {
+  void circularIncludeLarger() {
     // Actual
     assertThat(adapter.getTranslation("LargerCycle1._include").isPresent()).isTrue();
     assertThat(adapter.getTranslation("LargerCycle2._include").isPresent()).isTrue();
@@ -262,11 +260,11 @@ public class IncludeHandlerTest {
   }
 
   @Test
-  public void resolveKeyForOtherIncludeTag() {
+  void resolveKeyForOtherIncludeTag() {
     // Arrange
     var _config =
         ResourceBundleAdapterConfig.init(this)
-            .resourcesBundleName("test/includes")
+            .baseFileName("test/includes")
             .includeTag("[include]");
     var _adapter = new ResourceBundleAdapter(_config, Locale.ENGLISH);
     var _nls = new NLSImpl(adapter, _config, Locale.ENGLISH);

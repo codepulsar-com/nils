@@ -11,7 +11,7 @@ import com.codepulsar.nils.core.adapter.BaseAdapterFactory;
 public class ResourceBundleAdapterFactoryTest {
 
   @Test
-  public void factoryDefault() {
+  void factoryDefault() {
     // Act
     var underTest = new ResourceBundleAdapterFactory();
 
@@ -20,10 +20,10 @@ public class ResourceBundleAdapterFactoryTest {
   }
 
   @Test
-  public void create() {
+  void create() {
     // Arrange
     Locale locale = Locale.ENGLISH;
-    var config = ResourceBundleAdapterConfig.init(this).resourcesBundleName("test/existing");
+    var config = ResourceBundleAdapterConfig.init(this).baseFileName("test/existing");
     ResourceBundleAdapterFactory underTest = new ResourceBundleAdapterFactory();
     // Act
     ResourceBundleAdapter result = underTest.create(config, locale);

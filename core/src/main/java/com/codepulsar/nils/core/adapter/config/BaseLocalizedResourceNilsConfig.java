@@ -1,12 +1,14 @@
 package com.codepulsar.nils.core.adapter.config;
 
-import static com.codepulsar.nils.core.util.ParameterCheck.NILS_CONFIG;
+import static com.codepulsar.nils.core.error.ErrorTypes.CONFIG_ERROR;
+import static com.codepulsar.nils.core.util.ParameterCheck.nilsException;
 import static com.codepulsar.nils.core.util.ParameterCheck.notNull;
 import static com.codepulsar.nils.core.util.ParameterCheck.notNullEmptyOrBlank;
 
 import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.api.adapter.config.LocalizedResourceConfig;
 import com.codepulsar.nils.core.util.ParameterCheck;
+
 /**
  * The {@link BaseLocalizedResourceNilsConfig} is a base implementation of {@link NilsConfig} and
  * {@link LocalizedResourceConfig}.
@@ -24,6 +26,7 @@ public abstract class BaseLocalizedResourceNilsConfig<CFG extends BaseNilsConfig
   private final String baseFileExtension;
   private String baseFileName;
   private boolean fallbackActive = true;
+
   /**
    * Create a new instance.
    *
@@ -49,6 +52,7 @@ public abstract class BaseLocalizedResourceNilsConfig<CFG extends BaseNilsConfig
   public String getBaseFileName() {
     return baseFileName;
   }
+
   /**
    * Sets the base name for the localized files.
    *
@@ -63,7 +67,8 @@ public abstract class BaseLocalizedResourceNilsConfig<CFG extends BaseNilsConfig
   @SuppressWarnings("unchecked")
   public CFG baseFileName(String baseFileName) {
     this.baseFileName =
-        ParameterCheck.notNullEmptyOrBlank(baseFileName, "baseFileName", NILS_CONFIG);
+        ParameterCheck.notNullEmptyOrBlank(
+            baseFileName, "baseFileName", nilsException(CONFIG_ERROR));
     if (baseFileName.lastIndexOf(".") < 0) {
       this.baseFileName += this.baseFileExtension;
     }
@@ -74,6 +79,7 @@ public abstract class BaseLocalizedResourceNilsConfig<CFG extends BaseNilsConfig
   public boolean isFallbackActive() {
     return fallbackActive;
   }
+
   /**
    * Sets the flag, if a fallback to other resource files is active.
    *

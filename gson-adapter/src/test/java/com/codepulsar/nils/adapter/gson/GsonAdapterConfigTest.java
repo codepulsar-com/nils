@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.Test;
 
-import com.codepulsar.nils.api.error.NilsConfigException;
+import com.codepulsar.nils.api.error.NilsException;
 
 public class GsonAdapterConfigTest {
   @Test
@@ -14,7 +14,7 @@ public class GsonAdapterConfigTest {
     Class<?> nullClass = null;
     // Act / Assert
     assertThatThrownBy(() -> GsonAdapterConfig.init(nullClass))
-        .isInstanceOf(NilsConfigException.class)
+        .isInstanceOf(NilsException.class)
         .hasMessage("NILS-004: Parameter 'owner' cannot be null.");
   }
 
@@ -24,7 +24,7 @@ public class GsonAdapterConfigTest {
     Object nullObject = null;
     // Act / Assert
     assertThatThrownBy(() -> GsonAdapterConfig.init(nullObject))
-        .isInstanceOf(NilsConfigException.class)
+        .isInstanceOf(NilsException.class)
         .hasMessage("NILS-004: Parameter 'owner' cannot be null.");
   }
 

@@ -3,16 +3,12 @@ package com.codepulsar.nils.core.util;
 import java.util.function.Function;
 
 import com.codepulsar.nils.api.error.ErrorType;
-import com.codepulsar.nils.api.error.NilsConfigException;
 import com.codepulsar.nils.api.error.NilsException;
 
 public class ParameterCheck {
 
   public static final Function<String, ? extends RuntimeException> ILLEGAL_ARGUMENT =
       s -> new IllegalArgumentException(s);
-
-  public static final Function<String, ? extends RuntimeException> NILS_CONFIG =
-      s -> new NilsConfigException(s);
 
   private ParameterCheck() {
     super();

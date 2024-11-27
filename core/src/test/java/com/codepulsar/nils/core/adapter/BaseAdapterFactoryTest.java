@@ -8,7 +8,7 @@ import java.util.Locale;
 import org.junit.jupiter.api.Test;
 
 import com.codepulsar.nils.api.NilsConfig;
-import com.codepulsar.nils.api.error.NilsConfigException;
+import com.codepulsar.nils.api.error.NilsException;
 import com.codepulsar.nils.core.testadapter.BaseAdapterFactoryTesteeConfig;
 import com.codepulsar.nils.core.testadapter.BaseAdapterFactoryTesteeFactory;
 import com.codepulsar.nils.core.testadapter.StaticAdapterConfig;
@@ -49,7 +49,7 @@ public class BaseAdapterFactoryTest {
 
     // Act / Assert
     assertThatThrownBy(() -> underTest.create(config, locale))
-        .isInstanceOf(NilsConfigException.class)
+        .isInstanceOf(NilsException.class)
         .hasMessageContaining("The provided AdapterConfig")
         .hasMessageContaining("is not of the expected type");
   }

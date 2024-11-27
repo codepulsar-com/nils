@@ -1,6 +1,8 @@
 package com.codepulsar.nils.adapter.jdbc;
 
-import static com.codepulsar.nils.core.util.ParameterCheck.NILS_CONFIG;
+import static com.codepulsar.nils.core.error.ErrorTypes.ADAPTER_ERROR;
+import static com.codepulsar.nils.core.error.ErrorTypes.CONFIG_ERROR;
+import static com.codepulsar.nils.core.util.ParameterCheck.nilsException;
 import static com.codepulsar.nils.core.util.ParameterCheck.notNull;
 import static com.codepulsar.nils.core.util.ParameterCheck.notNullEmptyOrBlank;
 
@@ -18,10 +20,10 @@ import org.slf4j.LoggerFactory;
 
 import com.codepulsar.nils.adapter.jdbc.utils.JdbcErrorTypes;
 import com.codepulsar.nils.api.adapter.Adapter;
-import com.codepulsar.nils.api.error.NilsConfigException;
 import com.codepulsar.nils.api.error.NilsException;
 import com.codepulsar.nils.core.adapter.AdapterContext;
 import com.codepulsar.nils.core.adapter.util.FallbackAdapterHandler;
+
 /** An {@link Adapter} implementation for accessing a database via JDBC to get the translations. */
 public class JdbcAdapter implements Adapter {
   private static final Logger LOG = LoggerFactory.getLogger(JdbcAdapter.class);
@@ -41,9 +43,11 @@ public class JdbcAdapter implements Adapter {
     notNull(context.getConfig(), "context.config");
     notNull(context.getLocale(), "context.locale");
     if (!(context.getConfig() instanceof JdbcAdapterConfig)) {
-      throw new NilsConfigException(
-          "The provided AdapterConfig (%s) does not implement %s",
-          context.getConfig(), JdbcAdapter.class.getName());
+      throw ADAPTER_ERROR
+          .asException()
+          .message("The provided AdapterConfig (%s) does not implement %s.")
+          .args(context.getConfig(), JdbcAdapter.class.getName())
+          .go();
     }
     adapterConfig = (JdbcAdapterConfig) context.getConfig();
     locale = context.getLocale();
@@ -125,8 +129,8 @@ public class JdbcAdapter implements Adapter {
 
   private void checkConnectionConfig() {
     try {
-      notNullEmptyOrBlank(adapterConfig.getUrl(), "url", NILS_CONFIG);
-      notNullEmptyOrBlank(adapterConfig.getUsername(), "username", NILS_CONFIG);
+      notNullEmptyOrBlank(adapterConfig.getUrl(), "url", nilsException(CONFIG_ERROR));
+      notNullEmptyOrBlank(adapterConfig.getUsername(), "username", nilsException(CONFIG_ERROR));
     } catch (NilsException e) {
       LOG.error(e.getMessage(), e);
       throw JdbcErrorTypes.INCOMPLETE_CONNECTION_DATA.asException().cause(e).go();

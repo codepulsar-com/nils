@@ -1,6 +1,7 @@
 package com.codepulsar.nils.adapter.jdbc;
 
-import static com.codepulsar.nils.core.util.ParameterCheck.NILS_CONFIG;
+import static com.codepulsar.nils.core.error.ErrorTypes.CONFIG_ERROR;
+import static com.codepulsar.nils.core.util.ParameterCheck.nilsException;
 import static com.codepulsar.nils.core.util.ParameterCheck.notNull;
 import static com.codepulsar.nils.core.util.ParameterCheck.notNullEmptyOrBlank;
 
@@ -49,7 +50,7 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
    * @see #getUrl()
    */
   protected JdbcAdapterConfig url(String url) {
-    this.url = notNullEmptyOrBlank(url, "url", NILS_CONFIG).trim();
+    this.url = notNullEmptyOrBlank(url, "url", nilsException(CONFIG_ERROR)).trim();
     return this;
   }
 
@@ -74,7 +75,7 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
    * @see #getUsername()
    */
   protected JdbcAdapterConfig username(String username) {
-    this.username = notNullEmptyOrBlank(username, "username", NILS_CONFIG).trim();
+    this.username = notNullEmptyOrBlank(username, "username", nilsException(CONFIG_ERROR)).trim();
     return this;
   }
 
@@ -99,7 +100,8 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
    * @see #getPassword()
    */
   protected JdbcAdapterConfig password(String password) {
-    this.password = ParameterCheck.notNull(password, "password", NILS_CONFIG).trim();
+    this.password =
+        ParameterCheck.notNull(password, "password", nilsException(CONFIG_ERROR)).trim();
     return this;
   }
 
@@ -126,7 +128,8 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
    * @see #getDriverClass()
    */
   public JdbcAdapterConfig driverClass(String driverClass) {
-    this.driverClass = notNullEmptyOrBlank(driverClass, "driverClass", NILS_CONFIG).trim();
+    this.driverClass =
+        notNullEmptyOrBlank(driverClass, "driverClass", nilsException(CONFIG_ERROR)).trim();
     return this;
   }
 
@@ -153,7 +156,7 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
    * @see #getSchema()
    */
   public JdbcAdapterConfig schema(String schema) {
-    this.schema = notNullEmptyOrBlank(schema, "schema", NILS_CONFIG).trim();
+    this.schema = notNullEmptyOrBlank(schema, "schema", nilsException(CONFIG_ERROR)).trim();
     return this;
   }
 
@@ -178,7 +181,8 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
    * @see #getTableName()
    */
   public JdbcAdapterConfig tableName(String tableName) {
-    this.tableName = notNullEmptyOrBlank(tableName, "tableName", NILS_CONFIG).trim();
+    this.tableName =
+        notNullEmptyOrBlank(tableName, "tableName", nilsException(CONFIG_ERROR)).trim();
     return this;
   }
 
@@ -203,7 +207,8 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
    * @see #getLocaleField()
    */
   public JdbcAdapterConfig localeField(String localeField) {
-    this.localeField = notNullEmptyOrBlank(localeField, "localeField", NILS_CONFIG).trim();
+    this.localeField =
+        notNullEmptyOrBlank(localeField, "localeField", nilsException(CONFIG_ERROR)).trim();
     return this;
   }
 
@@ -228,7 +233,7 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
    * @see #getKeyField()
    */
   public JdbcAdapterConfig keyField(String keyField) {
-    this.keyField = notNullEmptyOrBlank(keyField, "keyField", NILS_CONFIG).trim();
+    this.keyField = notNullEmptyOrBlank(keyField, "keyField", nilsException(CONFIG_ERROR)).trim();
     return this;
   }
 
@@ -253,7 +258,8 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
    * @see #getValueField()
    */
   public JdbcAdapterConfig valueField(String valueField) {
-    this.valueField = notNullEmptyOrBlank(valueField, "valueField", NILS_CONFIG).trim();
+    this.valueField =
+        notNullEmptyOrBlank(valueField, "valueField", nilsException(CONFIG_ERROR)).trim();
     return this;
   }
 
@@ -328,7 +334,7 @@ public class JdbcAdapterConfig extends BaseNilsConfig<JdbcAdapterConfig> {
    * @see #getRootLocale()
    */
   public JdbcAdapterConfig rootLocale(Locale rootLocale) {
-    this.rootLocale = notNull(rootLocale, "rootLocale", NILS_CONFIG);
+    this.rootLocale = notNull(rootLocale, "rootLocale", nilsException(CONFIG_ERROR));
     return this;
   }
 

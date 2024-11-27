@@ -1,10 +1,12 @@
 package com.codepulsar.nils.adapter.rb;
 
-import static com.codepulsar.nils.core.util.ParameterCheck.NILS_CONFIG;
+import static com.codepulsar.nils.core.error.ErrorTypes.CONFIG_ERROR;
+import static com.codepulsar.nils.core.util.ParameterCheck.nilsException;
 
 import com.codepulsar.nils.api.adapter.AdapterFactory;
 import com.codepulsar.nils.core.adapter.config.BaseNilsConfig;
 import com.codepulsar.nils.core.util.ParameterCheck;
+
 /** Configuration for the {@link ResourceBundleAdapter} implementation. */
 public class ResourceBundleAdapterConfig extends BaseNilsConfig<ResourceBundleAdapterConfig> {
 
@@ -14,6 +16,7 @@ public class ResourceBundleAdapterConfig extends BaseNilsConfig<ResourceBundleAd
   private ResourceBundleAdapterConfig(Module owner) {
     this.owner = owner;
   }
+
   /**
    * Gets the owner module for the nls support.
    *
@@ -22,6 +25,7 @@ public class ResourceBundleAdapterConfig extends BaseNilsConfig<ResourceBundleAd
   public Module getOwner() {
     return owner;
   }
+
   /**
    * Gets the name of the resource bundle.
    *
@@ -56,7 +60,8 @@ public class ResourceBundleAdapterConfig extends BaseNilsConfig<ResourceBundleAd
    */
   public ResourceBundleAdapterConfig resourcesBundleName(String resourcesBundleName) {
     this.resourcesBundleName =
-        ParameterCheck.notNullEmptyOrBlank(resourcesBundleName, "resourcesBundleName", NILS_CONFIG);
+        ParameterCheck.notNullEmptyOrBlank(
+            resourcesBundleName, "resourcesBundleName", nilsException(CONFIG_ERROR));
     return this;
   }
 
@@ -69,7 +74,7 @@ public class ResourceBundleAdapterConfig extends BaseNilsConfig<ResourceBundleAd
    * @return The created ResourceBundleAdapterConfig.
    */
   public static ResourceBundleAdapterConfig init(Class<?> owner) {
-    ParameterCheck.notNull(owner, "owner", NILS_CONFIG);
+    ParameterCheck.notNull(owner, "owner", nilsException(CONFIG_ERROR));
     return new ResourceBundleAdapterConfig(owner.getModule());
   }
 
@@ -82,7 +87,7 @@ public class ResourceBundleAdapterConfig extends BaseNilsConfig<ResourceBundleAd
    * @return The created ResourceBundleAdapterConfig.
    */
   public static ResourceBundleAdapterConfig init(Object owner) {
-    ParameterCheck.notNull(owner, "owner", NILS_CONFIG);
+    ParameterCheck.notNull(owner, "owner", nilsException(CONFIG_ERROR));
     return init(owner.getClass());
   }
 }

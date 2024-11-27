@@ -1,7 +1,7 @@
 package com.codepulsar.nils.core.impl;
 
+import static com.codepulsar.nils.core.error.ErrorTypes.CONFIG_ERROR;
 import static com.codepulsar.nils.core.error.ErrorTypes.NLS_PARAMETER_CHECK;
-import static com.codepulsar.nils.core.util.ParameterCheck.NILS_CONFIG;
 import static com.codepulsar.nils.core.util.ParameterCheck.nilsException;
 import static com.codepulsar.nils.core.util.ParameterCheck.notNull;
 import static com.codepulsar.nils.core.util.ParameterCheck.notNullEmptyOrBlank;
@@ -20,6 +20,7 @@ import com.codepulsar.nils.api.adapter.AdapterFactory;
 import com.codepulsar.nils.api.error.NilsException;
 import com.codepulsar.nils.core.error.ErrorTypes;
 import com.codepulsar.nils.core.util.ParameterCheck;
+
 /** Factory for getting access to the provided NLS. A requested NLS object is cached. */
 public class NilsFactoryImpl implements NilsFactory {
   private static final Logger LOG = LoggerFactory.getLogger(NilsFactoryImpl.class);
@@ -31,7 +32,7 @@ public class NilsFactoryImpl implements NilsFactory {
   private final Map<Locale, NLS> translationCache = new HashMap<>();
 
   public NilsFactoryImpl(NilsConfig<?> config) {
-    this.config = ParameterCheck.notNull(config, "config", NILS_CONFIG);
+    this.config = ParameterCheck.notNull(config, "config", nilsException(CONFIG_ERROR));
     this.errorHandler = new ErrorHandler(config);
   }
 

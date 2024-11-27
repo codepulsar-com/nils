@@ -188,7 +188,7 @@ public class LocalizedResourceResolverTest {
     }
 
     @Override
-    public Module getOwner() {
+    public Module getOwnerModule() {
       return getClass().getModule();
     }
 

@@ -10,12 +10,13 @@ import com.codepulsar.nils.core.adapter.config.BaseLocalizedResourceNilsConfig;
 /**
  * Configuration for the {@link SnakeYamlAdapter} implementation.
  *
- * <p>The default base file name is {@code nls/translation.yaml}.
+ * <p>The default base file name is the package of the Class resolved in {@link #init(Class)} or
+ * {@link #init(Object)} + "translation.yaml".
  */
 public class SnakeYamlAdapterConfig
     extends BaseLocalizedResourceNilsConfig<SnakeYamlAdapterConfig> {
 
-  private SnakeYamlAdapterConfig(Module owner) {
+  private SnakeYamlAdapterConfig(Class<?> owner) {
     super(owner, ".yaml");
   }
 
@@ -27,20 +28,22 @@ public class SnakeYamlAdapterConfig
   /**
    * Create a <code>SnakeYamlAdapterConfig</code> from a class as reference.
    *
-   * <p><em>Note:</em> The class will be used to resolve the module the class is located in.
+   * <p><em>Note:</em> The {@code Class} will be used for resolving and accessing the translation
+   * files.
    *
    * @param owner A Class
    * @return The created SnakeYamlAdapterConfig.
    */
   public static SnakeYamlAdapterConfig init(Class<?> owner) {
     notNull(owner, "owner", nilsException(CONFIG_ERROR));
-    return new SnakeYamlAdapterConfig(owner.getModule());
+    return new SnakeYamlAdapterConfig(owner);
   }
 
   /**
    * Create a <code>SnakeYamlAdapterConfig</code> from an object as reference.
    *
-   * <p><em>Note:</em> The object will be used to resolve the module the object class is located in.
+   * <p><em>Note:</em> The object's class will be used for resolving and accessing the translation
+   * files.
    *
    * @param owner An object
    * @return The created SnakeYamlAdapterConfig.

@@ -37,8 +37,9 @@ public class JacksonAdapterYamlConfigTest {
     // Assert
     assertThat(underTest).isNotNull();
     assertThat(underTest).isInstanceOf(BaseLocalizedResourceNilsConfig.class);
-    assertThat(underTest.getOwner()).isEqualTo(getClass().getModule());
-    assertThat(underTest.getBaseFileName()).isEqualTo("nls/translation.yaml");
+    assertThat(underTest.getOwnerModule()).isEqualTo(getClass().getModule());
+    assertThat(underTest.getBaseFileName())
+        .isEqualTo("com/codepulsar/nils/adapter/jackson/translation.yaml");
     assertThat(underTest.getFactoryClass()).isEqualTo(JacksonAdapterFactory.class);
     assertThat(underTest.isFallbackActive()).isTrue();
   }
@@ -50,8 +51,9 @@ public class JacksonAdapterYamlConfigTest {
 
     // Assert
     assertThat(underTest).isNotNull();
-    assertThat(underTest.getOwner()).isEqualTo(this.getClass().getModule());
-    assertThat(underTest.getBaseFileName()).isEqualTo("nls/translation.yaml");
+    assertThat(underTest.getOwnerModule()).isEqualTo(this.getClass().getModule());
+    assertThat(underTest.getBaseFileName())
+        .isEqualTo("com/codepulsar/nils/adapter/jackson/translation.yaml");
   }
 
   @Test

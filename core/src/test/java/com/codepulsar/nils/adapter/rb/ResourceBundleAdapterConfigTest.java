@@ -37,8 +37,9 @@ public class ResourceBundleAdapterConfigTest {
     // Assert
     assertThat(underTest).isNotNull();
     assertThat(underTest).isInstanceOf(BaseLocalizedResourceNilsConfig.class);
-    assertThat(underTest.getOwner()).isEqualTo(getClass().getModule());
-    assertThat(underTest.getBaseFileName()).isEqualTo("nls/translation.properties");
+    assertThat(underTest.getOwnerModule()).isEqualTo(getClass().getModule());
+    assertThat(underTest.getBaseFileName())
+        .isEqualTo("com/codepulsar/nils/adapter/rb/translation.properties");
     assertThat(underTest.getFactoryClass()).isEqualTo(ResourceBundleAdapterFactory.class);
   }
 
@@ -49,8 +50,9 @@ public class ResourceBundleAdapterConfigTest {
 
     // Assert
     assertThat(underTest).isNotNull();
-    assertThat(underTest.getOwner()).isEqualTo(this.getClass().getModule());
-    assertThat(underTest.getBaseFileName()).isEqualTo("nls/translation.properties");
+    assertThat(underTest.getOwnerModule()).isEqualTo(this.getClass().getModule());
+    assertThat(underTest.getBaseFileName())
+        .isEqualTo("com/codepulsar/nils/adapter/rb/translation.properties");
   }
 
   @Test

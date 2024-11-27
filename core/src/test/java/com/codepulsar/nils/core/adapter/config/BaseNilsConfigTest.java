@@ -12,7 +12,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import com.codepulsar.nils.api.error.NilsConfigException;
+import com.codepulsar.nils.api.error.NilsException;
 import com.codepulsar.nils.core.handler.ClassPrefixResolver;
 import com.codepulsar.nils.core.handler.TranslationFormatter;
 import com.codepulsar.nils.core.testadapter.StaticAdapterConfig;
@@ -69,7 +69,7 @@ public class BaseNilsConfigTest {
     var underTest = new StaticAdapterConfig();
     // Act / Assert
     assertThatThrownBy(() -> underTest.escapePattern(pattern))
-        .isInstanceOf(NilsConfigException.class)
+        .isInstanceOf(NilsException.class)
         .hasMessage(errMsg);
   }
 
@@ -109,7 +109,7 @@ public class BaseNilsConfigTest {
 
     // Act / Assert
     assertThatThrownBy(() -> underTest.includeTag(tag))
-        .isInstanceOf(NilsConfigException.class)
+        .isInstanceOf(NilsException.class)
         .hasMessage(errMsg);
   }
 
@@ -136,7 +136,7 @@ public class BaseNilsConfigTest {
 
     // Act / Assert
     assertThatThrownBy(() -> underTest.translationFormatter(null))
-        .isInstanceOf(NilsConfigException.class)
+        .isInstanceOf(NilsException.class)
         .hasMessage("NILS-004: Parameter 'translationFormatter' cannot be null.");
   }
 
@@ -163,7 +163,7 @@ public class BaseNilsConfigTest {
 
     // Act / Assert
     assertThatThrownBy(() -> underTest.dateFormatStyle(null))
-        .isInstanceOf(NilsConfigException.class)
+        .isInstanceOf(NilsException.class)
         .hasMessage("NILS-004: Parameter 'dateFormatStyle' cannot be null.");
   }
 
@@ -190,7 +190,7 @@ public class BaseNilsConfigTest {
 
     // Act / Assert
     assertThatThrownBy(() -> underTest.classPrefixResolver(null))
-        .isInstanceOf(NilsConfigException.class)
+        .isInstanceOf(NilsException.class)
         .hasMessage("NILS-004: Parameter 'classPrefixResolver' cannot be null.");
   }
 

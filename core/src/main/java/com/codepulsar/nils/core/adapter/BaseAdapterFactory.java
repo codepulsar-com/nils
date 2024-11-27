@@ -1,5 +1,7 @@
 package com.codepulsar.nils.core.adapter;
 
+import static com.codepulsar.nils.core.error.ErrorTypes.ADAPTER_ERROR;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -10,7 +12,6 @@ import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.api.NilsFactory;
 import com.codepulsar.nils.api.adapter.Adapter;
 import com.codepulsar.nils.api.adapter.AdapterFactory;
-import com.codepulsar.nils.api.error.NilsConfigException;
 import com.codepulsar.nils.core.util.ParameterCheck;
 
 /**
@@ -53,20 +54,24 @@ public abstract class BaseAdapterFactory<A extends Adapter> implements AdapterFa
 
     if (!found) {
       var classNames =
-          getValidAdapterConfigClasses()
-              .stream()
+          getValidAdapterConfigClasses().stream()
               .map(Class::getName)
               .collect(Collectors.joining(","));
-      throw new NilsConfigException(
-          "The provided AdapterConfig (%s) is not of the expected type (%s)", config, classNames);
+      throw ADAPTER_ERROR
+          .asException()
+          .message("The provided AdapterConfig (%s) is not of the expected type (%s).")
+          .args(config, classNames)
+          .go();
     }
   }
+
   /**
    * Gets the classes for valid {@link NilsConfig}s for the factory.
    *
    * @return The Class of the valid {@link NilsConfig}.
    */
   protected abstract List<Class<? extends NilsConfig<?>>> getValidAdapterConfigClasses();
+
   /**
    * Create a concrete {@link Adapter} object.
    *

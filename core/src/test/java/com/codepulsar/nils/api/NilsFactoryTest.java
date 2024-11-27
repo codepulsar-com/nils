@@ -7,7 +7,7 @@ import java.util.Locale;
 
 import org.junit.jupiter.api.Test;
 
-import com.codepulsar.nils.api.error.NilsConfigException;
+import com.codepulsar.nils.api.error.NilsException;
 import com.codepulsar.nils.core.testadapter.StaticAdapterConfig;
 
 public class NilsFactoryTest {
@@ -18,7 +18,7 @@ public class NilsFactoryTest {
     NilsConfig<?> nilsConfig = null;
     // Act / Assert
     assertThatThrownBy(() -> NilsFactory.init(nilsConfig))
-        .isInstanceOf(NilsConfigException.class)
+        .isInstanceOf(NilsException.class)
         .hasMessage("NILS-004: Parameter 'config' cannot be null.");
   }
 

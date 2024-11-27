@@ -12,7 +12,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.api.NilsFactory;
-import com.codepulsar.nils.api.error.NilsConfigException;
 import com.codepulsar.nils.api.error.NilsException;
 import com.codepulsar.nils.core.testadapter.InvalidAdapterFactory;
 import com.codepulsar.nils.core.testadapter.StaticAdapterConfig;
@@ -39,7 +38,7 @@ public class NilsFactoryImplTest {
     NilsConfig<?> nilsConfig = null;
     // Act / Assert
     assertThatThrownBy(() -> new NilsFactoryImpl(nilsConfig))
-        .isInstanceOf(NilsConfigException.class)
+        .isInstanceOf(NilsException.class)
         .hasMessage("NILS-004: Parameter 'config' cannot be null.");
   }
 

@@ -1,5 +1,7 @@
 package com.codepulsar.nils.core.adapter;
 
+import static com.codepulsar.nils.core.error.ErrorTypes.ADAPTER_ERROR;
+
 import java.io.InputStream;
 import java.util.Locale;
 import java.util.Optional;
@@ -7,10 +9,10 @@ import java.util.Optional;
 import com.codepulsar.nils.api.NilsConfig;
 import com.codepulsar.nils.api.adapter.Adapter;
 import com.codepulsar.nils.api.adapter.config.LocalizedResourceConfig;
-import com.codepulsar.nils.api.error.NilsConfigException;
 import com.codepulsar.nils.core.adapter.util.LocalizedResourceResolver;
 import com.codepulsar.nils.core.adapter.util.TranslationRetriever;
 import com.codepulsar.nils.core.util.ParameterCheck;
+
 /**
  * The {@linkplain BaseLocalizedResourceAdapter} is a base implementation for resource based
  * adapters, which can have a fallback to other localized resources ("de_DE" &gt; "de" &gt; "").
@@ -26,20 +28,28 @@ public abstract class BaseLocalizedResourceAdapter<A extends Adapter, C extends 
     implements Adapter {
   /** Constant for an empty {@code Locale} */
   protected static final Locale ROOT_LOCALE = new Locale("");
+
   /** An {@link Adapter} object using if the translation was not found by these adapter. */
   protected A fallbackAdapter;
+
   /** Flag, if a fallback adapter is available. */
   protected boolean fallbackPossible = true;
+
   /** The {@link NilsConfig} of the adapter. */
   protected final C adapterConfig;
+
   /** The current {@code Locale} of the adapter. */
   protected final Locale locale;
+
   /** The {@link AdapterContext} of the adapter. */
   protected final AdapterContext<A> adapterContext;
+
   /** The {@link TranslationRetriever} of the adapter. */
   protected TranslationRetriever translation;
+
   /** The name of the use resource. */
   protected String resourceName;
+
   /**
    * Creates a new instance of this class.
    *
@@ -51,9 +61,11 @@ public abstract class BaseLocalizedResourceAdapter<A extends Adapter, C extends 
     ParameterCheck.notNull(context.getConfig(), "context.config");
     ParameterCheck.notNull(context.getLocale(), "context.locale");
     if (!(context.getConfig() instanceof LocalizedResourceConfig)) {
-      throw new NilsConfigException(
-          "The provided AdapterConfig (%s) does not implement %s",
-          context.getConfig(), LocalizedResourceConfig.class.getName());
+      throw ADAPTER_ERROR
+          .asException()
+          .message("The provided AdapterConfig (%s) does not implement %s.")
+          .args(context.getConfig(), LocalizedResourceConfig.class.getName())
+          .go();
     }
     adapterConfig = (C) context.getConfig();
     locale = context.getLocale();
@@ -128,6 +140,7 @@ public abstract class BaseLocalizedResourceAdapter<A extends Adapter, C extends 
    * @return An {@link InputStream} object or {@code null}
    */
   protected abstract InputStream resolveInputStream(String resource);
+
   /**
    * Initialize the translation using a concrete implementation how to access the file resource.
    *

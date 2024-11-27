@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.codepulsar.nils.api.NilsConfig;
-import com.codepulsar.nils.api.error.NilsConfigException;
+import com.codepulsar.nils.api.error.NilsException;
 import com.codepulsar.nils.core.testadapter.BaseLocalizedResourceAdapterTestee;
 import com.codepulsar.nils.core.testadapter.BaseLocalizedResourceAdapterTesteeConfig;
 import com.codepulsar.nils.core.testadapter.BaseLocalizedResourceAdapterTesteeFactory;
@@ -77,8 +77,8 @@ public class BaseLocalizedResourceAdapterTest {
 
     // Act / Assert
     assertThatThrownBy(() -> new BaseLocalizedResourceAdapterTestee(context))
-        .isInstanceOf(NilsConfigException.class)
-        .hasMessageContaining("NILS-004")
+        .isInstanceOf(NilsException.class)
+        .hasMessageContaining("NILS-005")
         .hasMessageContaining("The provided AdapterConfig")
         .hasMessageContaining("does not implement");
   }

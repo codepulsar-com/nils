@@ -1,6 +1,7 @@
 package com.codepulsar.nils.adapter.gson;
 
-import static com.codepulsar.nils.core.util.ParameterCheck.NILS_CONFIG;
+import static com.codepulsar.nils.core.error.ErrorTypes.CONFIG_ERROR;
+import static com.codepulsar.nils.core.util.ParameterCheck.nilsException;
 import static com.codepulsar.nils.core.util.ParameterCheck.notNull;
 
 import com.codepulsar.nils.api.adapter.AdapterFactory;
@@ -21,6 +22,7 @@ public class GsonAdapterConfig extends BaseLocalizedResourceNilsConfig<GsonAdapt
   public Class<? extends AdapterFactory<?>> getFactoryClass() {
     return GsonAdapterFactory.class;
   }
+
   /**
    * Create a <code>GsonAdapterConfig</code> from a class as reference.
    *
@@ -30,7 +32,7 @@ public class GsonAdapterConfig extends BaseLocalizedResourceNilsConfig<GsonAdapt
    * @return The created GsonAdapterConfig.
    */
   public static GsonAdapterConfig init(Class<?> owner) {
-    notNull(owner, "owner", NILS_CONFIG);
+    notNull(owner, "owner", nilsException(CONFIG_ERROR));
     return new GsonAdapterConfig(owner.getModule());
   }
 
@@ -43,7 +45,7 @@ public class GsonAdapterConfig extends BaseLocalizedResourceNilsConfig<GsonAdapt
    * @return The created GsonAdapterConfig.
    */
   public static GsonAdapterConfig init(Object owner) {
-    notNull(owner, "owner", NILS_CONFIG);
+    notNull(owner, "owner", nilsException(CONFIG_ERROR));
     return init(owner.getClass());
   }
 }

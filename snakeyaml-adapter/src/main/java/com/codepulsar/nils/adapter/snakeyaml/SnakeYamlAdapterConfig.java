@@ -1,6 +1,7 @@
 package com.codepulsar.nils.adapter.snakeyaml;
 
-import static com.codepulsar.nils.core.util.ParameterCheck.NILS_CONFIG;
+import static com.codepulsar.nils.core.error.ErrorTypes.CONFIG_ERROR;
+import static com.codepulsar.nils.core.util.ParameterCheck.nilsException;
 import static com.codepulsar.nils.core.util.ParameterCheck.notNull;
 
 import com.codepulsar.nils.api.adapter.AdapterFactory;
@@ -22,6 +23,7 @@ public class SnakeYamlAdapterConfig
   public Class<? extends AdapterFactory<?>> getFactoryClass() {
     return SnakeYamlAdapterFactory.class;
   }
+
   /**
    * Create a <code>SnakeYamlAdapterConfig</code> from a class as reference.
    *
@@ -31,7 +33,7 @@ public class SnakeYamlAdapterConfig
    * @return The created SnakeYamlAdapterConfig.
    */
   public static SnakeYamlAdapterConfig init(Class<?> owner) {
-    notNull(owner, "owner", NILS_CONFIG);
+    notNull(owner, "owner", nilsException(CONFIG_ERROR));
     return new SnakeYamlAdapterConfig(owner.getModule());
   }
 
@@ -44,7 +46,7 @@ public class SnakeYamlAdapterConfig
    * @return The created SnakeYamlAdapterConfig.
    */
   public static SnakeYamlAdapterConfig init(Object owner) {
-    notNull(owner, "owner", NILS_CONFIG);
+    notNull(owner, "owner", nilsException(CONFIG_ERROR));
     return init(owner.getClass());
   }
 }

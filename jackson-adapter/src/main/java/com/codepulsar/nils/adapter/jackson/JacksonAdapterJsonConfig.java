@@ -1,10 +1,12 @@
 package com.codepulsar.nils.adapter.jackson;
 
-import static com.codepulsar.nils.core.util.ParameterCheck.NILS_CONFIG;
+import static com.codepulsar.nils.core.error.ErrorTypes.CONFIG_ERROR;
+import static com.codepulsar.nils.core.util.ParameterCheck.nilsException;
 import static com.codepulsar.nils.core.util.ParameterCheck.notNull;
 
 import com.codepulsar.nils.api.adapter.AdapterFactory;
 import com.codepulsar.nils.core.adapter.config.BaseLocalizedResourceNilsConfig;
+
 /**
  * Configuration for the {@link JacksonAdapter} implementation for {@code json} files.
  *
@@ -22,6 +24,7 @@ public class JacksonAdapterJsonConfig
   public Class<? extends AdapterFactory<?>> getFactoryClass() {
     return JacksonAdapterFactory.class;
   }
+
   /**
    * Create a {@linkplain JacksonAdapterJsonConfig} from a class as reference.
    *
@@ -31,7 +34,7 @@ public class JacksonAdapterJsonConfig
    * @return The created {@linkplain JacksonAdapterJsonConfig}.
    */
   public static JacksonAdapterJsonConfig init(Class<?> owner) {
-    notNull(owner, "owner", NILS_CONFIG);
+    notNull(owner, "owner", nilsException(CONFIG_ERROR));
     return new JacksonAdapterJsonConfig(owner.getModule());
   }
 
@@ -44,7 +47,7 @@ public class JacksonAdapterJsonConfig
    * @return The created {@linkplain JacksonAdapterJsonConfig}.
    */
   public static JacksonAdapterJsonConfig init(Object owner) {
-    notNull(owner, "owner", NILS_CONFIG);
+    notNull(owner, "owner", nilsException(CONFIG_ERROR));
     return init(owner.getClass());
   }
 }

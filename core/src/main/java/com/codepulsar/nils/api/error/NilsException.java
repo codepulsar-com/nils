@@ -2,7 +2,7 @@ package com.codepulsar.nils.api.error;
 
 import java.util.Objects;
 
-/** Generic RuntimeException thrown by NILS. */
+/** Generic Exception thrown by NILS if a configuration or the usage is erroneous. */
 public class NilsException extends RuntimeException {
 
   /** */
@@ -20,6 +20,7 @@ public class NilsException extends RuntimeException {
     super(Objects.requireNonNull(errType).getErrCode() + ": " + message);
     this.errType = errType;
   }
+
   /**
    * Create a new {@link NilsException} based on the parameters. The message and the args will be
    * formatted using <code>String.format()</code>.

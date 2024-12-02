@@ -27,13 +27,13 @@ public class NilsFactoryImplTest {
   private NilsConfig<?> config;
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     config = new StaticAdapterConfig();
     underTest = new NilsFactoryImpl(config);
   }
 
   @Test
-  public void init_nilsConfigNull() {
+  void init_nilsConfigNull() {
     // Arrange
     NilsConfig<?> nilsConfig = null;
     // Act / Assert
@@ -43,7 +43,7 @@ public class NilsFactoryImplTest {
   }
 
   @Test
-  public void init_nilsConfig() {
+  void init_nilsConfig() {
     // Arrange
     var adapterConfig = new StaticAdapterConfig();
     NilsFactory _underTest = NilsFactory.init(adapterConfig);
@@ -57,7 +57,7 @@ public class NilsFactoryImplTest {
   }
 
   @Test
-  public void nls() {
+  void nls() {
     // Act
     var nls = underTest.nls();
 
@@ -67,7 +67,7 @@ public class NilsFactoryImplTest {
   }
 
   @Test
-  public void nlsFromLocale() {
+  void nlsFromLocale() {
     // Act
     var nls = underTest.nls(Locale.GERMAN);
 
@@ -81,7 +81,7 @@ public class NilsFactoryImplTest {
   }
 
   @Test
-  public void nlsFromLocaleNull() {
+  void nlsFromLocaleNull() {
     // Arrange
     Locale locale = null;
     config.suppressErrors(false);
@@ -93,7 +93,7 @@ public class NilsFactoryImplTest {
   }
 
   @Test
-  public void nlsFromLocaleNull_suppressErrors() {
+  void nlsFromLocaleNull_suppressErrors() {
     // Arrange
     Locale locale = null;
     config.suppressErrors(true);
@@ -106,7 +106,7 @@ public class NilsFactoryImplTest {
   }
 
   @Test
-  public void nlsFromLang() {
+  void nlsFromLang() {
     // Act
     var nls = underTest.nls("de-DE");
 
@@ -116,7 +116,7 @@ public class NilsFactoryImplTest {
   }
 
   @Test
-  public void nlsFromLang2() {
+  void nlsFromLang2() {
     // Act
     var nls = underTest.nls("en_US");
 
@@ -126,7 +126,7 @@ public class NilsFactoryImplTest {
   }
 
   @Test
-  public void nlsFromLang_notFound() {
+  void nlsFromLang_notFound() {
     // Act
     var nls = underTest.nls("XYZ");
 
@@ -135,9 +135,24 @@ public class NilsFactoryImplTest {
     assertThat(nls.getLocale()).isEqualTo(new Locale("xyz"));
   }
 
+  @Test
+  void reset() {
+    // Arrange
+    var nlsDe = underTest.nls(Locale.GERMAN);
+    var nlsDefault = underTest.nls();
+    // Act
+    underTest.reset();
+    var nlsDe2 = underTest.nls(Locale.GERMAN);
+    var nlsDefault2 = underTest.nls();
+
+    // Assert
+    assertThat(nlsDe2).isNotEqualTo(nlsDe);
+    assertThat(nlsDefault2).isNotEqualTo(nlsDefault);
+  }
+
   @ParameterizedTest
   @MethodSource(DATA_PROVIDER + "#nlsFromLang_invalid")
-  public void nlsFromLang_invalid(String lang, String errorMsg) {
+  void nlsFromLang_invalid(String lang, String errorMsg) {
     // Arrange
     config.suppressErrors(false);
 
@@ -149,7 +164,7 @@ public class NilsFactoryImplTest {
 
   @ParameterizedTest
   @MethodSource(DATA_PROVIDER + "#nlsFromLang_invalid")
-  public void nlsFromLang_invalid_suppressErrors(String lang, String errorMsg) {
+  void nlsFromLang_invalid_suppressErrors(String lang, String errorMsg) {
     // Arrange
     config.suppressErrors(true);
 
@@ -162,7 +177,7 @@ public class NilsFactoryImplTest {
   }
 
   @Test
-  public void nlsWithContext_string() {
+  void nlsWithContext_string() {
     // Arrange
     var context = "context";
     // Act
@@ -174,7 +189,7 @@ public class NilsFactoryImplTest {
   }
 
   @Test
-  public void nlsWithContext_class() {
+  void nlsWithContext_class() {
     // Arrange
     var context = Dummy.class;
     // Act
@@ -187,7 +202,7 @@ public class NilsFactoryImplTest {
 
   @ParameterizedTest
   @MethodSource(DATA_PROVIDER + "#nlsWithContext_string_invalid")
-  public void nlsWithContext_string_invalid(String context, String errorMsg) {
+  void nlsWithContext_string_invalid(String context, String errorMsg) {
     // Arrange
     config.suppressErrors(false);
     // Act / Assert
@@ -198,7 +213,7 @@ public class NilsFactoryImplTest {
 
   @ParameterizedTest
   @MethodSource(DATA_PROVIDER + "#nlsWithContext_string_invalid")
-  public void nlsWithContext_string_invalid_suppressErrors(String context, String errorMsg) {
+  void nlsWithContext_string_invalid_suppressErrors(String context, String errorMsg) {
     // Arrange
     config.suppressErrors(true);
 
@@ -210,7 +225,7 @@ public class NilsFactoryImplTest {
   }
 
   @Test
-  public void nlsWithContext_class_null() {
+  void nlsWithContext_class_null() {
     // Arrange
     config.suppressErrors(false);
     Class<?> context = null;
@@ -222,7 +237,7 @@ public class NilsFactoryImplTest {
   }
 
   @Test
-  public void nlsWithContext_class_null_suppressErrors() {
+  void nlsWithContext_class_null_suppressErrors() {
     // Arrange
     config.suppressErrors(true);
     Class<?> context = null;
@@ -235,7 +250,7 @@ public class NilsFactoryImplTest {
   }
 
   @Test
-  public void nlsWithContext_fromLang_string() {
+  void nlsWithContext_fromLang_string() {
     // Arrange
     var context = "context";
     // Act
@@ -247,7 +262,7 @@ public class NilsFactoryImplTest {
   }
 
   @Test
-  public void nlsWithContext_fromLang_class() {
+  void nlsWithContext_fromLang_class() {
     // Arrange
     var context = Dummy.class;
     // Act
@@ -260,7 +275,7 @@ public class NilsFactoryImplTest {
 
   @ParameterizedTest
   @MethodSource(DATA_PROVIDER + "#nlsWithContext_fromLang_string_invalid")
-  public void nlsWithContext_fromLang_string_invalid(String lang, String context, String errorMsg) {
+  void nlsWithContext_fromLang_string_invalid(String lang, String context, String errorMsg) {
     // Arrange
     config.suppressErrors(false);
 
@@ -272,7 +287,7 @@ public class NilsFactoryImplTest {
 
   @ParameterizedTest
   @MethodSource(DATA_PROVIDER + "#nlsWithContext_fromLang_string_invalid")
-  public void nlsWithContext_fromLang_string_invalid_suppressErrors(
+  void nlsWithContext_fromLang_string_invalid_suppressErrors(
       String lang, String context, String errorMsg) {
     // Arrange
     config.suppressErrors(true);
@@ -286,8 +301,7 @@ public class NilsFactoryImplTest {
 
   @ParameterizedTest
   @MethodSource(DATA_PROVIDER + "#nlsWithContext_fromLang_class_invalid")
-  public void nlsWithContext_fromLang_class_invalid(
-      String lang, Class<?> context, String errorMsg) {
+  void nlsWithContext_fromLang_class_invalid(String lang, Class<?> context, String errorMsg) {
     // Arrange
     config.suppressErrors(false);
     // Act / Assert
@@ -298,7 +312,7 @@ public class NilsFactoryImplTest {
 
   @ParameterizedTest
   @MethodSource(DATA_PROVIDER + "#nlsWithContext_fromLang_class_invalid")
-  public void nlsWithContext_fromLang_class_invalid_suppressErrors(
+  void nlsWithContext_fromLang_class_invalid_suppressErrors(
       String lang, Class<?> context, String errorMsg) {
     // Arrange
     config.suppressErrors(true);
@@ -311,7 +325,7 @@ public class NilsFactoryImplTest {
   }
 
   @Test
-  public void nlsWithContext_fromLocale_string() {
+  void nlsWithContext_fromLocale_string() {
     // Arrange
     var context = "context";
     // Act
@@ -323,7 +337,7 @@ public class NilsFactoryImplTest {
   }
 
   @Test
-  public void nlsWithContext_fromLocale_class() {
+  void nlsWithContext_fromLocale_class() {
     // Arrange
     var context = Dummy.class;
     // Act
@@ -336,8 +350,7 @@ public class NilsFactoryImplTest {
 
   @ParameterizedTest
   @MethodSource(DATA_PROVIDER + "#nlsWithContext_fromLocale_string_invalid")
-  public void nlsWithContext_fromLocale_string_invalid(
-      Locale locale, String context, String errorMsg) {
+  void nlsWithContext_fromLocale_string_invalid(Locale locale, String context, String errorMsg) {
     // Arrange
     config.suppressErrors(false);
 
@@ -349,7 +362,7 @@ public class NilsFactoryImplTest {
 
   @ParameterizedTest
   @MethodSource(DATA_PROVIDER + "#nlsWithContext_fromLocale_string_invalid")
-  public void nlsWithContext_fromLocale_string_invalid_suppressErrors(
+  void nlsWithContext_fromLocale_string_invalid_suppressErrors(
       Locale locale, String context, String errorMsg) {
     // Arrange
     config.suppressErrors(true);
@@ -363,8 +376,7 @@ public class NilsFactoryImplTest {
 
   @ParameterizedTest
   @MethodSource(DATA_PROVIDER + "#nlsWithContext_fromLocale_class_invalid")
-  public void nlsWithContext_fromLocale_class_invalid(
-      Locale locale, Class<?> context, String errorMsg) {
+  void nlsWithContext_fromLocale_class_invalid(Locale locale, Class<?> context, String errorMsg) {
     // Arrange
     config.suppressErrors(false);
     // Act / Assert
@@ -375,7 +387,7 @@ public class NilsFactoryImplTest {
 
   @ParameterizedTest
   @MethodSource(DATA_PROVIDER + "#nlsWithContext_fromLocale_class_invalid")
-  public void nlsWithContext_fromLocale_class_invalid_suppressErrors(
+  void nlsWithContext_fromLocale_class_invalid_suppressErrors(
       Locale locale, Class<?> context, String errorMsg) {
     // Arrange
     config.suppressErrors(true);
@@ -388,7 +400,7 @@ public class NilsFactoryImplTest {
   }
 
   @Test
-  public void nullAdapterFactoryClass() {
+  void nullAdapterFactoryClass() {
     var _config = new TestFactoryAdapterConfig(null);
     _config.suppressErrors(false);
 
@@ -401,7 +413,7 @@ public class NilsFactoryImplTest {
   }
 
   @Test
-  public void nullAdapterFactoryClass_suppressErrors() {
+  void nullAdapterFactoryClass_suppressErrors() {
     var _config = new TestFactoryAdapterConfig(null);
     _config.suppressErrors(true);
 
@@ -415,7 +427,7 @@ public class NilsFactoryImplTest {
   }
 
   @Test
-  public void adapterFactoryWithNonEmptyCtor() {
+  void adapterFactoryWithNonEmptyCtor() {
     var _config = new TestFactoryAdapterConfig(InvalidAdapterFactory.class);
     _config.suppressErrors(false);
 
@@ -428,7 +440,7 @@ public class NilsFactoryImplTest {
   }
 
   @Test
-  public void adapterFactoryWithNonEmptyCtor_suppressErrors() {
+  void adapterFactoryWithNonEmptyCtor_suppressErrors() {
     var _config = new TestFactoryAdapterConfig(InvalidAdapterFactory.class);
     _config.suppressErrors(true);
 

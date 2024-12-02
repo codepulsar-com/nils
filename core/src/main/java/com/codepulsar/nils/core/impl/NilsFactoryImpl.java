@@ -9,6 +9,7 @@ import static com.codepulsar.nils.core.util.ParameterCheck.notNullEmptyOrBlank;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -131,6 +132,18 @@ public class NilsFactoryImpl implements NilsFactory {
     } catch (NilsException ex) {
       errorHandler.handle(ex);
       return FALLSAVE;
+    }
+  }
+
+  @Override
+  public void reset() {
+    var lock = new ReentrantLock();
+    lock.lock();
+    try {
+      adapterFactory = null;
+      translationCache.clear();
+    } finally {
+      lock.unlock();
     }
   }
 

@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import com.codepulsar.nils.core.handler.ClassPrefixResolver;
 import com.codepulsar.nils.core.impl.NilsFactoryImpl;
+
 /** Factory for getting access to the provided NLS. A requested NLS object is cached. */
 public interface NilsFactory {
   /**
@@ -12,6 +13,7 @@ public interface NilsFactory {
    * @return The NLS object for the default <code>Locale</code>.
    */
   NLS nls();
+
   /**
    * Get the NLS object for a language tag.
    *
@@ -20,6 +22,7 @@ public interface NilsFactory {
    * @see Locale#forLanguageTag(String)
    */
   NLS nls(String lang);
+
   /**
    * Get the NLS object for a specific <code>Locale</code>.
    *
@@ -27,6 +30,7 @@ public interface NilsFactory {
    * @return The NLS object for the <code>Locale</code>.
    */
   NLS nls(Locale locale);
+
   /**
    * Get the NLS object for the default <code>Locale</code> and a specific context.
    *
@@ -36,6 +40,7 @@ public interface NilsFactory {
    * @return The NLS object for the default <code>Locale</code>.
    */
   NLS nlsWithContext(String context);
+
   /**
    * Get the NLS object for a language tag and a specific context.
    *
@@ -106,6 +111,13 @@ public interface NilsFactory {
    * @see Locale#forLanguageTag(String)
    */
   NLS nlsWithContext(Locale locale, Class<?> context);
+
+  /**
+   * Reset the {@link NilsFactory} and all its cached elements.
+   *
+   * <p><em>Note: The implementation is synchronized.</em>
+   */
+  void reset();
 
   /**
    * Initialize the factory using a {@link NilsConfig}.

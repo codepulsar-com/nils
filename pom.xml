@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.codepulsar.nils</groupId>
 	<artifactId>nils-parent</artifactId>
-	<version>3.0.0-SNAPSHOT</version>
+	<version>3.0.0</version>
 	<name>NILS - Parent</name>
 	<description>Parent POM of NILS - A Java NLS library</description>
 	<packaging>pom</packaging>
@@ -155,7 +155,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-gpg-plugin</artifactId>
-					<version>3.2.4</version>
+					<version>3.2.7</version>
 					<executions>
 						<execution>
 							<id>sign-artifacts</id>

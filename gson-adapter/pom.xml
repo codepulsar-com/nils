@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.codepulsar.nils</groupId>
 		<artifactId>nils-parent</artifactId>
-		<version>3.0.0</version>
+		<version>3.1.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>nils-gson-adapter</artifactId>
 	<name>NILS - Gson Adapter</name>

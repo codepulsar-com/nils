@@ -4,7 +4,7 @@ _NILS_ is a lightweight Java library for NLS (aka "national language support", "
 
 It enables developers to integrate NLS into their Java projects easily.
 
-The documentation can be found at https://docs.codepulsar.com/nils/docs/latest/index.html.
+The documentation can be found at [https://docs.codepulsar.com/nils/docs/latest/index.html](https://docs.codepulsar.com/nils/latest/index.html).
 
 ## Contributing
 

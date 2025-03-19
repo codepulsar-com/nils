@@ -40,8 +40,21 @@ public interface NilsFactory {
    *
    * @param context The context key.
    * @return The NLS object for the default <code>Locale</code>.
+   * @deprecated use {@link #nlsForContext(String)} instead. This method will be removed in 5.x or
+   *     later.
    */
+  @Deprecated
   NLS nlsWithContext(String context);
+
+  /**
+   * Get the NLS object for the default <code>Locale</code> and a specific context.
+   *
+   * <p>Only the keys beneath the context will be examined.
+   *
+   * @param context The context key.
+   * @return The NLS object for the default <code>Locale</code>.
+   */
+  NLS nlsForContext(String context);
 
   /**
    * Get the NLS object for a language tag and a specific context.
@@ -52,7 +65,7 @@ public interface NilsFactory {
    * @param context The context key.
    * @return The NLS object for the language tag.
    * @see Locale#forLanguageTag(String)
-   * @deprecated Use {@link #nlsWithContext(Locale, String)} instead. This method will be removed in
+   * @deprecated Use {@link #nlsForContext(Locale, String)} instead. This method will be removed in
    *     5.x or later.
    */
   @Deprecated
@@ -66,8 +79,38 @@ public interface NilsFactory {
    * @param locale The <code>Locale</code>.
    * @param context The context key.
    * @return The NLS object for the <code>Locale</code>.
+   * @deprecated use {@link #nlsForContext(Locale, String)} instead. This method will be removed in
+   *     5.x or later.
    */
+  @Deprecated
   NLS nlsWithContext(Locale locale, String context);
+
+  /**
+   * Get the NLS object for a specific <code>Locale</code> and a specific context.
+   *
+   * <p>Only the keys beneath the context will be examined.
+   *
+   * @param locale The <code>Locale</code>.
+   * @param context The context key.
+   * @return The NLS object for the <code>Locale</code>.
+   */
+  NLS nlsForContext(Locale locale, String context);
+
+  /**
+   * Get the NLS object for the default <code>Locale</code> and a specific context based on a <code>
+   * Class</code>.
+   *
+   * <p>Only the keys beneath the context will be examined.
+   *
+   * <p>The determination of the Class as key will be done with the configured {@link
+   * ClassPrefixResolver}.
+   *
+   * @param context The <code>Class</code> for the context key.
+   * @return The NLS object for the default <code>Locale</code>. * @deprecated use {@link
+   *     #nlsForContext(Class)} instead. This method will be removed in 5.x or later.
+   */
+  @Deprecated
+  NLS nlsWithContext(Class<?> context);
 
   /**
    * Get the NLS object for the default <code>Locale</code> and a specific context based on a <code>
@@ -81,7 +124,7 @@ public interface NilsFactory {
    * @param context The <code>Class</code> for the context key.
    * @return The NLS object for the default <code>Locale</code>.
    */
-  NLS nlsWithContext(Class<?> context);
+  NLS nlsForContext(Class<?> context);
 
   /**
    * Get the NLS object for a language tag and a specific context based on a <code>
@@ -98,7 +141,7 @@ public interface NilsFactory {
    * @param context The <code>Class</code> for the context key.
    * @return The NLS object for the language tag.
    * @see Locale#forLanguageTag(String)
-   * @deprecated Use {@link #nlsWithContext(Locale, Class)} instead. This method will be removed in
+   * @deprecated Use {@link #nlsForContext(Locale, Class)} instead. This method will be removed in
    *     5.x or later.
    */
   @Deprecated
@@ -117,8 +160,27 @@ public interface NilsFactory {
    * @param context The <code>Class</code> for the context key.
    * @return The NLS object for the language tag.
    * @see Locale#forLanguageTag(String)
+   * @deprecated use {@link #nlsForContext(Locale, String)} instead. This method will be removed in
+   *     5.x or later.
    */
+  @Deprecated
   NLS nlsWithContext(Locale locale, Class<?> context);
+
+  /**
+   * Get the NLS object for a language tag and a specific context based on a <code>
+   * Class</code>.
+   *
+   * <p>Only the keys beneath the context will be examined.
+   *
+   * <p>The determination of the Class as key will be done with the configured {@link
+   * ClassPrefixResolver}.
+   *
+   * @param locale The <code>Locale</code>.
+   * @param context The <code>Class</code> for the context key.
+   * @return The NLS object for the language tag.
+   * @see Locale#forLanguageTag(String)
+   */
+  NLS nlsForContext(Locale locale, Class<?> context);
 
   /**
    * Reset the {@link NilsFactory} and all its cached elements.

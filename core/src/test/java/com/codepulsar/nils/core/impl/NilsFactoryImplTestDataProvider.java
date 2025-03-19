@@ -11,7 +11,6 @@ import org.junit.jupiter.params.provider.Arguments;
 
 import com.codepulsar.nils.core.testdata.Dummy;
 
-@SuppressWarnings("exports")
 public class NilsFactoryImplTestDataProvider {
 
   public static Stream<Arguments> nlsFromLang_invalid() {
@@ -21,7 +20,7 @@ public class NilsFactoryImplTestDataProvider {
         arguments(" ", IAE_PARAMETER_BLANK.apply("lang")));
   }
 
-  public static Stream<Arguments> nlsWithContext_string_invalid() {
+  public static Stream<Arguments> nlsForContext_string_invalid() {
     return Stream.of(
         arguments(null, IAE_PARAMETER_NULL.apply("context")),
         arguments("", IAE_PARAMETER_BLANK.apply("context")),
@@ -48,7 +47,7 @@ public class NilsFactoryImplTestDataProvider {
         arguments(" ", Dummy.class, IAE_PARAMETER_BLANK.apply("lang")));
   }
 
-  public static Stream<Arguments> nlsWithContext_fromLocale_string_invalid() {
+  public static Stream<Arguments> nlsForContext_fromLocale_string_invalid() {
     return Stream.of(
         arguments(null, null, IAE_PARAMETER_NULL.apply("locale")),
         arguments(Locale.GERMANY, null, IAE_PARAMETER_NULL.apply("context")),
@@ -57,7 +56,7 @@ public class NilsFactoryImplTestDataProvider {
         arguments(null, "context", IAE_PARAMETER_NULL.apply("locale")));
   }
 
-  public static Stream<Arguments> nlsWithContext_fromLocale_class_invalid() {
+  public static Stream<Arguments> nlsForContext_fromLocale_class_invalid() {
     return Stream.of(
         arguments(null, null, IAE_PARAMETER_NULL.apply("locale")),
         arguments(Locale.FRANCE, null, IAE_PARAMETER_NULL.apply("context")),

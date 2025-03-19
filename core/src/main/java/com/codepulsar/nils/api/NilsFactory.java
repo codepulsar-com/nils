@@ -20,7 +20,9 @@ public interface NilsFactory {
    * @param lang The language tag.
    * @return The NLS object for the language tag.
    * @see Locale#forLanguageTag(String)
+   * @deprecated Use {@link #nls(Locale)} instead. This method will be removed in 5.x or later.
    */
+  @Deprecated
   NLS nls(String lang);
 
   /**
@@ -50,7 +52,10 @@ public interface NilsFactory {
    * @param context The context key.
    * @return The NLS object for the language tag.
    * @see Locale#forLanguageTag(String)
+   * @deprecated Use {@link #nlsWithContext(Locale, String)} instead. This method will be removed in
+   *     5.x or later.
    */
+  @Deprecated
   NLS nlsWithContext(String lang, String context);
 
   /**
@@ -93,7 +98,10 @@ public interface NilsFactory {
    * @param context The <code>Class</code> for the context key.
    * @return The NLS object for the language tag.
    * @see Locale#forLanguageTag(String)
+   * @deprecated Use {@link #nlsWithContext(Locale, Class)} instead. This method will be removed in
+   *     5.x or later.
    */
+  @Deprecated
   NLS nlsWithContext(String lang, Class<?> context);
 
   /**

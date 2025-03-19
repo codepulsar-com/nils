@@ -67,6 +67,11 @@ public class NilsFactoryImpl implements NilsFactory {
 
   @Override
   public NLS nlsWithContext(String context) {
+    return nlsForContext(context);
+  }
+
+  @Override
+  public NLS nlsForContext(String context) {
     try {
       notNullEmptyOrBlank(context, "context", nilsException(NLS_PARAMETER_CHECK));
       return nls().context(context);
@@ -90,6 +95,12 @@ public class NilsFactoryImpl implements NilsFactory {
 
   @Override
   public NLS nlsWithContext(Locale locale, String context) {
+    return nlsForContext(locale, context);
+  }
+
+  // TODO change test to the nlsFor methods
+  @Override
+  public NLS nlsForContext(Locale locale, String context) {
     try {
       notNull(locale, "locale", nilsException(NLS_PARAMETER_CHECK));
       notNullEmptyOrBlank(context, "context", nilsException(NLS_PARAMETER_CHECK));
@@ -102,6 +113,11 @@ public class NilsFactoryImpl implements NilsFactory {
 
   @Override
   public NLS nlsWithContext(Class<?> context) {
+    return nlsForContext(context);
+  }
+
+  @Override
+  public NLS nlsForContext(Class<?> context) {
     try {
       notNull(context, "context", nilsException(NLS_PARAMETER_CHECK));
       return nls().context(context);
@@ -125,6 +141,11 @@ public class NilsFactoryImpl implements NilsFactory {
 
   @Override
   public NLS nlsWithContext(Locale locale, Class<?> context) {
+    return nlsForContext(locale, context);
+  }
+
+  @Override
+  public NLS nlsForContext(Locale locale, Class<?> context) {
     try {
       notNull(locale, "locale", nilsException(NLS_PARAMETER_CHECK));
       notNull(context, "context", nilsException(NLS_PARAMETER_CHECK));

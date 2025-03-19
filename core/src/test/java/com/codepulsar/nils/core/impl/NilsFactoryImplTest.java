@@ -201,7 +201,7 @@ public class NilsFactoryImplTest {
   }
 
   @ParameterizedTest
-  @MethodSource(DATA_PROVIDER + "#nlsWithContext_string_invalid")
+  @MethodSource(DATA_PROVIDER + "#nlsForContext_string_invalid")
   void nlsWithContext_string_invalid(String context, String errorMsg) {
     // Arrange
     config.suppressErrors(false);
@@ -212,7 +212,7 @@ public class NilsFactoryImplTest {
   }
 
   @ParameterizedTest
-  @MethodSource(DATA_PROVIDER + "#nlsWithContext_string_invalid")
+  @MethodSource(DATA_PROVIDER + "#nlsForContext_string_invalid")
   void nlsWithContext_string_invalid_suppressErrors(String context, String errorMsg) {
     // Arrange
     config.suppressErrors(true);
@@ -349,7 +349,7 @@ public class NilsFactoryImplTest {
   }
 
   @ParameterizedTest
-  @MethodSource(DATA_PROVIDER + "#nlsWithContext_fromLocale_string_invalid")
+  @MethodSource(DATA_PROVIDER + "#nlsForContext_fromLocale_string_invalid")
   void nlsWithContext_fromLocale_string_invalid(Locale locale, String context, String errorMsg) {
     // Arrange
     config.suppressErrors(false);
@@ -361,7 +361,7 @@ public class NilsFactoryImplTest {
   }
 
   @ParameterizedTest
-  @MethodSource(DATA_PROVIDER + "#nlsWithContext_fromLocale_string_invalid")
+  @MethodSource(DATA_PROVIDER + "#nlsForContext_fromLocale_string_invalid")
   void nlsWithContext_fromLocale_string_invalid_suppressErrors(
       Locale locale, String context, String errorMsg) {
     // Arrange
@@ -375,7 +375,7 @@ public class NilsFactoryImplTest {
   }
 
   @ParameterizedTest
-  @MethodSource(DATA_PROVIDER + "#nlsWithContext_fromLocale_class_invalid")
+  @MethodSource(DATA_PROVIDER + "#nlsForContext_fromLocale_class_invalid")
   void nlsWithContext_fromLocale_class_invalid(Locale locale, Class<?> context, String errorMsg) {
     // Arrange
     config.suppressErrors(false);
@@ -386,7 +386,7 @@ public class NilsFactoryImplTest {
   }
 
   @ParameterizedTest
-  @MethodSource(DATA_PROVIDER + "#nlsWithContext_fromLocale_class_invalid")
+  @MethodSource(DATA_PROVIDER + "#nlsForContext_fromLocale_class_invalid")
   void nlsWithContext_fromLocale_class_invalid_suppressErrors(
       Locale locale, Class<?> context, String errorMsg) {
     // Arrange
@@ -394,6 +394,154 @@ public class NilsFactoryImplTest {
 
     // Act
     var nls = underTest.nlsWithContext(locale, context);
+
+    // Assert
+    assertThat(nls).isInstanceOf(FallsaveNLSImpl.class);
+  }
+
+  @Test
+  void nlsForContext_string() {
+    // Arrange
+    var context = "context";
+    // Act
+    var nls = underTest.nlsForContext(context);
+
+    // Assert
+    assertThat(nls).isNotNull();
+    assertThat(nls.getLocale()).isEqualTo(Locale.getDefault());
+  }
+
+  @Test
+  void nlsForContext_class() {
+    // Arrange
+    var context = Dummy.class;
+    // Act
+    var nls = underTest.nlsForContext(context);
+
+    // Assert
+    assertThat(nls).isNotNull();
+    assertThat(nls.getLocale()).isEqualTo(Locale.getDefault());
+  }
+
+  @ParameterizedTest
+  @MethodSource(DATA_PROVIDER + "#nlsForContext_string_invalid")
+  void nlsForContext_string_invalid(String context, String errorMsg) {
+    // Arrange
+    config.suppressErrors(false);
+    // Act / Assert
+    assertThatThrownBy(() -> underTest.nlsForContext(context))
+        .isInstanceOf(NilsException.class)
+        .hasMessageContaining(errorMsg);
+  }
+
+  @ParameterizedTest
+  @MethodSource(DATA_PROVIDER + "#nlsForContext_string_invalid")
+  void nlsForContext_string_invalid_suppressErrors(String context, String errorMsg) {
+    // Arrange
+    config.suppressErrors(true);
+
+    // Act
+    var nls = underTest.nlsForContext(context);
+
+    // Assert
+    assertThat(nls).isInstanceOf(FallsaveNLSImpl.class);
+  }
+
+  @Test
+  void nlsForContext_class_null() {
+    // Arrange
+    config.suppressErrors(false);
+    Class<?> context = null;
+
+    // Act / Assert
+    assertThatThrownBy(() -> underTest.nlsForContext(context))
+        .isInstanceOf(NilsException.class)
+        .hasMessageContaining("Parameter 'context' cannot be null.");
+  }
+
+  @Test
+  void nlsForContext_class_null_suppressErrors() {
+    // Arrange
+    config.suppressErrors(true);
+    Class<?> context = null;
+
+    // Act
+    var nls = underTest.nlsForContext(context);
+
+    // Assert
+    assertThat(nls).isInstanceOf(FallsaveNLSImpl.class);
+  }
+
+  @Test
+  void nlsForContext_fromLocale_string() {
+    // Arrange
+    var context = "context";
+    // Act
+    var nls = underTest.nlsForContext(Locale.GERMAN, context);
+
+    // Assert
+    assertThat(nls).isNotNull();
+    assertThat(nls.getLocale()).isEqualTo(Locale.GERMAN);
+  }
+
+  @Test
+  void nlsForContext_fromLocale_class() {
+    // Arrange
+    var context = Dummy.class;
+    // Act
+    var nls = underTest.nlsForContext(Locale.GERMAN, context);
+
+    // Assert
+    assertThat(nls).isNotNull();
+    assertThat(nls.getLocale()).isEqualTo(Locale.GERMAN);
+  }
+
+  @ParameterizedTest
+  @MethodSource(DATA_PROVIDER + "#nlsForContext_fromLocale_string_invalid")
+  void nlsForContext_fromLocale_string_invalid(Locale locale, String context, String errorMsg) {
+    // Arrange
+    config.suppressErrors(false);
+
+    // Act / Assert
+    assertThatThrownBy(() -> underTest.nlsForContext(locale, context))
+        .isInstanceOf(NilsException.class)
+        .hasMessageContaining(errorMsg);
+  }
+
+  @ParameterizedTest
+  @MethodSource(DATA_PROVIDER + "#nlsForContext_fromLocale_string_invalid")
+  void nlsForContext_fromLocale_string_invalid_suppressErrors(
+      Locale locale, String context, String errorMsg) {
+    // Arrange
+    config.suppressErrors(true);
+
+    // Act
+    var nls = underTest.nlsForContext(locale, context);
+
+    // Assert
+    assertThat(nls).isInstanceOf(FallsaveNLSImpl.class);
+  }
+
+  @ParameterizedTest
+  @MethodSource(DATA_PROVIDER + "#nlsForContext_fromLocale_class_invalid")
+  void nlsForContext_fromLocale_class_invalid(Locale locale, Class<?> context, String errorMsg) {
+    // Arrange
+    config.suppressErrors(false);
+    // Act / Assert
+    assertThatThrownBy(() -> underTest.nlsForContext(locale, context))
+        .isInstanceOf(NilsException.class)
+        .hasMessageContaining(errorMsg);
+  }
+
+  @ParameterizedTest
+  @MethodSource(DATA_PROVIDER + "#nlsForContext_fromLocale_class_invalid")
+  void nlsForContext_fromLocale_class_invalid_suppressErrors(
+      Locale locale, Class<?> context, String errorMsg) {
+    // Arrange
+    config.suppressErrors(true);
+
+    // Act
+    var nls = underTest.nlsForContext(locale, context);
 
     // Assert
     assertThat(nls).isInstanceOf(FallsaveNLSImpl.class);
